@@ -42,7 +42,6 @@ public class LobbyPrep : MonoBehaviour
     public void LobbySetUp(int deckAmmount) {
         PlayerData data = SaveSystem.LoadPlayer();
         Player player = new Player(data.name, data.hair, data.face, data.kit, data.body);
-        Debug.Log(player.Name);
         PhotonPlayerSetup.BuildPhotonPlayer(PhotonNetwork.player, player);
         if (PhotonNetwork.offlineMode) {
             CreateRoom(deckAmmount);

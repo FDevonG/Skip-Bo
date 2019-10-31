@@ -21,7 +21,7 @@ public class CardScaleLerp : MonoBehaviour
         newCardValue = newCardVal;
 
         if (transform.parent.GetComponent<RectTransform>().sizeDelta == new Vector2(144, 200)) {
-            endScale = new Vector3(0, 1.5f, 1);
+            endScale = new Vector3(0, 2, 1);
         } else {
             endScale = new Vector3(0, 1, 1);
         }
@@ -39,7 +39,7 @@ public class CardScaleLerp : MonoBehaviour
             if (percentageComplete >= timeTakenDuringLerp) {
                 firstScaleing = false;
 
-                if (transform.localScale == new Vector3(0, 1.5f, 1)) {
+                if (transform.localScale == new Vector3(0, 2, 1)) {
                     endScale = new Vector3(2, 2, 1);
                 } else {
                     endScale = new Vector3(1, 1, 1);
