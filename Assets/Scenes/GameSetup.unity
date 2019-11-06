@@ -6847,6 +6847,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   noGamesPanel: {fileID: 1659694794}
   roomNameExistsPanel: {fileID: 21201654}
+  mainPanel: {fileID: 1879725090}
+  roomCreationPanel: {fileID: 2070116865}
+  joinRoomPanel: {fileID: 567281010}
+  roomBrowserPanel: {fileID: 1958272637}
+  gameFiltersPanel: {fileID: 1300915200}
 --- !u!1 &1325513761
 GameObject:
   m_ObjectHideFlags: 0
