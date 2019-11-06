@@ -2,7 +2,7 @@
 
 public class PhotonNetworking : MonoBehaviour {
 
-    private string versionNumber = "1.0";
+    private string versionNumber = "1.2";
 
     public static PhotonNetworking Instance { get; private set; }
 
@@ -33,7 +33,7 @@ public class PhotonNetworking : MonoBehaviour {
     //}
 
     private void OnJoinedLobby() {
-        GameObject.FindGameObjectWithTag("GameManager").GetComponent<Menu>().SwitchPanel(GameObject.FindGameObjectWithTag("GameManager").GetComponent<LobbyPrep>().gameSetupPanel);
+        SceneController.LoadGameSetup();
     }
 
     //this is called when you get disconnected from photon

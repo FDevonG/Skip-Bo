@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-using System.Collections;
 
 public class InGameMenu : MonoBehaviour
 {
@@ -28,8 +27,6 @@ public class InGameMenu : MonoBehaviour
         });
     }
 
-
-
     public void OpenMenu() {
         if (!GetComponent<GameControl>().playerWon) {
             if (!menuWindow.active) {
@@ -48,12 +45,6 @@ public class InGameMenu : MonoBehaviour
         }
     }
 
-    public void SwitchPanel(GameObject panel) {
-        activePanel.SetActive(false);
-        activePanel = panel;
-        panel.SetActive(true);
-    }
-
     public void LeaveMatch() {
         PhotonNetwork.DestroyPlayerObjects(PhotonNetwork.player);
         PhotonNetwork.Disconnect();
@@ -64,6 +55,9 @@ public class InGameMenu : MonoBehaviour
     public void PlayAgain() {
         if (PhotonNetwork.offlineMode) {
             SceneController.ReloadScene();
+        }
+        if (!PhotonNetwork.offlineMode) {
+            PhotonNetwork.LeaveRoom();
         }
     }
 

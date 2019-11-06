@@ -126,9 +126,6 @@ public class GameControl : MonoBehaviour
     public void ChangeTurn() {
 
         localPlayerPanel.GetComponent<CanvasGroup>().blocksRaycasts = false;
-        //for (int i = 0; i < playerPanels.Length; i++) {
-        //    playerPanels[i].GetComponent<PanelControl>().avatarPanel.GetComponent<ColorLerp>().StartColorLerp(false, true);
-        //}
         playerPanels[turnIndex].GetComponent<PanelControl>().avatarPanel.GetComponent<ColorLerp>().StartColorLerp(false, true);
 
         if (PhotonNetwork.isMasterClient) {

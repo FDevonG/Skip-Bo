@@ -62,9 +62,9 @@ public class Victory : MonoBehaviour
             child.SetActive(true);
         }
 
-        if (PhotonNetwork.offlineMode) {
-            playAgainButton.SetActive(true);
-        }
+        //if (PhotonNetwork.offlineMode) {
+        //    playAgainButton.SetActive(true);
+        //}
 
         while (playerStandings.Length == 0) {
             yield return new WaitForSeconds(0.5f);

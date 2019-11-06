@@ -256,7 +256,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 1311493706}
+      objectReference: {fileID: 1311493708}
     - target: {fileID: 5247988230175085175, guid: 2d80c77b21de041babe6ac38894d9be5,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
@@ -555,7 +555,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 1311493706}
+      objectReference: {fileID: 1311493708}
     - target: {fileID: 5247988230175085175, guid: 2d80c77b21de041babe6ac38894d9be5,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
@@ -725,7 +725,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 1311493706}
+      objectReference: {fileID: 1311493708}
     - target: {fileID: 5247988230175085175, guid: 2d80c77b21de041babe6ac38894d9be5,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
@@ -1103,7 +1103,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
       value: 
-      objectReference: {fileID: 1311493706}
+      objectReference: {fileID: 1311493708}
     - target: {fileID: 5247988230175085175, guid: 2d80c77b21de041babe6ac38894d9be5,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
@@ -2756,11 +2756,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 1311493708}
+      objectReference: {fileID: 1311493709}
     - target: {fileID: 5247988230175085175, guid: 2d80c77b21de041babe6ac38894d9be5,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: LobbySetUp
+      value: CreateOfflineGame
       objectReference: {fileID: 0}
     - target: {fileID: 5247988230175085175, guid: 2d80c77b21de041babe6ac38894d9be5,
         type: 3}
@@ -2921,7 +2921,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 1311493706}
+      objectReference: {fileID: 1311493708}
     - target: {fileID: 5247988230175085175, guid: 2d80c77b21de041babe6ac38894d9be5,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
@@ -3086,7 +3086,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 1311493706}
+      objectReference: {fileID: 1311493708}
     - target: {fileID: 5247988230175085175, guid: 2d80c77b21de041babe6ac38894d9be5,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
@@ -3657,7 +3657,7 @@ PrefabInstance:
     - target: {fileID: 5247988230175085175, guid: 2d80c77b21de041babe6ac38894d9be5,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5247988230175085175, guid: 2d80c77b21de041babe6ac38894d9be5,
         type: 3}
@@ -3683,7 +3683,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 1311493708}
+      objectReference: {fileID: 1311493709}
     - target: {fileID: 5247988230175085175, guid: 2d80c77b21de041babe6ac38894d9be5,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
@@ -3863,7 +3863,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 1311493708}
+      objectReference: {fileID: 1311493709}
     - target: {fileID: 5247988230175085175, guid: 2d80c77b21de041babe6ac38894d9be5,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
@@ -3888,7 +3888,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
       value: 
-      objectReference: {fileID: 1311493706}
+      objectReference: {fileID: 1311493708}
     - target: {fileID: 5247988230175085175, guid: 2d80c77b21de041babe6ac38894d9be5,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
@@ -4352,7 +4352,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 1311493706}
+      objectReference: {fileID: 1311493708}
     - target: {fileID: 5247988230175085175, guid: 2d80c77b21de041babe6ac38894d9be5,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
@@ -5840,7 +5840,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 1311493706}
+      objectReference: {fileID: 1311493708}
     - target: {fileID: 5247988230175085175, guid: 2d80c77b21de041babe6ac38894d9be5,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
@@ -6005,11 +6005,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 1311493708}
+      objectReference: {fileID: 1311493709}
     - target: {fileID: 5247988230175085175, guid: 2d80c77b21de041babe6ac38894d9be5,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: LobbySetUp
+      value: CreateOfflineGame
       objectReference: {fileID: 0}
     - target: {fileID: 5247988230175085175, guid: 2d80c77b21de041babe6ac38894d9be5,
         type: 3}
@@ -6044,8 +6044,9 @@ GameObject:
   m_Component:
   - component: {fileID: 1311493707}
   - component: {fileID: 1311493706}
-  - component: {fileID: 1311493708}
   - component: {fileID: 1311493711}
+  - component: {fileID: 1311493709}
+  - component: {fileID: 1311493708}
   m_Layer: 0
   m_Name: ScriptsObject
   m_TagString: GameManager
@@ -6097,11 +6098,23 @@ MonoBehaviour:
   m_GameObject: {fileID: 1311493705}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c705f00bf2dfd4da1a2a468c89cb7eea, type: 3}
+  m_Script: {fileID: 11500000, guid: 673411af67c7d44e1b24a3c53f233765, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  activePanel: {fileID: 0}
+--- !u!114 &1311493709
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1311493705}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b5e02127716a4e969e9917509f41568, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   connectingPanel: {fileID: 1232243901}
-  gameSetupPanel: {fileID: 206623557}
 --- !u!114 &1311493711
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6602,7 +6615,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 1311493706}
+      objectReference: {fileID: 1311493708}
     - target: {fileID: 5247988230175085175, guid: 2d80c77b21de041babe6ac38894d9be5,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
@@ -6772,7 +6785,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 1311493706}
+      objectReference: {fileID: 1311493708}
     - target: {fileID: 5247988230175085175, guid: 2d80c77b21de041babe6ac38894d9be5,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
@@ -7303,11 +7316,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 1311493708}
+      objectReference: {fileID: 1311493709}
     - target: {fileID: 5247988230175085175, guid: 2d80c77b21de041babe6ac38894d9be5,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: LobbySetUp
+      value: CreateOfflineGame
       objectReference: {fileID: 0}
     - target: {fileID: 5247988230175085175, guid: 2d80c77b21de041babe6ac38894d9be5,
         type: 3}
@@ -7545,7 +7558,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 1311493706}
+      objectReference: {fileID: 1311493708}
     - target: {fileID: 5247988230175085175, guid: 2d80c77b21de041babe6ac38894d9be5,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
@@ -7710,7 +7723,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 1311493706}
+      objectReference: {fileID: 1311493708}
     - target: {fileID: 5247988230175085175, guid: 2d80c77b21de041babe6ac38894d9be5,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
@@ -7875,7 +7888,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 1311493706}
+      objectReference: {fileID: 1311493708}
     - target: {fileID: 5247988230175085175, guid: 2d80c77b21de041babe6ac38894d9be5,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
@@ -8194,11 +8207,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 1311493708}
+      objectReference: {fileID: 1311493709}
     - target: {fileID: 5247988230175085175, guid: 2d80c77b21de041babe6ac38894d9be5,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: LobbySetUp
+      value: CreateOfflineGame
       objectReference: {fileID: 0}
     - target: {fileID: 5247988230175085175, guid: 2d80c77b21de041babe6ac38894d9be5,
         type: 3}
@@ -8504,11 +8517,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 1311493708}
+      objectReference: {fileID: 1311493709}
     - target: {fileID: 5247988230175085175, guid: 2d80c77b21de041babe6ac38894d9be5,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: LobbySetUp
+      value: CreateOfflineGame
       objectReference: {fileID: 0}
     - target: {fileID: 5247988230175085175, guid: 2d80c77b21de041babe6ac38894d9be5,
         type: 3}
@@ -10025,7 +10038,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 1311493706}
+      objectReference: {fileID: 1311493708}
     - target: {fileID: 5247988230175085175, guid: 2d80c77b21de041babe6ac38894d9be5,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
@@ -11343,11 +11356,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 1311493708}
+      objectReference: {fileID: 1311493709}
     - target: {fileID: 5247988230175085175, guid: 2d80c77b21de041babe6ac38894d9be5,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: LobbySetUp
+      value: CreateOfflineGame
       objectReference: {fileID: 0}
     - target: {fileID: 5247988230175085175, guid: 2d80c77b21de041babe6ac38894d9be5,
         type: 3}

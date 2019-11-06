@@ -5,6 +5,8 @@ using UnityEngine;
 public class Lobby : MonoBehaviour
 {
     [SerializeField]
+    Text roomNameText;
+    [SerializeField]
     Text infoText;
     [SerializeField]
     Text numberText;
@@ -19,6 +21,7 @@ public class Lobby : MonoBehaviour
 
     private void OnEnable() {
         UpdateWaitingPanel();
+        roomNameText.text = "Room Name: " + PhotonNetwork.room.Name;
     }
 
     public void UpdateWaitingPanel() {
@@ -68,8 +71,7 @@ public class Lobby : MonoBehaviour
 
     public void LeaveRoom() {
         PhotonNetwork.LeaveRoom();
-        PhotonNetwork.Disconnect();
-        SceneController.LoadStartMenu();
+        SceneController.LoadGameSetup();
     }
 
     private void Update() {

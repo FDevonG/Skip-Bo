@@ -3,9 +3,6 @@ using UnityEngine.UI;
 
 public class CharacterCreation : MonoBehaviour
 {
-
-    Menu menu;
-
     public Image cbody;//used to display the body
     public Image cface;//used to display the face
     public Image chair;//used to display the hair
@@ -26,10 +23,6 @@ public class CharacterCreation : MonoBehaviour
 
     public Button loginCancelButton;
     public Button startMenuCancelButton;
-
-    private void Start() {
-        menu = GameObject.FindGameObjectWithTag("GameManager").GetComponent<Menu>();
-    }
 
     private void OnEnable() {
     PlayerData data = SaveSystem.LoadPlayer();
@@ -155,7 +148,7 @@ public class CharacterCreation : MonoBehaviour
         if (!string.IsNullOrEmpty(playerName) && !string.IsNullOrWhiteSpace(playerName)) {
             Player player = new Player(playerName, hair[chairIndex].name, face[cfaceIndex].name, kit[ckitIndex].name, body[cbodyIndex].name);
             SaveSystem.SavePlayer(player);
-            menu.SwitchPanel(menu.startMenu);
+            GameObject.FindGameObjectWithTag("GameManager").GetComponent<ActivatePanel>().SwitchPanel(GameObject.FindGameObjectWithTag("GameManager").GetComponent<Menu>().startMenu);
         } else {
             placeholderText.text = "Enter Name";
             placeholderText.color = Color.red;

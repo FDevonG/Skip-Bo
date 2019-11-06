@@ -135,9 +135,10 @@ public class GameSetup : MonoBehaviour {
     }
 
     private void SpawnPanelInfo(GameObject playerPanel, PhotonPlayer photonPlayer) {
+        
         PanelControl panelControl = playerPanel.GetComponent<PanelControl>();
         panelControl.photonPlayer = photonPlayer;
-        
+        Debug.Log((string)panelControl.photonPlayer.CustomProperties["body"]);
         panelControl.nameText.text = (string)panelControl.photonPlayer.CustomProperties["name"];
         panelControl.cbody.sprite = Resources.Load<Sprite>("Faces/Bodies/" + (string)panelControl.photonPlayer.CustomProperties["body"]) as Sprite;
         panelControl.cface.sprite = Resources.Load<Sprite>("Faces/Faces/" + (string)panelControl.photonPlayer.CustomProperties["face"]) as Sprite;
@@ -157,7 +158,7 @@ public class GameSetup : MonoBehaviour {
             GameObject panel = gameControl.playerPanels[i];
 
             //second we will spawn the cards in the deck
-            for (int x = 0; x < (int)PhotonNetwork.room.CustomProperties[LobbyPrep.deckAmmount]; x++) {
+            for (int x = 0; x < (int)PhotonNetwork.room.CustomProperties[PhotonRooms.DeckSize()]; x++) {
                 GameObject card = SpawnCard();
                 photonView.RPC("DeckCardSpawned", PhotonTargets.All, card.GetComponent<PhotonView>().viewID, i);//we will place the new card where it belongs on the field for all playuers in the the game
             }
@@ -196,14 +197,14 @@ public class GameSetup : MonoBehaviour {
         card.localPosition = new Vector3(0,0,0);
         if (gameControl.playerPanels[panelIndex] == gameControl.localPlayerPanel) {
             card.localScale = new Vector3(2,2,2);
-            if (panel.GetComponent<PanelControl>().deck.transform.childCount == (int)PhotonNetwork.room.CustomProperties[LobbyPrep.deckAmmount]) {
+            if (panel.GetComponent<PanelControl>().deck.transform.childCount == (int)PhotonNetwork.room.CustomProperties[PhotonRooms.DeckSize()]) {
                 card.gameObject.AddComponent<CardDragHandler>();
             }
         }
-        if (panel.GetComponent<PanelControl>().deck.transform.childCount == (int)PhotonNetwork.room.CustomProperties[LobbyPrep.deckAmmount]) {
+        if (panel.GetComponent<PanelControl>().deck.transform.childCount == (int)PhotonNetwork.room.CustomProperties[PhotonRooms.DeckSize()]) {
             card.GetComponent<Card>().SetUpCard(card.GetComponent<Card>().cardNumber);
         }
-        panel.GetComponent<PanelControl>().cardsLeftText.text = (int)PhotonNetwork.room.CustomProperties[LobbyPrep.deckAmmount] + " Cards Left!";
+        panel.GetComponent<PanelControl>().cardsLeftText.text = (int)PhotonNetwork.room.CustomProperties[PhotonRooms.DeckSize()] + " Cards Left!";
     }
 
     [PunRPC]

@@ -152,4 +152,8 @@ public class PlayedCardsDropHandler : MonoBehaviour, IDropHandler {
         }
     }
 
+    public void DoubleClickedSideboard(int viewID, int panelIndex) {
+        photonView.RPC("PlayCardFromSideboard", PhotonTargets.AllViaServer, viewID, panelIndex, PhotonNetwork.player);
+    }
+
 }

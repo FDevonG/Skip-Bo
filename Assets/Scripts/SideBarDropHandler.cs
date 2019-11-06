@@ -29,6 +29,9 @@ public class SideBarDropHandler : MonoBehaviour, IDropHandler {
             if (numberOfChildren > 3) {
                 CardDragHandler.itemBeingDragged.transform.localPosition = new Vector3(0, 3 * -60, 0);
             }
+
+            CardDragHandler.itemBeingDragged.AddComponent<SideBoardDoubleClick>();
+
             //if we get to many cards in the same sytack showing they are going to get to be to much and take up to much screen real estate
             panelControl.HideLowerSideBarCards(transform);//we are going to hide the lower cards beneath newer cards so we do not run out of screen real estate
 
@@ -77,7 +80,7 @@ public class SideBarDropHandler : MonoBehaviour, IDropHandler {
     public void TurnOffCardInteractions() {
         if (transform.childCount > 1) {
             transform.GetChild(transform.childCount - 2).GetComponent<CanvasGroup>().blocksRaycasts = false;
-        }
+        } 
     }
     public void TurnOnCardInteraction() {
         if (transform.childCount != 0) {
