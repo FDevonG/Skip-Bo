@@ -5,3 +5,4 @@ Update 1.2
 -Filters added for the room browser
 -The play again button now works for the online play
 -A panel added to join a room by name
+-Double tap cards on your sideboard to play instantly
