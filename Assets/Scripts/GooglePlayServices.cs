@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using GooglePlayGames;
 using GooglePlayGames.BasicApi;
 
@@ -17,11 +15,6 @@ public class GooglePlayServices : MonoBehaviour
             Instance = this;
         }
         DontDestroyOnLoad(gameObject);
-    }
-
-    // Start is called before the first frame update
-    void Start()
-    {
         Authenticate();
     }
 
@@ -30,15 +23,19 @@ public class GooglePlayServices : MonoBehaviour
         PlayGamesPlatform.InitializeInstance(config);
         PlayGamesPlatform.DebugLogEnabled = true;
         PlayGamesPlatform.Activate();
-        SignIn();
+        //SignIn();
     }
 
-    void SignIn() {
+    public void SignIn() {
         Social.localUser.Authenticate((bool success) => {
             if (success) {
-                Debug.Log("Logged into google play services");
+                if (SaveSystem.LoadPlayer() == null) {
+                    GameObject.FindGameObjectWithTag("GameManager").GetComponent<ActivatePanel>().SwitchPanel(GameObject.FindGameObjectWithTag("GameManager").GetComponent<Menu>().characterCreationPanel);
+                } else {
+                    GameObject.FindGameObjectWithTag("GameManager").GetComponent<ActivatePanel>().SwitchPanel(GameObject.FindGameObjectWithTag("GameManager").GetComponent<Menu>().startMenu);
+                }
             } else {
-                Debug.Log("Failed to sign into google play servcies");
+                GameObject.FindGameObjectWithTag("GameManager").GetComponent<ActivatePanel>().SwitchPanel(GameObject.FindGameObjectWithTag("GameManager").GetComponent<Menu>().failedToLoginPanel);
             }
         });
     }

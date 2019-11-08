@@ -13,7 +13,7 @@ public class PlayerStatsController : MonoBehaviour
 
     private void LoadPlayer() {
         PlayerData data = SaveSystem.LoadPlayer();
-        player = new Player(data.name, data.hair, data.face, data.kit, data.body, data.offlineGamesPlayed, data.onlineGamesPlayed, data.offlineGamesWon, data.onlineGamesWon);
+        player = new Player(data.name, data.hair, data.face, data.kit, data.body, data.offlineGamesPlayed, data.onlineGamesPlayed, data.offlineGamesWon, data.onlineGamesWon, data.uniqueID);
         AddGamePlayed();
     }
 
