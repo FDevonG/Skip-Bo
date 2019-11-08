@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 public class Menu : MonoBehaviour
 {
@@ -11,6 +12,7 @@ public class Menu : MonoBehaviour
     public GameObject statsPanel;
     public GameObject failedToConnectPanel;
     public GameObject quitGamePanel;
+    public GameObject failedToLoginPanel;
 
     private ActivatePanel activatePanel;
 
@@ -68,6 +70,10 @@ public class Menu : MonoBehaviour
             activatePanel.SwitchPanel(startMenu);
             return;
         }
+        if (activatePanel.activePanel == failedToLoginPanel) {
+            activatePanel.SwitchPanel(logInPanel);
+            return;
+        }
     }
 
     private void DoesPlayerExist() {
@@ -75,7 +81,11 @@ public class Menu : MonoBehaviour
         if (data == null) {
             activatePanel.SwitchPanel(logInPanel);
         } else {
-            activatePanel.SwitchPanel(startMenu);
+            if (String.IsNullOrEmpty(data.uniqueID)) {
+                activatePanel.SwitchPanel(startMenu);
+            } else {
+                GameObject.FindGameObjectWithTag("GooglePlayServices").GetComponent<GooglePlayServices>().SignIn();
+            }
         }
     }
 

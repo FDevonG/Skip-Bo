@@ -6,3 +6,8 @@ Update 1.2
 -The play again button now works for the online play
 -A panel added to join a room by name
 -Double tap cards on your sideboard to play instantly
+
+
+Update 1.3
+-Checkmarks fixed on checkboxes
+-Screen scaling issue solved

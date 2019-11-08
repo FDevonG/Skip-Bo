@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using GooglePlayGames;
+using GooglePlayGames.BasicApi;
 
 public class CharacterCreation : MonoBehaviour
 {
@@ -146,7 +148,12 @@ public class CharacterCreation : MonoBehaviour
     public void SavePlayer() {
         string playerName = nameText.text;
         if (!string.IsNullOrEmpty(playerName) && !string.IsNullOrWhiteSpace(playerName)) {
-            Player player = new Player(playerName, hair[chairIndex].name, face[cfaceIndex].name, kit[ckitIndex].name, body[cbodyIndex].name);
+            Player player = new Player();
+            if (PlayGamesPlatform.Instance.IsAuthenticated()) {
+                player = new Player(playerName, hair[chairIndex].name, face[cfaceIndex].name, kit[ckitIndex].name, body[cbodyIndex].name, Social.localUser.id);
+            } else {
+                player = new Player(playerName, hair[chairIndex].name, face[cfaceIndex].name, kit[ckitIndex].name, body[cbodyIndex].name, "");
+            }
             SaveSystem.SavePlayer(player);
             GameObject.FindGameObjectWithTag("GameManager").GetComponent<ActivatePanel>().SwitchPanel(GameObject.FindGameObjectWithTag("GameManager").GetComponent<Menu>().startMenu);
         } else {

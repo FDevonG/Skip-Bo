@@ -4,7 +4,7 @@ public static class PhotonRooms
 {
     public static void SetupPhotonPlayer() {
         PlayerData data = SaveSystem.LoadPlayer();
-        Player player = new Player(data.name, data.hair, data.face, data.kit, data.body);
+        Player player = new Player(data.name, data.hair, data.face, data.kit, data.body, data.uniqueID);
         PhotonPlayerSetup.BuildPhotonPlayer(PhotonNetwork.player, player);
     }
 
