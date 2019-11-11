@@ -34,10 +34,16 @@ public class GooglePlayServices : MonoBehaviour
 
     public void SignIn() {
         Social.localUser.Authenticate((bool success) => {
+            PlayerData data = SaveSystem.LoadPlayer();
+            GameObject.FindGameObjectWithTag("GameManager").GetComponent<Menu>().TurnOnCanvas();
             if (success) {
-                
+                if (data == null) {
+                    GameObject.FindGameObjectWithTag("GameManager").GetComponent<ActivatePanel>().SwitchPanel(GameObject.FindGameObjectWithTag("GameManager").GetComponent<Menu>().characterCreationPanel);
+                } else {
+                    GameObject.FindGameObjectWithTag("GameManager").GetComponent<ActivatePanel>().SwitchPanel(GameObject.FindGameObjectWithTag("GameManager").GetComponent<Menu>().startMenu);
+                }
             } else {
-                Debug.Log("Failed to sign into google play servcies");
+                GameObject.FindGameObjectWithTag("GameManager").GetComponent<ActivatePanel>().SwitchPanel(GameObject.FindGameObjectWithTag("GameManager").GetComponent<Menu>().failedToLogInPanel);
             }
         });
     }

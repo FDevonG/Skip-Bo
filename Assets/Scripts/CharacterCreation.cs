@@ -25,7 +25,15 @@ public class CharacterCreation : MonoBehaviour
     public Button startMenuCancelButton;
 
     private void OnEnable() {
-    PlayerData data = SaveSystem.LoadPlayer();
+        PlayerData data = SaveSystem.LoadPlayer();
+        if (DeviceType.IsDeviceIos()) {
+            Debug.Log("Write the code for the iphone here to determine if name input is hidden on character creation");
+        }
+        if (DeviceType.IsDeviceAndroid()) {
+            if (GooglePlayServices.IsGooglePlayLoggedIn()) {
+                nameInput.gameObject.SetActive(false);
+            }
+        }
         if (data == null) {
             RandomizeCharacter();
             loginCancelButton.gameObject.SetActive(true);
@@ -144,15 +152,27 @@ public class CharacterCreation : MonoBehaviour
     }
 
     public void SavePlayer() {
-        string playerName = nameText.text;
-        if (!string.IsNullOrEmpty(playerName) && !string.IsNullOrWhiteSpace(playerName)) {
-            Player player = new Player(playerName, hair[chairIndex].name, face[cfaceIndex].name, kit[ckitIndex].name, body[cbodyIndex].name);
-            SaveSystem.SavePlayer(player);
-            GameObject.FindGameObjectWithTag("GameManager").GetComponent<ActivatePanel>().SwitchPanel(GameObject.FindGameObjectWithTag("GameManager").GetComponent<Menu>().startMenu);
+        if (DeviceType.IsDeviceAndroid()) {
+            if (GooglePlayServices.IsGooglePlayLoggedIn()) {
+                SerializePlayer(Social.localUser.userName, Social.localUser.id);
+            }
+        } else if (DeviceType.IsDeviceIos()) {
+            Debug.Log("Write the Ios code here for saving the character creation");
         } else {
-            placeholderText.text = "Enter Name";
-            placeholderText.color = Color.red;
+            string playerName = nameText.text;
+            if (!string.IsNullOrEmpty(playerName) && !string.IsNullOrWhiteSpace(playerName)) {
+                SerializePlayer(playerName, "");
+            } else {
+                placeholderText.text = "Enter Name";
+                placeholderText.color = Color.red;
+            }
         }
+    }
+
+    private void SerializePlayer(string sentName, string id) {
+        Player player = new Player(sentName, hair[chairIndex].name, face[cfaceIndex].name, kit[ckitIndex].name, body[cbodyIndex].name, id);
+        SaveSystem.SavePlayer(player);
+        GameObject.FindGameObjectWithTag("GameManager").GetComponent<ActivatePanel>().SwitchPanel(GameObject.FindGameObjectWithTag("GameManager").GetComponent<Menu>().startMenu);
     }
 
 }

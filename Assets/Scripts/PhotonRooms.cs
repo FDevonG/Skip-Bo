@@ -4,7 +4,7 @@ public static class PhotonRooms
 {
     public static void SetupPhotonPlayer() {
         PlayerData data = SaveSystem.LoadPlayer();
-        Player player = new Player(data.name, data.hair, data.face, data.kit, data.body);
+        Player player = new Player(data.name, data.hair, data.face, data.kit, data.body, data.uniqueID);
         PhotonPlayerSetup.BuildPhotonPlayer(PhotonNetwork.player, player);
     }
 
@@ -42,6 +42,7 @@ public static class PhotonRooms
         roomOptions.MaxPlayers = MaxPlayers();//the max number of players in the game is 4
         roomOptions.CustomRoomProperties = new ExitGames.Client.Photon.Hashtable();//create a new custom room properties
         roomOptions.CustomRoomProperties[DeckSize()] = deckAmmount;
+        roomOptions.PublishUserId = true;
         roomOptions.CustomRoomPropertiesForLobby = new string[] {
             DeckSize(),
         };

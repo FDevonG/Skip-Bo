@@ -2,6 +2,7 @@
 
 public class Menu : MonoBehaviour
 {
+    public Canvas canvas;
     public GameObject logInPanel;
     public GameObject startMenu;
     public GameObject characterCreationPanel;
@@ -12,6 +13,7 @@ public class Menu : MonoBehaviour
     public GameObject failedToConnectPanel;
     public GameObject quitGamePanel;
     public GameObject failedToLogInPanel;
+    public GameObject friendsPanel;
 
     private ActivatePanel activatePanel;
 
@@ -73,6 +75,10 @@ public class Menu : MonoBehaviour
             activatePanel.SwitchPanel(startMenu);
             return;
         }
+        if (activatePanel.activePanel == friendsPanel) {
+            activatePanel.SwitchPanel(startMenu);
+            return;
+        }
     }
 
     private void DoesPlayerExist() {
@@ -82,6 +88,10 @@ public class Menu : MonoBehaviour
         } else {
             activatePanel.SwitchPanel(startMenu);
         }
+    }
+
+    public void TurnOnCanvas() {
+        canvas.gameObject.SetActive(true);
     }
 
     private void Update() {

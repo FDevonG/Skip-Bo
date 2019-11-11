@@ -7,20 +7,24 @@ public class Player
     private string kit;
     private string body;
 
+    private string uniqueID;
+
     private int offlineGamesPlayed;
     private int onlineGamesPlayed;
     private int offlineGamesWon;
     private int onlineGamesWon;
 
-    public Player(string playerName, string playerHair, string playerFace, string playerKit, string playerBody) {
+    public Player(string playerName, string playerHair, string playerFace, string playerKit, string playerBody, string id) {
         Name = playerName;
         Hair = playerHair;
         Face = playerFace;
         Kit = playerKit;
         Body = playerBody;
+
+        UniqueID = id;
     }
 
-    public Player(string playerName, string playerHair, string playerFace, string playerKit, string playerBody, int offGamesPlayed, int onGamesPlayed, int offGamesWon, int onGamesWon) {
+    public Player(string playerName, string playerHair, string playerFace, string playerKit, string playerBody, int offGamesPlayed, int onGamesPlayed, int offGamesWon, int onGamesWon, string id) {
         Name = playerName;
         Hair = playerHair;
         Face = playerFace;
@@ -31,6 +35,8 @@ public class Player
         OnlineGamesPlayed = onGamesPlayed;
         OfflineGamesWon = offGamesWon;
         OnlineGamesWon = onGamesWon;
+
+        UniqueID = id;
     }
 
     public Player() {
@@ -80,6 +86,11 @@ public class Player
     public int OnlineGamesWon {
         get { return onlineGamesWon; }
         set { onlineGamesWon = value; }
+    }
+
+    public string UniqueID {
+        get { return uniqueID; }
+        set { uniqueID = value; }
     }
 
 }
