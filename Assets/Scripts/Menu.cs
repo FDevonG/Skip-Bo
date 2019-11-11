@@ -11,6 +11,7 @@ public class Menu : MonoBehaviour
     public GameObject statsPanel;
     public GameObject failedToConnectPanel;
     public GameObject quitGamePanel;
+    public GameObject failedToLogInPanel;
 
     private ActivatePanel activatePanel;
 
@@ -65,6 +66,10 @@ public class Menu : MonoBehaviour
             return;
         }
         if (activatePanel.activePanel == statsPanel) {
+            activatePanel.SwitchPanel(startMenu);
+            return;
+        }
+        if (activatePanel.activePanel == failedToLogInPanel) {
             activatePanel.SwitchPanel(startMenu);
             return;
         }

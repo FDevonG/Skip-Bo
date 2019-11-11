@@ -91,6 +91,9 @@ public class GameSetup : MonoBehaviour {
         GameObject localPlayerPanel = PhotonNetwork.Instantiate("MainPlayerPanel", new Vector3(540, 90, 0), Quaternion.identity, 0);
         localPlayerPanel.transform.SetParent(mainPlayerContainer.transform);
         gameControl.localPlayerPanel = localPlayerPanel;
+        localPlayerPanel.transform.localScale = new Vector3(1,1,1);
+        localPlayerPanel.GetComponent<RectTransform>().offsetMax = new Vector2(0,0);
+        localPlayerPanel.GetComponent<RectTransform>().offsetMin = new Vector2(0, 0);
         SpawnPanelInfo(localPlayerPanel, PhotonNetwork.player);
 
         gameControl.playerPanels = new GameObject[PhotonNetwork.room.MaxPlayers];
@@ -106,6 +109,7 @@ public class GameSetup : MonoBehaviour {
 
             if (gameControl.connectedPlayers[i] != PhotonNetwork.player) {
                 playerPanel = Instantiate(Resources.Load<GameObject>("OtherPlayerPanel") as GameObject, panelParent);
+                playerPanel.transform.localScale = new Vector3(1, 1, 1);
                 gameControl.playerPanels[i] = playerPanel;
                 SpawnPanelInfo(playerPanel, gameControl.connectedPlayers[i]);
             } else {
@@ -195,6 +199,7 @@ public class GameSetup : MonoBehaviour {
         GameObject panel = gameControl.playerPanels[panelIndex];
         card.SetParent(panel.GetComponent<PanelControl>().deck.transform);
         card.localPosition = new Vector3(0,0,0);
+        card.localScale = new Vector3(1, 1, 1);
         if (gameControl.playerPanels[panelIndex] == gameControl.localPlayerPanel) {
             card.localScale = new Vector3(2,2,2);
             if (panel.GetComponent<PanelControl>().deck.transform.childCount == (int)PhotonNetwork.room.CustomProperties[PhotonRooms.DeckSize()]) {
@@ -221,6 +226,7 @@ public class GameSetup : MonoBehaviour {
         GameObject panel = gameControl.playerPanels[panelIndex];
         card.SetParent(panel.GetComponent<PanelControl>().handSlots[card.GetComponent<Card>().handSlot].transform);
         card.transform.localPosition = new Vector3(0,0,0);
+        card.localScale = new Vector3(1, 1, 1);
         if (gameControl.playerPanels[panelIndex] == gameControl.localPlayerPanel) {
             card.localScale = new Vector3(2, 2, 2);
             card.gameObject.AddComponent<CardDragHandler>();

@@ -116,6 +116,7 @@ public class GameControl : MonoBehaviour
         }
         card.transform.SetParent(gameSetup.canvas.transform);
         card.transform.localPosition = cardSpawnLocation;
+        card.transform.localScale = new Vector3(1, 1, 1);
         card.GetComponent<CardLerp>().StartLerping(panelControl.handSlots[card.GetComponent<Card>().handSlot].transform, new Vector3(0, 0, 0));//start the cards animating out to the players
         if (playerPanels[turnIn] == localPlayerPanel) {
             card.GetComponent<CardScaleLerp>().StartScale(card.GetComponent<Card>().cardNumber);

@@ -21,11 +21,12 @@ public class AdManager : MonoBehaviour
         }
         DontDestroyOnLoad(gameObject);
 
-        #if UNITY_IOS
+        if (DeviceType.IsDeviceIos()) {
             gameId = "3313553";
-        #elif UNITY_ANDROID
+        }
+        if (DeviceType.IsDeviceAndroid()) {
             gameId = "3313552";
-        #endif
+        }
         Advertisement.Initialize(gameId, testMode);
     }
 

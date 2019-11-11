@@ -30,16 +30,23 @@ public class GooglePlayServices : MonoBehaviour
         PlayGamesPlatform.InitializeInstance(config);
         PlayGamesPlatform.DebugLogEnabled = true;
         PlayGamesPlatform.Activate();
-        SignIn();
     }
 
-    void SignIn() {
+    public void SignIn() {
         Social.localUser.Authenticate((bool success) => {
             if (success) {
-                Debug.Log("Logged into google play services");
+                
             } else {
                 Debug.Log("Failed to sign into google play servcies");
             }
         });
+    }
+
+    public static void SignOut() {
+        PlayGamesPlatform.Instance.SignOut();
+    }
+
+    public static bool IsGooglePlayLoggedIn() {
+        return Social.localUser.authenticated;
     }
 }

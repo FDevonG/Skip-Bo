@@ -28,4 +28,8 @@ public static class SaveSystem {
             return null;
         }
     }
+
+    public static void DeletePlayer() {
+        File.Delete(Application.persistentDataPath + "/player.ski");
+    }
 }
