@@ -13,7 +13,7 @@ public class Login : MonoBehaviour {
     Button CreateNewButton;
 
     public void LogIn() {
-        FireBaseScript.LogIn(emailInput.GetComponent<InputField>().text, passwordInput.GetComponent<InputField>().text);
+        StartCoroutine(FireBaseScript.LogIn(emailInput.GetComponent<InputField>().text, passwordInput.GetComponent<InputField>().text));
     }
 
     public void LogInAnonymously() {
@@ -65,6 +65,9 @@ public class Login : MonoBehaviour {
     }
 
     public void SetLoginInfoText (string message) {
+        if (infoText.gameObject.active == false) {
+            infoText.gameObject.SetActive(true);
+        }
         infoText.text = message;
         Debug.Log("Hi");
     }
