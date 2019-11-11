@@ -2,7 +2,6 @@
 
 public class Menu : MonoBehaviour
 {
-    public Canvas canvas;
     public GameObject logInPanel;
     public GameObject startMenu;
     public GameObject characterCreationPanel;
@@ -14,6 +13,7 @@ public class Menu : MonoBehaviour
     public GameObject quitGamePanel;
     public GameObject failedToLogInPanel;
     public GameObject friendsPanel;
+    public GameObject startGamePanel;
 
     private ActivatePanel activatePanel;
 
@@ -35,8 +35,12 @@ public class Menu : MonoBehaviour
     }
 
     private void GoBackAPanel() {
-        if (activatePanel.activePanel == logInPanel) {
+        if (activatePanel.activePanel == startGamePanel) {
             activatePanel.SwitchPanel(quitGamePanel);
+            return;
+        }
+        if (activatePanel.activePanel == logInPanel) {
+            activatePanel.SwitchPanel(startGamePanel);
             return;
         }
         if (activatePanel.activePanel == startMenu) {
@@ -79,19 +83,16 @@ public class Menu : MonoBehaviour
             activatePanel.SwitchPanel(startMenu);
             return;
         }
+
     }
 
     private void DoesPlayerExist() {
         PlayerData data = SaveSystem.LoadPlayer();
-        if (data == null) {
-            activatePanel.SwitchPanel(logInPanel);
+        if (data == null && !FireBaseScript.IsPlayerLoggedIn()) {
+            activatePanel.SwitchPanel(startGamePanel);
         } else {
             activatePanel.SwitchPanel(startMenu);
         }
-    }
-
-    public void TurnOnCanvas() {
-        canvas.gameObject.SetActive(true);
     }
 
     private void Update() {

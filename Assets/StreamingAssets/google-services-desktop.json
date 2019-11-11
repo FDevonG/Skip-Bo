@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "518563179345",
+    "firebase_url": "https://skip-bo-52535022.firebaseio.com",
+    "project_id": "skip-bo-52535022",
+    "storage_bucket": "skip-bo-52535022.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:518563179345:android:02770eb3be6f316267c170",
+        "android_client_info": {
+          "package_name": "com.FogBankGames.SkipBo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "518563179345-90o3gqn9em38rm4jbj74mtsf3jiiv0qs.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.FogBankGames.SkipBo",
+            "certificate_hash": "d048289cac1a903e360afc600066dd3fd9b51d87"
+          }
+        },
+        {
+          "client_id": "518563179345-j2obuoq5r4euiqb1guenhg877odfh5i3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAlAdx65id9oU2rCJ0SizdvhF5Mfm4m5uI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "518563179345-j2obuoq5r4euiqb1guenhg877odfh5i3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

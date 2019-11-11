@@ -26,14 +26,6 @@ public class CharacterCreation : MonoBehaviour
 
     private void OnEnable() {
         PlayerData data = SaveSystem.LoadPlayer();
-        if (DeviceType.IsDeviceIos()) {
-            Debug.Log("Write the code for the iphone here to determine if name input is hidden on character creation");
-        }
-        if (DeviceType.IsDeviceAndroid()) {
-            if (GooglePlayServices.IsGooglePlayLoggedIn()) {
-                nameInput.gameObject.SetActive(false);
-            }
-        }
         if (data == null) {
             RandomizeCharacter();
             loginCancelButton.gameObject.SetActive(true);
@@ -153,9 +145,9 @@ public class CharacterCreation : MonoBehaviour
 
     public void SavePlayer() {
         if (DeviceType.IsDeviceAndroid()) {
-            if (GooglePlayServices.IsGooglePlayLoggedIn()) {
+            //if (GooglePlayServices.IsGooglePlayLoggedIn()) {
                 SerializePlayer(Social.localUser.userName, Social.localUser.id);
-            }
+            //}
         } else if (DeviceType.IsDeviceIos()) {
             Debug.Log("Write the Ios code here for saving the character creation");
         } else {
