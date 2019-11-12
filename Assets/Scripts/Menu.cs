@@ -3,6 +3,7 @@
 public class Menu : MonoBehaviour
 {
     public GameObject logInPanel;
+    public GameObject signUpPanel;
     public GameObject startMenu;
     public GameObject characterCreationPanel;
     public GameObject howToPlayPanel;
@@ -14,6 +15,7 @@ public class Menu : MonoBehaviour
     public GameObject failedToLogInPanel;
     public GameObject friendsPanel;
     public GameObject startGamePanel;
+    public GameObject forgotPasswordPanel;
 
     private ActivatePanel activatePanel;
 
@@ -40,6 +42,14 @@ public class Menu : MonoBehaviour
             return;
         }
         if (activatePanel.activePanel == logInPanel) {
+            activatePanel.SwitchPanel(startGamePanel);
+            return;
+        }
+        if (activatePanel.activePanel == forgotPasswordPanel) {
+            activatePanel.SwitchPanel(logInPanel);
+            return;
+        }
+        if (activatePanel.activePanel == signUpPanel) {
             activatePanel.SwitchPanel(startGamePanel);
             return;
         }

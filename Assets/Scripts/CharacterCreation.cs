@@ -146,14 +146,14 @@ public class CharacterCreation : MonoBehaviour
     public void SavePlayer() {
         if (DeviceType.IsDeviceAndroid()) {
             //if (GooglePlayServices.IsGooglePlayLoggedIn()) {
-                SerializePlayer(Social.localUser.userName, Social.localUser.id);
+                SerializePlayer(Social.localUser.userName);
             //}
         } else if (DeviceType.IsDeviceIos()) {
             Debug.Log("Write the Ios code here for saving the character creation");
         } else {
             string playerName = nameText.text;
             if (!string.IsNullOrEmpty(playerName) && !string.IsNullOrWhiteSpace(playerName)) {
-                SerializePlayer(playerName, "");
+                SerializePlayer(playerName);
             } else {
                 placeholderText.text = "Enter Name";
                 placeholderText.color = Color.red;
@@ -161,8 +161,8 @@ public class CharacterCreation : MonoBehaviour
         }
     }
 
-    private void SerializePlayer(string sentName, string id) {
-        Player player = new Player(sentName, hair[chairIndex].name, face[cfaceIndex].name, kit[ckitIndex].name, body[cbodyIndex].name, id);
+    private void SerializePlayer(string sentName) {
+        Player player = new Player(sentName, hair[chairIndex].name, face[cfaceIndex].name, kit[ckitIndex].name, body[cbodyIndex].name);
         SaveSystem.SavePlayer(player);
         GameObject.FindGameObjectWithTag("GameManager").GetComponent<ActivatePanel>().SwitchPanel(GameObject.FindGameObjectWithTag("GameManager").GetComponent<Menu>().startMenu);
     }

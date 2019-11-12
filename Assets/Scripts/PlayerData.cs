@@ -13,8 +13,6 @@ public class PlayerData
     public int offlineGamesWon;
     public int onlineGamesWon;
 
-    public string uniqueID;
-
     public PlayerData(Player player) {
         name = player.Name;
         hair = player.Hair;
@@ -26,8 +24,6 @@ public class PlayerData
         onlineGamesPlayed = player.OnlineGamesPlayed;
         offlineGamesWon = player.OfflineGamesWon;
         onlineGamesWon = player.OnlineGamesWon;
-
-        uniqueID = player.UniqueID;
     }
 
 }
