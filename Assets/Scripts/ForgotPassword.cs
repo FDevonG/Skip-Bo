@@ -1,8 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-public class ForgotPassword : MonoBehaviour
-{
+public class ForgotPassword : MonoBehaviour {
     public GameObject emailInput;
     public Text infoText;
     public Button sendEmailButton;
@@ -12,9 +11,7 @@ public class ForgotPassword : MonoBehaviour
     }
 
     public void SetInfoText(string message) {
-        if (infoText.gameObject.active == false) {
-            infoText.gameObject.SetActive(true);
-        }
+        infoText.gameObject.SetActive(true);
         infoText.text = message;
     }
 
@@ -24,6 +21,20 @@ public class ForgotPassword : MonoBehaviour
         } else {
             sendEmailButton.interactable = false;
         }
+    }
+
+    public void SendEmailButton() {
+        if (VerifyEmail.ValidateEmail(emailInput.GetComponent<InputField>().text)) {
+            sendEmailButton.interactable = true;
+        } else {
+            sendEmailButton.interactable = false;
+        }
+    }
+
+    public void EmailSent() {
+        sendEmailButton.interactable = false;
+        SetInfoText("Email has been sent to " + emailInput.GetComponent<InputField>().text);
+        emailInput.GetComponent<InputField>().text = "";
     }
 
     private void OnDisable() {

@@ -102,6 +102,7 @@ public class Menu : MonoBehaviour
             activatePanel.SwitchPanel(startGamePanel);
         } else {
             activatePanel.SwitchPanel(startMenu);
+            StartCoroutine(FireBaseScript.GetUsers());
         }
     }
 

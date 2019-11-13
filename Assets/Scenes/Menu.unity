@@ -3543,8 +3543,8 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_MethodName: LoginButtonCheck
+      - m_Target: {fileID: 1926140313}
+        m_MethodName: SendEmailButton
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
