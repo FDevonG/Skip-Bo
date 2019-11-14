@@ -6,8 +6,17 @@ public class User {
     public string email;
     public string userName;
     public string uniqueID;
-    public Dictionary<string, string> avatar = new Dictionary<string, string>();
-    public Dictionary<string, int> playerStats = new Dictionary<string, int>();
+
+    public string hair;
+    public string face;
+    public string kit;
+    public string body;
+
+    public int offlineGamesPlayed;
+    public int onlineGamesPlayed;
+    public int offlineGamesWon;
+    public int onlineGamesWon;
+
     public List<string> friends = new List<string>();
 
     public User(string userEmail) {
@@ -19,15 +28,16 @@ public class User {
         uniqueID = id;
     }
 
-    public User () {
-
+    public User (string name, string uHair, string uFace, string Ukit, string Ubody) {
+        userName = name;
+        hair = uHair;
+        face = uFace;
+        kit = Ukit;
+        body = Ubody;
     }
 
-    public void BuildStartingStatsDictionary() {
-        playerStats.Add("offlineGamesPlayed", 0);
-        playerStats.Add("onlineGamesPlayed", 0);
-        playerStats.Add("offlineGamesWon", 0);
-        playerStats.Add("onlineGamesWon", 0);
+    public User () {
+
     }
 
 }

@@ -3,35 +3,21 @@
 public class PlayerStatsController : MonoBehaviour
 {
 
-    public Player player;
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        LoadPlayer();
-    }
-
-    private void LoadPlayer() {
-        PlayerData data = SaveSystem.LoadPlayer();
-        player = new Player(data.name, data.hair, data.face, data.kit, data.body, data.offlineGamesPlayed, data.onlineGamesPlayed, data.offlineGamesWon, data.onlineGamesWon);
-        AddGamePlayed();
-    }
-
-    private void AddGamePlayed() {
+    public void AddGamePlayed() {
         if (PhotonNetwork.offlineMode) {
-            player.OfflineGamesPlayed += 1;
+            LocalUser.user.offlineGamesPlayed += 1;
         } else {
-            player.OnlineGamesPlayed += 1;
+            LocalUser.user.onlineGamesPlayed += 1;
         }
-        SaveSystem.SavePlayer(player);
+        FireBaseScript.UpdateUser(LocalUser.user);
     }
 
     public void AddGameWon() {
         if (PhotonNetwork.offlineMode) {
-            player.OfflineGamesWon += 1;
+            LocalUser.user.offlineGamesWon += 1;
         } else {
-            player.OnlineGamesWon += 1;
+            LocalUser.user.onlineGamesWon += 1;
         }
-        SaveSystem.SavePlayer(player);
+        FireBaseScript.UpdateUser(LocalUser.user);
     }
 }

@@ -100,15 +100,13 @@ public class Menu : MonoBehaviour
     private IEnumerator DoesPlayerExist() {
         if (!FireBaseScript.IsPlayerLoggedIn()) {
             activatePanel.SwitchPanel(startGamePanel);
-            yield return null;
         } else {
-            StartCoroutine(FireBaseScript.GetCurrentUser());
-            while (CurrentUser.curUser == null) {
-                yield return new WaitForSeconds(0.1f);
-                StartCoroutine(FireBaseScript.GetCurrentUser());
+            FireBaseScript.GetCurrentUser();
+            while (LocalUser.user == null) {
+                yield return new WaitForSeconds(0.5f);
+                FireBaseScript.GetCurrentUser();
             }
-            Debug.Log(CurrentUser.curUser);
-            if (string.IsNullOrEmpty(CurrentUser.curUser.userName)) {
+            if (string.IsNullOrEmpty(LocalUser.user.userName)) {
                 activatePanel.SwitchPanel(characterCreationPanel);
             } else {
                 activatePanel.SwitchPanel(startMenu);

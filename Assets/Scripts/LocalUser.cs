@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CurrentUser : MonoBehaviour
+public class LocalUser : MonoBehaviour
 {
-    public static User curUser;
-    public static CurrentUser Instance { get; private set; }
+    public static LocalUser Instance { get; private set; }
+    public static User user;
 
     private void Awake() {
 

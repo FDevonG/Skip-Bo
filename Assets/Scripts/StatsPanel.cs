@@ -17,19 +17,18 @@ public class StatsPanel : MonoBehaviour
     public Text onlineGamesWonPercentageText;
 
     private void OnEnable() {
-        PlayerData data = SaveSystem.LoadPlayer();
-        int totalGamesPlayed = data.offlineGamesPlayed + data.onlineGamesPlayed;
-        int totalGamesWon = data.offlineGamesWon + data.onlineGamesWon;
+        int totalGamesPlayed = LocalUser.user.offlineGamesPlayed + LocalUser.user.onlineGamesPlayed;
+        int totalGamesWon = LocalUser.user.offlineGamesWon + LocalUser.user.onlineGamesWon;
 
         totalGamesPlayedText.text = "Total Games Played - " + totalGamesPlayed.ToString();
-        offlineGamesPlayedText.text = "Offline Games Played - " + data.offlineGamesPlayed.ToString();
-        onlineGamesPlayedText.text = "Online Games Played - " + data.onlineGamesPlayed.ToString();
+        offlineGamesPlayedText.text = "Offline Games Played - " + LocalUser.user.offlineGamesPlayed.ToString();
+        onlineGamesPlayedText.text = "Online Games Played - " + LocalUser.user.onlineGamesPlayed.ToString();
         totalGamesWonText.text = "Total Games Won - " + totalGamesWon.ToString();
-        offlineGamesWonText.text = "Offline Games Won - " + data.offlineGamesWon.ToString();
-        onelineGamesWonText.text = "Online Games Won - " + data.onlineGamesWon.ToString();
+        offlineGamesWonText.text = "Offline Games Won - " + LocalUser.user.offlineGamesWon.ToString();
+        onelineGamesWonText.text = "Online Games Won - " + LocalUser.user.onlineGamesWon.ToString();
         totalWinPercentageText.text = "Total Win Percent - " + GetPercentage(totalGamesWon, totalGamesPlayed).ToString() + "%";
-        offlineGamesWonPercentageText.text = "Offline Win Percent - " + GetPercentage(data.offlineGamesWon, data.offlineGamesPlayed) + "%";
-        onlineGamesWonPercentageText.text = "Online Win Percent - " + GetPercentage(data.onlineGamesWon, data.onlineGamesPlayed) + "%";
+        offlineGamesWonPercentageText.text = "Offline Win Percent - " + GetPercentage(LocalUser.user.offlineGamesWon, LocalUser.user.offlineGamesPlayed) + "%";
+        onlineGamesWonPercentageText.text = "Online Win Percent - " + GetPercentage(LocalUser.user.onlineGamesWon, LocalUser.user.onlineGamesPlayed) + "%";
     }
 
     private int GetPercentage(int smallNumber, int largeNumber) {

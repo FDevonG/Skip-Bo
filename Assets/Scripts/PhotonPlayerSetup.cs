@@ -1,8 +1,8 @@
 ﻿
 public static class PhotonPlayerSetup
 {
-    public static void BuildPhotonPlayer(PhotonPlayer photonPlayer, Player player) {
-        ExitGames.Client.Photon.Hashtable customProperties = new ExitGames.Client.Photon.Hashtable() { { "name", player.Name }, { "hair", player.Hair }, { "face", player.Face }, { "kit", player.Kit }, { "body", player.Body } };
+    public static void BuildPhotonPlayer(PhotonPlayer photonPlayer, User user) {
+        ExitGames.Client.Photon.Hashtable customProperties = new ExitGames.Client.Photon.Hashtable() { { "name", user.userName }, { "hair", user.hair }, { "face", user.face }, { "kit", user.kit }, { "body", user.body } };
         photonPlayer.SetCustomProperties(customProperties);
     }
 }

@@ -3,9 +3,7 @@
 public static class PhotonRooms
 {
     public static void SetupPhotonPlayer() {
-        PlayerData data = SaveSystem.LoadPlayer();
-        Player player = new Player(data.name, data.hair, data.face, data.kit, data.body);
-        PhotonPlayerSetup.BuildPhotonPlayer(PhotonNetwork.player, player);
+        PhotonPlayerSetup.BuildPhotonPlayer(PhotonNetwork.player, LocalUser.user);
     }
 
     public static void JoinRandomRoom() {

@@ -3,7 +3,9 @@
 public class LogOut : MonoBehaviour
 {
     public void LogOutOfGame() {
-        SaveSystem.DeletePlayer();
+        if (FireBaseScript.IsPlayerAnonymous()) {
+            FireBaseScript.DeleteAccount();
+        }
         FireBaseScript.SignOut();
     }
 }

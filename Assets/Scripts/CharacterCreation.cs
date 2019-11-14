@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using Firebase.Auth;
+﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -26,8 +26,16 @@ public class CharacterCreation : MonoBehaviour
     public Button startMenuCancelButton;
 
     private void OnEnable() {
-        StartCoroutine(FireBaseScript.GetCurrentUser());
-        if (string.IsNullOrEmpty(CurrentUser.curUser.userName)) {
+        StartCoroutine(BuildCharacter());
+    }
+
+    private IEnumerator BuildCharacter() {
+        FireBaseScript.GetCurrentUser();
+        while (LocalUser.user == null) {
+            yield return new WaitForSeconds(0.1f);
+            FireBaseScript.GetCurrentUser();
+        }
+        if (string.IsNullOrEmpty(LocalUser.user.userName)) {
             RandomizeCharacter();
             startMenuCancelButton.gameObject.SetActive(false);
         } else {
@@ -51,14 +59,14 @@ public class CharacterCreation : MonoBehaviour
     }
 
     private void BuildSavedCharacter() {
-        StartCoroutine(FireBaseScript.GetCurrentUser());
-        nameInput.GetComponent<InputField>().text = CurrentUser.curUser.userName;
+        //User user = FireBaseScript.GetCurrentUser();
+        nameInput.GetComponent<InputField>().text = LocalUser.user.userName;
         
         ////set the body parts
-        cbody.sprite = Resources.Load<Sprite>("Faces/Bodies/" + CurrentUser.curUser.avatar["body"]) as Sprite;
-        cface.sprite = Resources.Load<Sprite>("Faces/Faces/" + CurrentUser.curUser.avatar["face"]) as Sprite;
-        chair.sprite = Resources.Load<Sprite>("Faces/Hairs/" + CurrentUser.curUser.avatar["hair"]) as Sprite;
-        ckit.sprite = Resources.Load<Sprite>("Faces/Kits/" + CurrentUser.curUser.avatar["kit"]) as Sprite;
+        cbody.sprite = Resources.Load<Sprite>("Faces/Bodies/" + LocalUser.user.body) as Sprite;
+        cface.sprite = Resources.Load<Sprite>("Faces/Faces/" + LocalUser.user.face) as Sprite;
+        chair.sprite = Resources.Load<Sprite>("Faces/Hairs/" + LocalUser.user.hair) as Sprite;
+        ckit.sprite = Resources.Load<Sprite>("Faces/Kits/" + LocalUser.user.kit) as Sprite;
     }
 
     //changes the hair to the next one
@@ -145,9 +153,12 @@ public class CharacterCreation : MonoBehaviour
         string playerName = nameInput.GetComponent<InputField>().text;
         if (!string.IsNullOrEmpty(playerName) && !string.IsNullOrWhiteSpace(playerName)) {
             if (!FireBaseScript.DoesUserNameExist(playerName)) {
-                Dictionary<string, string> avatar = BuildAvatarDictionary();
-                FireBaseScript.UpdateUserAvatar(avatar);
-                FireBaseScript.UpdateUserName(playerName);
+                LocalUser.user.userName = playerName;
+                LocalUser.user.hair = hair[chairIndex].name;
+                LocalUser.user.face = face[cfaceIndex].name;
+                LocalUser.user.kit = kit[ckitIndex].name;
+                LocalUser.user.body = body[cbodyIndex].name;
+                FireBaseScript.UpdateUser(LocalUser.user);
                 GameObject.FindGameObjectWithTag("GameManager").GetComponent<ActivatePanel>().SwitchPanel(GameObject.FindGameObjectWithTag("GameManager").GetComponent<Menu>().startMenu);
             } else {
                 ErrorWithCharacterEdit("Username is taken");
@@ -161,15 +172,6 @@ public class CharacterCreation : MonoBehaviour
         infoText.gameObject.SetActive(true);
         infoText.text = message;
         nameInput.GetComponent<Outline>().enabled = true;
-    }
-
-    private Dictionary<string, string> BuildAvatarDictionary() {
-        Dictionary<string, string> avatar = new Dictionary<string, string>();
-        avatar.Add("hair", hair[chairIndex].name);
-        avatar.Add("face", face[cfaceIndex].name);
-        avatar.Add("kit", kit[ckitIndex].name);
-        avatar.Add("body", body[cbodyIndex].name);
-        return avatar;
     }
 
 }
