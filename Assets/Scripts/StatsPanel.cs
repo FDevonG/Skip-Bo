@@ -17,6 +17,11 @@ public class StatsPanel : MonoBehaviour
     public Text onlineGamesWonPercentageText;
 
     private void OnEnable() {
+
+        if (LocalUser.user == null) {
+            FireBaseScript.GetCurrentUser();
+        }
+
         int totalGamesPlayed = LocalUser.user.offlineGamesPlayed + LocalUser.user.onlineGamesPlayed;
         int totalGamesWon = LocalUser.user.offlineGamesWon + LocalUser.user.onlineGamesWon;
 

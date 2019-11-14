@@ -5,6 +5,7 @@ using System.Collections.Generic;
 public class User {
     public string email;
     public string userName;
+    public string userID;
 
     public string hair;
     public string face;
@@ -18,8 +19,9 @@ public class User {
 
     public List<string> friends = new List<string>();
 
-    public User(string userEmail) {
+    public User(string userEmail, string id) {
         email = userEmail;
+        userID = id;
     }
 
     public User (string name, string uHair, string uFace, string Ukit, string Ubody) {

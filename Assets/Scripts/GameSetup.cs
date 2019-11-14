@@ -24,6 +24,7 @@ public class GameSetup : MonoBehaviour {
     }
 
     public void SetGameUp() {
+        PlayerStatsController.AddGamePlayed();
         //if we are in an offline game we want to build the array to build out the game with and to store later for checking if the play is still connected
         if (!PhotonNetwork.offlineMode) {
             gameControl.connectedPlayers = GetPhotonPlayerArray();
@@ -142,7 +143,7 @@ public class GameSetup : MonoBehaviour {
         
         PanelControl panelControl = playerPanel.GetComponent<PanelControl>();
         panelControl.photonPlayer = photonPlayer;
-        Debug.Log((string)panelControl.photonPlayer.CustomProperties["body"]);
+        
         panelControl.nameText.text = (string)panelControl.photonPlayer.CustomProperties["name"];
         panelControl.cbody.sprite = Resources.Load<Sprite>("Faces/Bodies/" + (string)panelControl.photonPlayer.CustomProperties["body"]) as Sprite;
         panelControl.cface.sprite = Resources.Load<Sprite>("Faces/Faces/" + (string)panelControl.photonPlayer.CustomProperties["face"]) as Sprite;

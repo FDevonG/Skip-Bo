@@ -1811,7 +1811,6 @@ GameObject:
   - component: {fileID: 829572479}
   - component: {fileID: 829572480}
   - component: {fileID: 829572481}
-  - component: {fileID: 829572482}
   - component: {fileID: 829572483}
   - component: {fileID: 829572484}
   m_Layer: 0
@@ -2194,18 +2193,6 @@ MonoBehaviour:
   victoryPanel: {fileID: 723533070}
   menuButton: {fileID: 1562089095}
   activePanel: {fileID: 957019033}
---- !u!114 &829572482
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 829572474}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 366004e1fa8c34f748d26302ec996ad2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &829572483
 MonoBehaviour:
   m_ObjectHideFlags: 0

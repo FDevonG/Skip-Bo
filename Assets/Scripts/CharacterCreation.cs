@@ -32,6 +32,8 @@ public class CharacterCreation : MonoBehaviour
 
     private void OnDisable() {
         nameInput.GetComponent<InputField>().text = "";
+        nameInput.GetComponent<Outline>().enabled = false;
+        infoText.gameObject.SetActive(false);
     }
 
     private IEnumerator BuildCharacter() {

@@ -70,7 +70,7 @@ public class Victory : MonoBehaviour
             yield return new WaitForSeconds(0.5f);
         }
         if (gameControl.localPlayerPanel.GetComponent<PanelControl>().deck.transform.childCount == 0) {
-            GameObject.FindGameObjectWithTag("GameManager").GetComponent<PlayerStatsController>().AddGameWon();
+            PlayerStatsController.AddGameWon();
         }
         for (int i = 0; i < playerStandings.Length; i++) {
             GameObject standingPanel = Instantiate(Resources.Load<GameObject>("PlayerStandingPanel") as GameObject);

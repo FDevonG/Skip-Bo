@@ -30,6 +30,10 @@ public class FireBaseScript : MonoBehaviour
             GameObject.FindGameObjectWithTag("GameManager").GetComponent<Menu>().logInPanel.GetComponent<Login>().SetLoginInfoText(GetErrorMessage(registerTask.Exception));
         } else {
             GetCurrentUser();
+            while (LocalUser.user == null) {
+                yield return new WaitForSeconds(0.2f);
+                GetCurrentUser();
+            }
             if (string.IsNullOrEmpty(LocalUser.user.userName)) {
                 GameObject.FindGameObjectWithTag("GameManager").GetComponent<ActivatePanel>().SwitchPanel(GameObject.FindGameObjectWithTag("GameManager").GetComponent<Menu>().characterCreationPanel);
             } else {
@@ -45,7 +49,7 @@ public class FireBaseScript : MonoBehaviour
         if (registerTask.Exception != null) {
             GameObject.FindGameObjectWithTag("GameManager").GetComponent<Menu>().logInPanel.GetComponent<Login>().SetLoginInfoText(GetErrorMessage(registerTask.Exception));
         } else {
-            User newUser = new User("GuestLogin");
+            User newUser = new User("GuestLogin", FirebaseAuth.DefaultInstance.CurrentUser.UserId);
             WriteNewUser(newUser);
             GameObject.FindGameObjectWithTag("GameManager").GetComponent<ActivatePanel>().SwitchPanel(GameObject.FindGameObjectWithTag("GameManager").GetComponent<Menu>().characterCreationPanel);
         }
@@ -59,7 +63,7 @@ public class FireBaseScript : MonoBehaviour
         if (registerTask.Exception != null) {
             GameObject.FindGameObjectWithTag("GameManager").GetComponent<Menu>().signUpPanel.GetComponent<SignUpPanel>().ChangeSignUpErrorText(GetErrorMessage(registerTask.Exception));
         } else {
-            User newUser = new User(email);
+            User newUser = new User(email, FirebaseAuth.DefaultInstance.CurrentUser.UserId);
             WriteNewUser(newUser);
             GameObject.FindGameObjectWithTag("GameManager").GetComponent<ActivatePanel>().SwitchPanel(GameObject.FindGameObjectWithTag("GameManager").GetComponent<Menu>().characterCreationPanel);
         }
@@ -147,11 +151,12 @@ public class FireBaseScript : MonoBehaviour
         databaseReference.Child("users").Child(FirebaseAuth.DefaultInstance.CurrentUser.UserId).Child("onlineGamesPlayed").SetValueAsync(user.onlineGamesPlayed);
         databaseReference.Child("users").Child(FirebaseAuth.DefaultInstance.CurrentUser.UserId).Child("offlineGamesWon").SetValueAsync(user.offlineGamesWon);
         databaseReference.Child("users").Child(FirebaseAuth.DefaultInstance.CurrentUser.UserId).Child("onlineGamesWon").SetValueAsync(user.onlineGamesWon);
+        databaseReference.Child("users").Child(FirebaseAuth.DefaultInstance.CurrentUser.UserId).Child("friends").SetValueAsync(user.friends);
     }
 
     public static void DeleteAccountData() {
-        DatabaseReference databaseReference = FirebaseDatabase.DefaultInstance.RootReference;
-        databaseReference.Child("users").Child(FirebaseAuth.DefaultInstance.CurrentUser.UserId).RemoveValueAsync();
+        DatabaseReference databaseReference = FirebaseDatabase.DefaultInstance.RootReference.Child("users").Child(FirebaseAuth.DefaultInstance.CurrentUser.UserId);
+        databaseReference.RemoveValueAsync();
     }
 
     #endregion
@@ -193,9 +198,11 @@ public class FireBaseScript : MonoBehaviour
             bool userNameExists = false;
             foreach (DataSnapshot snap in snapshot.Children) {
                 User user = JsonUtility.FromJson<User>(snap.GetRawJsonValue());
-                if (user.userName == LocalUser.user.userName) {
-                    userNameExists = true;
-                    break;
+                if (user.userName.ToUpper() == LocalUser.user.userName.ToUpper()) {
+                    if (FirebaseAuth.DefaultInstance.CurrentUser.UserId != user.userID) {
+                        userNameExists = true;
+                        break;
+                    }
                 }
             }
             

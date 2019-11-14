@@ -1,9 +1,7 @@
-﻿using UnityEngine;
-
-public class PlayerStatsController : MonoBehaviour
+﻿public class PlayerStatsController
 {
 
-    public void AddGamePlayed() {
+    public static void AddGamePlayed() {
         if (PhotonNetwork.offlineMode) {
             LocalUser.user.offlineGamesPlayed += 1;
         } else {
@@ -12,7 +10,7 @@ public class PlayerStatsController : MonoBehaviour
         FireBaseScript.UpdateUser(LocalUser.user);
     }
 
-    public void AddGameWon() {
+    public static void AddGameWon() {
         if (PhotonNetwork.offlineMode) {
             LocalUser.user.offlineGamesWon += 1;
         } else {
