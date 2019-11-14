@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>518563179345-vh4u59vglbgmaik65a23ee43asfo0pue.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.518563179345-vh4u59vglbgmaik65a23ee43asfo0pue</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>518563179345-90o3gqn9em38rm4jbj74mtsf3jiiv0qs.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyCLwv8DBbUQn-xNDiM2oixJfHYJxkzPS1g</string>
+	<key>GCM_SENDER_ID</key>
+	<string>518563179345</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.FogBankGames.SkipBo</string>
+	<key>PROJECT_ID</key>
+	<string>skip-bo-52535022</string>
+	<key>STORAGE_BUCKET</key>
+	<string>skip-bo-52535022.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:518563179345:ios:9070f877341a518767c170</string>
+	<key>DATABASE_URL</key>
+	<string>https://skip-bo-52535022.firebaseio.com</string>
+</dict>
+</plist>

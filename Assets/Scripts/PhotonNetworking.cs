@@ -2,7 +2,7 @@
 
 public class PhotonNetworking : MonoBehaviour {
 
-    private string versionNumber = "1.3";
+    private string versionNumber = "1.5";
 
     public static PhotonNetworking Instance { get; private set; }
 

@@ -5,7 +5,6 @@ using System.Collections.Generic;
 public class User {
     public string email;
     public string userName;
-    public string uniqueID;
 
     public string hair;
     public string face;
@@ -21,11 +20,6 @@ public class User {
 
     public User(string userEmail) {
         email = userEmail;
-    }
-
-    public User (string userEmail, string id) {
-        email = userEmail;
-        uniqueID = id;
     }
 
     public User (string name, string uHair, string uFace, string Ukit, string Ubody) {

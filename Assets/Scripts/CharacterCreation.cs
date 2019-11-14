@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class CharacterCreation : MonoBehaviour
 {
+    [SerializeField] GameObject avatarPanel;
     public Image cbody;//used to display the body
     public Image cface;//used to display the face
     public Image chair;//used to display the hair
@@ -29,12 +30,19 @@ public class CharacterCreation : MonoBehaviour
         StartCoroutine(BuildCharacter());
     }
 
+    private void OnDisable() {
+        nameInput.GetComponent<InputField>().text = "";
+    }
+
     private IEnumerator BuildCharacter() {
-        FireBaseScript.GetCurrentUser();
+        if (LocalUser.user == null) {
+            FireBaseScript.GetCurrentUser();
+        }
         while (LocalUser.user == null) {
             yield return new WaitForSeconds(0.1f);
             FireBaseScript.GetCurrentUser();
         }
+        avatarPanel.SetActive(true);
         if (string.IsNullOrEmpty(LocalUser.user.userName)) {
             RandomizeCharacter();
             startMenuCancelButton.gameObject.SetActive(false);
@@ -152,17 +160,12 @@ public class CharacterCreation : MonoBehaviour
     public void SavePlayer() {
         string playerName = nameInput.GetComponent<InputField>().text;
         if (!string.IsNullOrEmpty(playerName) && !string.IsNullOrWhiteSpace(playerName)) {
-            if (!FireBaseScript.DoesUserNameExist(playerName)) {
-                LocalUser.user.userName = playerName;
-                LocalUser.user.hair = hair[chairIndex].name;
-                LocalUser.user.face = face[cfaceIndex].name;
-                LocalUser.user.kit = kit[ckitIndex].name;
-                LocalUser.user.body = body[cbodyIndex].name;
-                FireBaseScript.UpdateUser(LocalUser.user);
-                GameObject.FindGameObjectWithTag("GameManager").GetComponent<ActivatePanel>().SwitchPanel(GameObject.FindGameObjectWithTag("GameManager").GetComponent<Menu>().startMenu);
-            } else {
-                ErrorWithCharacterEdit("Username is taken");
-            }
+            LocalUser.user.userName = playerName;
+            LocalUser.user.hair = hair[chairIndex].name;
+            LocalUser.user.face = face[cfaceIndex].name;
+            LocalUser.user.kit = kit[ckitIndex].name;
+            LocalUser.user.body = body[cbodyIndex].name;
+            StartCoroutine(FireBaseScript.DoesUserNameExist());
         } else {
             ErrorWithCharacterEdit("Please enter a username");
         }

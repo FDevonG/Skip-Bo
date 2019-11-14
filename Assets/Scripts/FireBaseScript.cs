@@ -45,7 +45,7 @@ public class FireBaseScript : MonoBehaviour
         if (registerTask.Exception != null) {
             GameObject.FindGameObjectWithTag("GameManager").GetComponent<Menu>().logInPanel.GetComponent<Login>().SetLoginInfoText(GetErrorMessage(registerTask.Exception));
         } else {
-            User newUser = new User();
+            User newUser = new User("GuestLogin");
             WriteNewUser(newUser);
             GameObject.FindGameObjectWithTag("GameManager").GetComponent<ActivatePanel>().SwitchPanel(GameObject.FindGameObjectWithTag("GameManager").GetComponent<Menu>().characterCreationPanel);
         }
@@ -59,7 +59,7 @@ public class FireBaseScript : MonoBehaviour
         if (registerTask.Exception != null) {
             GameObject.FindGameObjectWithTag("GameManager").GetComponent<Menu>().signUpPanel.GetComponent<SignUpPanel>().ChangeSignUpErrorText(GetErrorMessage(registerTask.Exception));
         } else {
-            User newUser = new User(email, FirebaseAuth.DefaultInstance.CurrentUser.UserId);
+            User newUser = new User(email);
             WriteNewUser(newUser);
             GameObject.FindGameObjectWithTag("GameManager").GetComponent<ActivatePanel>().SwitchPanel(GameObject.FindGameObjectWithTag("GameManager").GetComponent<Menu>().characterCreationPanel);
         }
@@ -149,10 +149,10 @@ public class FireBaseScript : MonoBehaviour
         databaseReference.Child("users").Child(FirebaseAuth.DefaultInstance.CurrentUser.UserId).Child("onlineGamesWon").SetValueAsync(user.onlineGamesWon);
     }
 
-    //public static void UpdateUser(string name) {
-    //    DatabaseReference databaseReference = FirebaseDatabase.DefaultInstance.RootReference;
-    //    databaseReference.Child("users").Child(FirebaseAuth.DefaultInstance.CurrentUser.UserId).Child("userName").SetValueAsync(name);
-    //}
+    public static void DeleteAccountData() {
+        DatabaseReference databaseReference = FirebaseDatabase.DefaultInstance.RootReference;
+        databaseReference.Child("users").Child(FirebaseAuth.DefaultInstance.CurrentUser.UserId).RemoveValueAsync();
+    }
 
     #endregion
 
@@ -184,21 +184,28 @@ public class FireBaseScript : MonoBehaviour
         });
     }
 
-    public static bool DoesUserNameExist(string username) {
-        bool userNameExist = false;
-        FirebaseDatabase.DefaultInstance.GetReference("users").GetValueAsync().ContinueWith(task => {
-            if (task.IsCompleted) {
-                DataSnapshot snapshot = task.Result;
-                List<User> users = JsonUtility.FromJson<List<User>>(snapshot.ToString());
-                for (int i = 0; i < users.Count; i++) {
-                    if (users[i].userName == username) {
-                        userNameExist = true;
-                        break;
-                    }
+    public static IEnumerator DoesUserNameExist() {
+        var auth = FirebaseAuth.DefaultInstance;
+        var task = FirebaseDatabase.DefaultInstance.GetReference("users").GetValueAsync();
+        yield return new WaitUntil(() => task.IsCompleted);
+        if (task.Exception == null) {
+            DataSnapshot snapshot = task.Result;
+            bool userNameExists = false;
+            foreach (DataSnapshot snap in snapshot.Children) {
+                User user = JsonUtility.FromJson<User>(snap.GetRawJsonValue());
+                if (user.userName == LocalUser.user.userName) {
+                    userNameExists = true;
+                    break;
                 }
             }
-        });
-        return userNameExist;
+            
+            if (userNameExists) {
+                GameObject.FindGameObjectWithTag("GameManager").GetComponent<Menu>().characterCreationPanel.GetComponent<CharacterCreation>().ErrorWithCharacterEdit("Username is taken");
+            } else {
+                FireBaseScript.UpdateUser(LocalUser.user);
+                GameObject.FindGameObjectWithTag("GameManager").GetComponent<ActivatePanel>().SwitchPanel(GameObject.FindGameObjectWithTag("GameManager").GetComponent<Menu>().startMenu);
+            }
+        }
     }
 
 }
