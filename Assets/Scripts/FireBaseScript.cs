@@ -34,7 +34,12 @@ public class FireBaseScript : MonoBehaviour
         if (registerTask.Exception != null) {
             GameObject.FindGameObjectWithTag("GameManager").GetComponent<Menu>().logInPanel.GetComponent<Login>().SetLoginInfoText(GetErrorMessage(registerTask.Exception));
         } else {
-            GameObject.FindGameObjectWithTag("GameManager").GetComponent<ActivatePanel>().SwitchPanel(GameObject.FindGameObjectWithTag("GameManager").GetComponent<Menu>().startMenu);
+            GetCurrentUser();
+            if (string.IsNullOrEmpty(CurrentUser.curUser.userName)) {
+                GameObject.FindGameObjectWithTag("GameManager").GetComponent<ActivatePanel>().SwitchPanel(GameObject.FindGameObjectWithTag("GameManager").GetComponent<Menu>().characterCreationPanel);
+            } else {
+                GameObject.FindGameObjectWithTag("GameManager").GetComponent<ActivatePanel>().SwitchPanel(GameObject.FindGameObjectWithTag("GameManager").GetComponent<Menu>().startMenu);
+            }
         }
     }
 
@@ -45,6 +50,8 @@ public class FireBaseScript : MonoBehaviour
         if (registerTask.Exception != null) {
             GameObject.FindGameObjectWithTag("GameManager").GetComponent<Menu>().logInPanel.GetComponent<Login>().SetLoginInfoText(GetErrorMessage(registerTask.Exception));
         } else {
+            User newUser = new User();
+            WriteNewUser(newUser);
             GameObject.FindGameObjectWithTag("GameManager").GetComponent<ActivatePanel>().SwitchPanel(GameObject.FindGameObjectWithTag("GameManager").GetComponent<Menu>().characterCreationPanel);
         }
 
@@ -58,7 +65,9 @@ public class FireBaseScript : MonoBehaviour
             GameObject.FindGameObjectWithTag("GameManager").GetComponent<Menu>().signUpPanel.GetComponent<SignUpPanel>().ChangeSignUpErrorText(GetErrorMessage(registerTask.Exception));
         } else {
             User newUser = new User(email, FirebaseAuth.DefaultInstance.CurrentUser.UserId);
+            newUser.BuildStartingStatsDictionary();//build the stats dictionary for new character
             WriteNewUser(newUser);
+            UpdatePlayerStats(newUser.playerStats);
             GameObject.FindGameObjectWithTag("GameManager").GetComponent<ActivatePanel>().SwitchPanel(GameObject.FindGameObjectWithTag("GameManager").GetComponent<Menu>().characterCreationPanel);
         }
     }
@@ -119,6 +128,33 @@ public class FireBaseScript : MonoBehaviour
         FirebaseAuth.DefaultInstance.SignOut();
     }
 
+    #endregion
+    //GameObject.FindGameObjectWithTag("GameManager").GetComponent<Menu>().characterCreationPanel.GetComponent<CharacterCreation>().ErrorWithCharacterEdit("Failed to save to server");
+    #region Database
+
+    public static void WriteNewUser(User user) {
+        string json = JsonUtility.ToJson(user);
+        DatabaseReference databaseReference = FirebaseDatabase.DefaultInstance.RootReference;
+        databaseReference.Child("users").Child(FirebaseAuth.DefaultInstance.CurrentUser.UserId).Push().SetRawJsonValueAsync(json);
+    }
+
+    public static void UpdateUserAvatar(Dictionary<string, string> avatar) {
+        DatabaseReference databaseReference = FirebaseDatabase.DefaultInstance.RootReference;
+        databaseReference.Child("users").Child(FirebaseAuth.DefaultInstance.CurrentUser.UserId).Child("avatar").SetValueAsync(avatar);
+    }
+
+    public static void UpdateUserName(string name) {
+        DatabaseReference databaseReference = FirebaseDatabase.DefaultInstance.RootReference;
+        databaseReference.Child("users").Child(FirebaseAuth.DefaultInstance.CurrentUser.UserId).Child("userName").SetValueAsync(name);
+    }
+
+    public static void UpdatePlayerStats(Dictionary<string, int> stats) {
+        DatabaseReference databaseReference = FirebaseDatabase.DefaultInstance.RootReference;
+        databaseReference.Child("users").Child(FirebaseAuth.DefaultInstance.CurrentUser.UserId).Child("playerStats").SetValueAsync(stats);
+    }
+
+    #endregion
+
     public static bool IsPlayerLoggedIn() {
         bool loggedIn = true;
         if (FirebaseAuth.DefaultInstance.CurrentUser == null) {
@@ -126,32 +162,45 @@ public class FireBaseScript : MonoBehaviour
         }
         return loggedIn;
     }
-    #endregion
 
-    #region Database
-
-    public static void WriteNewUser(User user) {
-        string json = JsonUtility.ToJson(user);
-        DatabaseReference databaseReference = FirebaseDatabase.DefaultInstance.RootReference;
-        databaseReference.Child("users").Child(user.UserID).SetRawJsonValueAsync(json);
-    }
-
-    public static IEnumerator GetUsers() {
-        var auth = FirebaseAuth.DefaultInstance;
-        var registerTask = FirebaseDatabase.DefaultInstance.GetReference("users").GetValueAsync();
-        yield return new WaitUntil(() => registerTask.IsCompleted);
-
-        if (registerTask.Exception != null) {
-            Debug.Log(registerTask.Result);
-            Debug.Log("Getting Users went wrong");
+    public static bool IsPlayerAnonymous() {
+        if (FirebaseAuth.DefaultInstance.CurrentUser.IsAnonymous) {
+            return true;
         } else {
-            Debug.Log(registerTask.Result);
-            Debug.Log("Getting Users");
+            return false;
         }
     }
 
-    
+    public static IEnumerator GetCurrentUser() {
+        var auth = FirebaseAuth.DefaultInstance;
+        var task = FirebaseDatabase.DefaultInstance.GetReference("users").GetValueAsync();
+        yield return new WaitUntil(() => task.IsCompleted);
+        Debug.Log("Geting CurrentPlayer");
+        if (task.Exception != null) {
+            Debug.Log("Failed to get current user");
+        } else {
+            DataSnapshot snapshot = task.Result;
+            string json = snapshot.Child(FirebaseAuth.DefaultInstance.CurrentUser.UserId).ToString();
+            CurrentUser.curUser = JsonUtility.FromJson<User>(json);
+            Debug.Log(CurrentUser.curUser.avatar.Keys);
+        }
+    }
 
-    #endregion
+    public static bool DoesUserNameExist(string username) {
+        bool userNameExist = false;
+        FirebaseDatabase.DefaultInstance.GetReference("users").GetValueAsync().ContinueWith(task => {
+            if (task.IsCompleted) {
+                DataSnapshot snapshot = task.Result;
+                List<User> users = JsonUtility.FromJson<List<User>>(snapshot.ToString());
+                for (int i = 0; i < users.Count; i++) {
+                    if (users[i].userName == username) {
+                        userNameExist = true;
+                        break;
+                    }
+                }
+            }
+        });
+        return userNameExist;
+    }
 
 }

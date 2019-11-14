@@ -39,9 +39,6 @@ public class PhotonNetworking : MonoBehaviour {
     //this is called when you get disconnected from photon
     private void OnDisconnectedFromPhoton() {
         Debug.Log("Disconnected from photon");
-        if (!NetworkCheck()) {
-            Instantiate(Resources.Load<GameObject>("DisconnectedFromPhotonCanvas") as GameObject);
-        }
     }
 
     private void OnCreatedRoom() {
@@ -84,14 +81,6 @@ public class PhotonNetworking : MonoBehaviour {
                 Debug.Log("Master Switched");
                 GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameControl>().DetermineNPCTurn();
             }
-        }
-    }
-
-    private bool NetworkCheck() {
-        if (Application.internetReachability != NetworkReachability.NotReachable) {
-            return true;
-        } else {
-            return false;
         }
     }
 

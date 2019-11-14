@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using Firebase.Auth;
+using UnityEngine;
 using UnityEngine.UI;
 
 public class CharacterCreation : MonoBehaviour
@@ -13,26 +15,23 @@ public class CharacterCreation : MonoBehaviour
     public Sprite[] kit;//used to display the clothes types
 
     public GameObject nameInput;
-    public Text nameText;//used to refernce the name input
-    public Text placeholderText;
+
+    [SerializeField] Text infoText;
 
     public int cbodyIndex = 0;
     public int cfaceIndex = 0;
     public int chairIndex = 0;
     public int ckitIndex = 0;
 
-    public Button loginCancelButton;
     public Button startMenuCancelButton;
 
     private void OnEnable() {
-        PlayerData data = SaveSystem.LoadPlayer();
-        if (data == null) {
+        StartCoroutine(FireBaseScript.GetCurrentUser());
+        if (string.IsNullOrEmpty(CurrentUser.curUser.userName)) {
             RandomizeCharacter();
-            loginCancelButton.gameObject.SetActive(true);
             startMenuCancelButton.gameObject.SetActive(false);
         } else {
             BuildSavedCharacter();
-            loginCancelButton.gameObject.SetActive(false);
             startMenuCancelButton.gameObject.SetActive(true);
         }
     }
@@ -52,15 +51,14 @@ public class CharacterCreation : MonoBehaviour
     }
 
     private void BuildSavedCharacter() {
-        PlayerData data = SaveSystem.LoadPlayer();
-        nameInput.GetComponent<InputField>().text = data.name;
-        nameText.text = data.name;
-
+        StartCoroutine(FireBaseScript.GetCurrentUser());
+        nameInput.GetComponent<InputField>().text = CurrentUser.curUser.userName;
+        
         ////set the body parts
-        cbody.sprite = Resources.Load<Sprite>("Faces/Bodies/" + data.body) as Sprite;
-        cface.sprite = Resources.Load<Sprite>("Faces/Faces/" + data.face) as Sprite;
-        chair.sprite = Resources.Load<Sprite>("Faces/Hairs/" + data.hair) as Sprite;
-        ckit.sprite = Resources.Load<Sprite>("Faces/Kits/" + data.kit) as Sprite;
+        cbody.sprite = Resources.Load<Sprite>("Faces/Bodies/" + CurrentUser.curUser.avatar["body"]) as Sprite;
+        cface.sprite = Resources.Load<Sprite>("Faces/Faces/" + CurrentUser.curUser.avatar["face"]) as Sprite;
+        chair.sprite = Resources.Load<Sprite>("Faces/Hairs/" + CurrentUser.curUser.avatar["hair"]) as Sprite;
+        ckit.sprite = Resources.Load<Sprite>("Faces/Kits/" + CurrentUser.curUser.avatar["kit"]) as Sprite;
     }
 
     //changes the hair to the next one
@@ -144,27 +142,34 @@ public class CharacterCreation : MonoBehaviour
     }
 
     public void SavePlayer() {
-        if (DeviceType.IsDeviceAndroid()) {
-            //if (GooglePlayServices.IsGooglePlayLoggedIn()) {
-                SerializePlayer(Social.localUser.userName);
-            //}
-        } else if (DeviceType.IsDeviceIos()) {
-            Debug.Log("Write the Ios code here for saving the character creation");
-        } else {
-            string playerName = nameText.text;
-            if (!string.IsNullOrEmpty(playerName) && !string.IsNullOrWhiteSpace(playerName)) {
-                SerializePlayer(playerName);
+        string playerName = nameInput.GetComponent<InputField>().text;
+        if (!string.IsNullOrEmpty(playerName) && !string.IsNullOrWhiteSpace(playerName)) {
+            if (!FireBaseScript.DoesUserNameExist(playerName)) {
+                Dictionary<string, string> avatar = BuildAvatarDictionary();
+                FireBaseScript.UpdateUserAvatar(avatar);
+                FireBaseScript.UpdateUserName(playerName);
+                GameObject.FindGameObjectWithTag("GameManager").GetComponent<ActivatePanel>().SwitchPanel(GameObject.FindGameObjectWithTag("GameManager").GetComponent<Menu>().startMenu);
             } else {
-                placeholderText.text = "Enter Name";
-                placeholderText.color = Color.red;
+                ErrorWithCharacterEdit("Username is taken");
             }
+        } else {
+            ErrorWithCharacterEdit("Please enter a username");
         }
     }
 
-    private void SerializePlayer(string sentName) {
-        Player player = new Player(sentName, hair[chairIndex].name, face[cfaceIndex].name, kit[ckitIndex].name, body[cbodyIndex].name);
-        SaveSystem.SavePlayer(player);
-        GameObject.FindGameObjectWithTag("GameManager").GetComponent<ActivatePanel>().SwitchPanel(GameObject.FindGameObjectWithTag("GameManager").GetComponent<Menu>().startMenu);
+    public void ErrorWithCharacterEdit(string message) {
+        infoText.gameObject.SetActive(true);
+        infoText.text = message;
+        nameInput.GetComponent<Outline>().enabled = true;
+    }
+
+    private Dictionary<string, string> BuildAvatarDictionary() {
+        Dictionary<string, string> avatar = new Dictionary<string, string>();
+        avatar.Add("hair", hair[chairIndex].name);
+        avatar.Add("face", face[cfaceIndex].name);
+        avatar.Add("kit", kit[ckitIndex].name);
+        avatar.Add("body", body[cbodyIndex].name);
+        return avatar;
     }
 
 }

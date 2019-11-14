@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 
 public class Menu : MonoBehaviour
 {
@@ -28,7 +29,7 @@ public class Menu : MonoBehaviour
     void Start()
     {
         activatePanel = GetComponent<ActivatePanel>();
-        DoesPlayerExist();
+        StartCoroutine(DoesPlayerExist());
     }
 
     //this is called when you fail to connect to photon
@@ -96,13 +97,22 @@ public class Menu : MonoBehaviour
 
     }
 
-    private void DoesPlayerExist() {
-        PlayerData data = SaveSystem.LoadPlayer();
-        if (data == null && !FireBaseScript.IsPlayerLoggedIn()) {
+    private IEnumerator DoesPlayerExist() {
+        if (!FireBaseScript.IsPlayerLoggedIn()) {
             activatePanel.SwitchPanel(startGamePanel);
+            yield return null;
         } else {
-            activatePanel.SwitchPanel(startMenu);
-            StartCoroutine(FireBaseScript.GetUsers());
+            StartCoroutine(FireBaseScript.GetCurrentUser());
+            while (CurrentUser.curUser == null) {
+                yield return new WaitForSeconds(0.1f);
+                StartCoroutine(FireBaseScript.GetCurrentUser());
+            }
+            Debug.Log(CurrentUser.curUser);
+            if (string.IsNullOrEmpty(CurrentUser.curUser.userName)) {
+                activatePanel.SwitchPanel(characterCreationPanel);
+            } else {
+                activatePanel.SwitchPanel(startMenu);
+            }
         }
     }
 

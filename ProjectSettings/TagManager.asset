@@ -8,7 +8,7 @@ TagManager:
   - GameManager
   - SoundManager
   - AdManager
-  - FireBase
+  - CurrentPlayer
   layers:
   - Default
   - TransparentFX
