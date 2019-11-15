@@ -29,7 +29,7 @@ allprojects {
             url "https://maven.google.com"
         }
         maven {
-            url (unityProjectPath + "/Assets/Firebase/m2repository") // Assets/Firebase/Editor/AppDependencies.xml:20, Assets/Firebase/Editor/AuthDependencies.xml:20, Assets/Firebase/Editor/DatabaseDependencies.xml:20
+            url (unityProjectPath + "/Assets/Firebase/m2repository") // Assets/Firebase/Editor/AppDependencies.xml:20, Assets/Firebase/Editor/AuthDependencies.xml:20, Assets/Firebase/Editor/CrashlyticsDependencies.xml:20, Assets/Firebase/Editor/DatabaseDependencies.xml:20, Assets/Firebase/Editor/FunctionsDependencies.xml:22, Assets/Firebase/Editor/MessagingDependencies.xml:22
         }
         mavenLocal()
         jcenter()
@@ -43,13 +43,20 @@ apply plugin: 'com.android.application'
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 // Android Resolver Dependencies Start
-    implementation 'com.google.firebase:firebase-analytics:17.2.0' // Assets/Firebase/Editor/DatabaseDependencies.xml:15
+    implementation 'com.crashlytics.sdk.android:crashlytics:2.9.9' // Assets/Firebase/Editor/CrashlyticsDependencies.xml:15
+    implementation 'com.google.firebase:firebase-analytics:17.2.0' // Assets/Firebase/Editor/MessagingDependencies.xml:15
     implementation 'com.google.firebase:firebase-app-unity:6.6.0' // Assets/Firebase/Editor/AppDependencies.xml:20
     implementation 'com.google.firebase:firebase-auth:19.0.0' // Assets/Firebase/Editor/AuthDependencies.xml:13
     implementation 'com.google.firebase:firebase-auth-unity:6.6.0' // Assets/Firebase/Editor/AuthDependencies.xml:20
     implementation 'com.google.firebase:firebase-common:19.1.0' // Assets/Firebase/Editor/AppDependencies.xml:13
+    implementation 'com.google.firebase:firebase-crashlytics-unity:6.6.0' // Assets/Firebase/Editor/CrashlyticsDependencies.xml:20
     implementation 'com.google.firebase:firebase-database:19.1.0' // Assets/Firebase/Editor/DatabaseDependencies.xml:13
     implementation 'com.google.firebase:firebase-database-unity:6.6.0' // Assets/Firebase/Editor/DatabaseDependencies.xml:20
+    implementation 'com.google.firebase:firebase-functions:19.0.1' // Assets/Firebase/Editor/FunctionsDependencies.xml:13
+    implementation 'com.google.firebase:firebase-functions-unity:6.6.0' // Assets/Firebase/Editor/FunctionsDependencies.xml:22
+    implementation 'com.google.firebase:firebase-iid:[20.0.0]' // Assets/Firebase/Editor/MessagingDependencies.xml:13
+    implementation 'com.google.firebase:firebase-messaging:20.0.0' // Assets/Firebase/Editor/MessagingDependencies.xml:17
+    implementation 'com.google.firebase:firebase-messaging-unity:6.6.0' // Assets/Firebase/Editor/MessagingDependencies.xml:22
 // Android Resolver Dependencies End
 **DEPS**}
 

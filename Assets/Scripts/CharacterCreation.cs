@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -34,21 +35,24 @@ public class CharacterCreation : MonoBehaviour
         nameInput.GetComponent<InputField>().text = "";
         nameInput.GetComponent<Outline>().enabled = false;
         infoText.gameObject.SetActive(false);
-        FireBaseScript.GetCurrentUser();
+        //FireBaseScript.GetCurrentUser();
     }
 
     private IEnumerator BuildCharacter() {
-        FireBaseScript.GetCurrentUser();
-        while (LocalUser.user == null) {
-            yield return new WaitForSeconds(0.1f);
-            FireBaseScript.GetCurrentUser();
+        var task = FirebaseCloudFunctions.GetUser();
+        User user = new User();
+        yield return new WaitUntil(() => task.IsCompleted);
+        if (task.IsFaulted) {
+            ErrorWithCharacterEdit("Failed to load User");
+        } else {
+            user = JsonUtility.FromJson<User>(task.Result);
         }
         avatarPanel.SetActive(true);
-        if (string.IsNullOrEmpty(LocalUser.user.userName)) {
+        if (string.IsNullOrEmpty(user.userName)) {
             RandomizeCharacter();
             startMenuCancelButton.gameObject.SetActive(false);
         } else {
-            BuildSavedCharacter();
+            StartCoroutine(BuildSavedCharacter());
             startMenuCancelButton.gameObject.SetActive(true);
         }
     }
@@ -67,15 +71,23 @@ public class CharacterCreation : MonoBehaviour
         ckit.sprite = kit[ckitIndex];
     }
 
-    private void BuildSavedCharacter() {
-        //User user = FireBaseScript.GetCurrentUser();
-        nameInput.GetComponent<InputField>().text = LocalUser.user.userName;
+    private IEnumerator BuildSavedCharacter() {
+        var task = FirebaseCloudFunctions.GetUser();
+        User user = new User();
+        yield return new WaitUntil(() => task.IsCompleted);
+        if (task.IsFaulted) {
+            ErrorWithCharacterEdit("Failed to load User");
+        } else {
+            user = JsonUtility.FromJson<User>(task.Result);
+        }
+
+        nameInput.GetComponent<InputField>().text = user.userName;
         
         ////set the body parts
-        cbody.sprite = Resources.Load<Sprite>("Faces/Bodies/" + LocalUser.user.body) as Sprite;
-        cface.sprite = Resources.Load<Sprite>("Faces/Faces/" + LocalUser.user.face) as Sprite;
-        chair.sprite = Resources.Load<Sprite>("Faces/Hairs/" + LocalUser.user.hair) as Sprite;
-        ckit.sprite = Resources.Load<Sprite>("Faces/Kits/" + LocalUser.user.kit) as Sprite;
+        cbody.sprite = Resources.Load<Sprite>("Faces/Bodies/" + user.body) as Sprite;
+        cface.sprite = Resources.Load<Sprite>("Faces/Faces/" + user.face) as Sprite;
+        chair.sprite = Resources.Load<Sprite>("Faces/Hairs/" + user.hair) as Sprite;
+        ckit.sprite = Resources.Load<Sprite>("Faces/Kits/" + user.kit) as Sprite;
     }
 
     //changes the hair to the next one
@@ -169,12 +181,16 @@ public class CharacterCreation : MonoBehaviour
             StartCoroutine(FireBaseScript.DoesUserNameExist());
         } else {
             ErrorWithCharacterEdit("Please enter a username");
+            ErrorWithName();
         }
     }
 
     public void ErrorWithCharacterEdit(string message) {
         infoText.gameObject.SetActive(true);
         infoText.text = message;
+    }
+
+    private void ErrorWithName() {
         nameInput.GetComponent<Outline>().enabled = true;
     }
 

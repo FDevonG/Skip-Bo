@@ -29,12 +29,19 @@ public class FireBaseScript : MonoBehaviour
         if (registerTask.Exception != null) {
             GameObject.FindGameObjectWithTag("GameManager").GetComponent<Menu>().logInPanel.GetComponent<Login>().SetLoginInfoText(GetErrorMessage(registerTask.Exception));
         } else {
-            GetCurrentUser();
-            while (LocalUser.user == null) {
-                yield return new WaitForSeconds(0.2f);
-                GetCurrentUser();
+            var task = FirebaseCloudFunctions.GetUser();
+            User user = new User();
+            yield return new WaitUntil(() => task.IsCompleted);
+            if (task.IsFaulted) {
+                Debug.Log("Failed to load User");
+            } else {
+                user = JsonUtility.FromJson<User>(task.Result);
             }
-            if (string.IsNullOrEmpty(LocalUser.user.userName)) {
+            //while (LocalUser.user == null) {
+            //    yield return new WaitForSeconds(0.2f);
+            //    GetCurrentUser();
+            //}
+            if (string.IsNullOrEmpty(user.userName)) {
                 GameObject.FindGameObjectWithTag("GameManager").GetComponent<ActivatePanel>().SwitchPanel(GameObject.FindGameObjectWithTag("GameManager").GetComponent<Menu>().characterCreationPanel);
             } else {
                 GameObject.FindGameObjectWithTag("GameManager").GetComponent<ActivatePanel>().SwitchPanel(GameObject.FindGameObjectWithTag("GameManager").GetComponent<Menu>().startMenu);
@@ -177,17 +184,17 @@ public class FireBaseScript : MonoBehaviour
         }
     }
 
-    public static void GetCurrentUser() {
-        FirebaseDatabase.DefaultInstance.GetReference("users").GetValueAsync().ContinueWith(task => {
-            if (task.IsFaulted) {
-                Debug.Log("Failed Getting Character");
-            } else if (task.IsCompleted) {
-                DataSnapshot snapshot = task.Result;
-                string json = snapshot.Child(FirebaseAuth.DefaultInstance.CurrentUser.UserId).GetRawJsonValue();
-                LocalUser.user = JsonUtility.FromJson<User>(json);
-            }
-        });
-    }
+    //public static void GetCurrentUser() {
+    //    FirebaseDatabase.DefaultInstance.GetReference("users").GetValueAsync().ContinueWith(task => {
+    //        if (task.IsFaulted) {
+    //            Debug.Log("Failed Getting Character");
+    //        } else if (task.IsCompleted) {
+    //            DataSnapshot snapshot = task.Result;
+    //            string json = snapshot.Child(FirebaseAuth.DefaultInstance.CurrentUser.UserId).GetRawJsonValue();
+    //            LocalUser.user = JsonUtility.FromJson<User>(json);
+    //        }
+    //    });
+    //}
 
     public static IEnumerator DoesUserNameExist() {
         var auth = FirebaseAuth.DefaultInstance;
