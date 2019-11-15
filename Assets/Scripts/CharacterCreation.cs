@@ -34,12 +34,11 @@ public class CharacterCreation : MonoBehaviour
         nameInput.GetComponent<InputField>().text = "";
         nameInput.GetComponent<Outline>().enabled = false;
         infoText.gameObject.SetActive(false);
+        FireBaseScript.GetCurrentUser();
     }
 
     private IEnumerator BuildCharacter() {
-        if (LocalUser.user == null) {
-            FireBaseScript.GetCurrentUser();
-        }
+        FireBaseScript.GetCurrentUser();
         while (LocalUser.user == null) {
             yield return new WaitForSeconds(0.1f);
             FireBaseScript.GetCurrentUser();

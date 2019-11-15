@@ -3,6 +3,7 @@
 public static class PhotonRooms
 {
     public static void SetupPhotonPlayer() {
+        //FireBaseScript.GetCurrentUser();
         PhotonPlayerSetup.BuildPhotonPlayer(PhotonNetwork.player, LocalUser.user);
     }
 
