@@ -7,7 +7,6 @@ public class LogOut : MonoBehaviour
             FireBaseScript.DeleteAccountData();
             FireBaseScript.DeleteAccount();
         }
-        LocalUser.user = null;
         FireBaseScript.SignOut();
     }
 }

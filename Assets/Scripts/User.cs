@@ -24,7 +24,7 @@ public class User {
         userID = id;
     }
 
-    public User (string name, string uHair, string uFace, string Ukit, string Ubody) {
+    public User(string name, string uHair, string uFace, string Ukit, string Ubody) {
         userName = name;
         hair = uHair;
         face = uFace;

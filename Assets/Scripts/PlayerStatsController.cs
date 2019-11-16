@@ -1,21 +1,45 @@
-﻿public class PlayerStatsController
-{
+﻿using UnityEngine;
+using System.Collections;
 
-    public static void AddGamePlayed() {
-        if (PhotonNetwork.offlineMode) {
-            LocalUser.user.offlineGamesPlayed += 1;
+public class PlayerStatsController : MonoBehaviour
+{
+    public static PlayerStatsController Instance { get; private set; }
+
+    private void Awake() {
+
+        if (Instance != null && Instance != this) {
+            Destroy(this.gameObject);
         } else {
-            LocalUser.user.onlineGamesPlayed += 1;
+            Instance = this;
         }
-        FireBaseScript.UpdateUser(LocalUser.user);
+        DontDestroyOnLoad(gameObject);
     }
 
-    public static void AddGameWon() {
-        if (PhotonNetwork.offlineMode) {
-            LocalUser.user.offlineGamesWon += 1;
-        } else {
-            LocalUser.user.onlineGamesWon += 1;
+    public IEnumerator AddGamePlayed() {
+        var task = FireBaseScript.GetCurrentUser();
+        yield return new WaitUntil(() => task.IsCompleted);
+        if (!task.IsFaulted) {
+            User user = JsonUtility.FromJson<User>(task.Result);
+            if (PhotonNetwork.offlineMode) {
+                user.offlineGamesPlayed += 1;
+            } else {
+                user.onlineGamesPlayed += 1;
+            }
+            FireBaseScript.UpdateUser(user);
         }
-        FireBaseScript.UpdateUser(LocalUser.user);
+    }
+
+    public IEnumerator AddGameWon() {
+        var task = FireBaseScript.GetCurrentUser();
+        yield return new WaitUntil(() => task.IsCompleted);
+        if (!task.IsFaulted) {
+            User user = JsonUtility.FromJson<User>(task.Result);
+            if (PhotonNetwork.offlineMode) {
+                user.offlineGamesWon += 1;
+            } else {
+                user.onlineGamesWon += 1;
+            }
+            FireBaseScript.UpdateUser(user);
+        }
     }
 }

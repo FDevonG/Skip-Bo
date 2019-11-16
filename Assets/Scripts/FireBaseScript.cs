@@ -6,6 +6,7 @@ using Firebase;
 using Firebase.Auth;
 using Firebase.Database;
 using System;
+using System.Threading.Tasks;
 
 public class FireBaseScript : MonoBehaviour
 {
@@ -21,6 +22,10 @@ public class FireBaseScript : MonoBehaviour
         FirebaseApp.DefaultInstance.SetEditorDatabaseUrl("https://skip-bo-52535022.firebaseio.com/");
     }
 
+    public static string AuthenitcationKey() {
+        return FirebaseAuth.DefaultInstance.CurrentUser.UserId;
+    }
+
     #region Authentiation
     public static IEnumerator LogIn(string email, string password) {
         var auth = FirebaseAuth.DefaultInstance;
@@ -29,12 +34,13 @@ public class FireBaseScript : MonoBehaviour
         if (registerTask.Exception != null) {
             GameObject.FindGameObjectWithTag("GameManager").GetComponent<Menu>().logInPanel.GetComponent<Login>().SetLoginInfoText(GetErrorMessage(registerTask.Exception));
         } else {
-            GetCurrentUser();
-            while (LocalUser.user == null) {
-                yield return new WaitForSeconds(0.2f);
-                GetCurrentUser();
+            var task = GetCurrentUser();
+            yield return new WaitUntil(() => task.IsCompleted);
+            User user = new User();
+            if (!task.IsFaulted) {
+                user = JsonUtility.FromJson<User>(task.Result);
             }
-            if (string.IsNullOrEmpty(LocalUser.user.userName)) {
+            if (string.IsNullOrEmpty(user.userName)) {
                 GameObject.FindGameObjectWithTag("GameManager").GetComponent<ActivatePanel>().SwitchPanel(GameObject.FindGameObjectWithTag("GameManager").GetComponent<Menu>().characterCreationPanel);
             } else {
                 GameObject.FindGameObjectWithTag("GameManager").GetComponent<ActivatePanel>().SwitchPanel(GameObject.FindGameObjectWithTag("GameManager").GetComponent<Menu>().startMenu);
@@ -49,7 +55,7 @@ public class FireBaseScript : MonoBehaviour
         if (registerTask.Exception != null) {
             GameObject.FindGameObjectWithTag("GameManager").GetComponent<Menu>().logInPanel.GetComponent<Login>().SetLoginInfoText(GetErrorMessage(registerTask.Exception));
         } else {
-            User newUser = new User("GuestLogin", FirebaseAuth.DefaultInstance.CurrentUser.UserId);
+            User newUser = new User("GuestLogin", AuthenitcationKey());
             WriteNewUser(newUser);
             GameObject.FindGameObjectWithTag("GameManager").GetComponent<ActivatePanel>().SwitchPanel(GameObject.FindGameObjectWithTag("GameManager").GetComponent<Menu>().characterCreationPanel);
         }
@@ -63,7 +69,7 @@ public class FireBaseScript : MonoBehaviour
         if (registerTask.Exception != null) {
             GameObject.FindGameObjectWithTag("GameManager").GetComponent<Menu>().signUpPanel.GetComponent<SignUpPanel>().ChangeSignUpErrorText(GetErrorMessage(registerTask.Exception));
         } else {
-            User newUser = new User(email, FirebaseAuth.DefaultInstance.CurrentUser.UserId);
+            User newUser = new User(email, AuthenitcationKey());
             WriteNewUser(newUser);
             GameObject.FindGameObjectWithTag("GameManager").GetComponent<ActivatePanel>().SwitchPanel(GameObject.FindGameObjectWithTag("GameManager").GetComponent<Menu>().characterCreationPanel);
         }
@@ -130,33 +136,69 @@ public class FireBaseScript : MonoBehaviour
     }
 
     #endregion
-    //GameObject.FindGameObjectWithTag("GameManager").GetComponent<Menu>().characterCreationPanel.GetComponent<CharacterCreation>().ErrorWithCharacterEdit("Failed to save to server");
+    
     #region Database
 
     public static void WriteNewUser(User user) {
         string json = JsonUtility.ToJson(user);
         DatabaseReference databaseReference = FirebaseDatabase.DefaultInstance.RootReference;
-        databaseReference.Child("users").Child(FirebaseAuth.DefaultInstance.CurrentUser.UserId).SetRawJsonValueAsync(json);
+        databaseReference.Child("users").Child(AuthenitcationKey()).SetRawJsonValueAsync(json);
     }
 
-    public static void UpdateUser(User user) {
-        string json = JsonUtility.ToJson(user);
+    public static IEnumerator UpdateUser(User user) {
+        var task = GetCurrentUser();
+        yield return new WaitUntil(() => task.IsCompleted);
+        User currentUser = new User();
+        if (!task.IsFaulted) {
+            currentUser = JsonUtility.FromJson<User>(task.Result);
+        }
         DatabaseReference databaseReference = FirebaseDatabase.DefaultInstance.RootReference;
-        databaseReference.Child("users").Child(FirebaseAuth.DefaultInstance.CurrentUser.UserId).Child("userName").SetValueAsync(user.userName);
-        databaseReference.Child("users").Child(FirebaseAuth.DefaultInstance.CurrentUser.UserId).Child("hair").SetValueAsync(user.hair);
-        databaseReference.Child("users").Child(FirebaseAuth.DefaultInstance.CurrentUser.UserId).Child("face").SetValueAsync(user.face);
-        databaseReference.Child("users").Child(FirebaseAuth.DefaultInstance.CurrentUser.UserId).Child("kit").SetValueAsync(user.kit);
-        databaseReference.Child("users").Child(FirebaseAuth.DefaultInstance.CurrentUser.UserId).Child("body").SetValueAsync(user.body);
-        databaseReference.Child("users").Child(FirebaseAuth.DefaultInstance.CurrentUser.UserId).Child("offlineGamesPlayed").SetValueAsync(user.offlineGamesPlayed);
-        databaseReference.Child("users").Child(FirebaseAuth.DefaultInstance.CurrentUser.UserId).Child("onlineGamesPlayed").SetValueAsync(user.onlineGamesPlayed);
-        databaseReference.Child("users").Child(FirebaseAuth.DefaultInstance.CurrentUser.UserId).Child("offlineGamesWon").SetValueAsync(user.offlineGamesWon);
-        databaseReference.Child("users").Child(FirebaseAuth.DefaultInstance.CurrentUser.UserId).Child("onlineGamesWon").SetValueAsync(user.onlineGamesWon);
-        databaseReference.Child("users").Child(FirebaseAuth.DefaultInstance.CurrentUser.UserId).Child("friends").SetValueAsync(user.friends);
+        if (currentUser.userName != user.userName) {
+            databaseReference.Child("users").Child(FirebaseAuth.DefaultInstance.CurrentUser.UserId).Child("userName").SetValueAsync(user.userName);
+        }
+        if (currentUser.hair != user.hair) {
+            databaseReference.Child("users").Child(FirebaseAuth.DefaultInstance.CurrentUser.UserId).Child("hair").SetValueAsync(user.hair);
+        }
+        if (currentUser.face != user.face) {
+            databaseReference.Child("users").Child(FirebaseAuth.DefaultInstance.CurrentUser.UserId).Child("face").SetValueAsync(user.face);
+        }
+        if (currentUser.kit != user.kit) {
+            databaseReference.Child("users").Child(FirebaseAuth.DefaultInstance.CurrentUser.UserId).Child("kit").SetValueAsync(user.kit);
+        }
+        if (currentUser.body != user.body) {
+            databaseReference.Child("users").Child(FirebaseAuth.DefaultInstance.CurrentUser.UserId).Child("body").SetValueAsync(user.body);
+        }
+        if (currentUser.offlineGamesPlayed != user.offlineGamesPlayed) {
+            databaseReference.Child("users").Child(FirebaseAuth.DefaultInstance.CurrentUser.UserId).Child("offlineGamesPlayed").SetValueAsync(user.offlineGamesPlayed);
+        }
+        if (currentUser.onlineGamesPlayed != user.onlineGamesPlayed) {
+            databaseReference.Child("users").Child(FirebaseAuth.DefaultInstance.CurrentUser.UserId).Child("onlineGamesPlayed").SetValueAsync(user.onlineGamesPlayed);
+        }
+        if (currentUser.offlineGamesWon != user.offlineGamesWon) {
+            databaseReference.Child("users").Child(FirebaseAuth.DefaultInstance.CurrentUser.UserId).Child("offlineGamesWon").SetValueAsync(user.offlineGamesWon);
+        }
+        if (currentUser.onlineGamesWon != user.onlineGamesWon) {
+            databaseReference.Child("users").Child(FirebaseAuth.DefaultInstance.CurrentUser.UserId).Child("onlineGamesWon").SetValueAsync(user.onlineGamesWon);
+        }
+        if (currentUser.friends != user.friends) {
+            databaseReference.Child("users").Child(FirebaseAuth.DefaultInstance.CurrentUser.UserId).Child("friends").SetValueAsync(user.friends);
+        }
     }
 
     public static void DeleteAccountData() {
-        DatabaseReference databaseReference = FirebaseDatabase.DefaultInstance.RootReference.Child("users").Child(FirebaseAuth.DefaultInstance.CurrentUser.UserId);
+        DatabaseReference databaseReference = FirebaseDatabase.DefaultInstance.RootReference.Child("users").Child(AuthenitcationKey());
         databaseReference.RemoveValueAsync();
+    }
+    public static Task<string> GetCurrentUser() {
+        return FirebaseDatabase.DefaultInstance.GetReference("users").Child(FirebaseAuth.DefaultInstance.CurrentUser.UserId).GetValueAsync().ContinueWith(task => {
+            return task.Result.GetRawJsonValue();
+        });
+    }
+
+    public static Task<DataSnapshot> GetUsers() {
+        return FirebaseDatabase.DefaultInstance.GetReference("users").GetValueAsync().ContinueWith(task => {
+            return task.Result;
+        });
     }
 
     #endregion
@@ -177,42 +219,6 @@ public class FireBaseScript : MonoBehaviour
         }
     }
 
-    public static void GetCurrentUser() {
-        FirebaseDatabase.DefaultInstance.GetReference("users").GetValueAsync().ContinueWith(task => {
-            if (task.IsFaulted) {
-                Debug.Log("Failed Getting Character");
-            } else if (task.IsCompleted) {
-                DataSnapshot snapshot = task.Result;
-                string json = snapshot.Child(FirebaseAuth.DefaultInstance.CurrentUser.UserId).GetRawJsonValue();
-                LocalUser.user = JsonUtility.FromJson<User>(json);
-            }
-        });
-    }
-
-    public static IEnumerator DoesUserNameExist() {
-        var auth = FirebaseAuth.DefaultInstance;
-        var task = FirebaseDatabase.DefaultInstance.GetReference("users").GetValueAsync();
-        yield return new WaitUntil(() => task.IsCompleted);
-        if (task.Exception == null) {
-            DataSnapshot snapshot = task.Result;
-            bool userNameExists = false;
-            foreach (DataSnapshot snap in snapshot.Children) {
-                User user = JsonUtility.FromJson<User>(snap.GetRawJsonValue());
-                if (user.userName.ToUpper() == LocalUser.user.userName.ToUpper()) {
-                    if (FirebaseAuth.DefaultInstance.CurrentUser.UserId != user.userID) {
-                        userNameExists = true;
-                        break;
-                    }
-                }
-            }
-            
-            if (userNameExists) {
-                GameObject.FindGameObjectWithTag("GameManager").GetComponent<Menu>().characterCreationPanel.GetComponent<CharacterCreation>().ErrorWithCharacterEdit("Username is taken");
-            } else {
-                FireBaseScript.UpdateUser(LocalUser.user);
-                GameObject.FindGameObjectWithTag("GameManager").GetComponent<ActivatePanel>().SwitchPanel(GameObject.FindGameObjectWithTag("GameManager").GetComponent<Menu>().startMenu);
-            }
-        }
-    }
+    
 
 }

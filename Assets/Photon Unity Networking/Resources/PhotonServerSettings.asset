@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f3758f8f58fdef43803eb9be1df0608, type: 3}
   m_Name: PhotonServerSettings
   m_EditorClassIdentifier: 
-  AppID: 
+  AppID: 7301237d-1c0d-4ddc-8871-a26839dbc6c7
   VoiceAppID: 
   ChatAppID: 
-  HostType: 0
-  PreferredRegion: 0
+  HostType: 1
+  PreferredRegion: 1
   EnabledRegions: -1
   Protocol: 0
   ServerAddress: 
@@ -27,5 +27,30 @@ MonoBehaviour:
   PunLogging: 0
   NetworkLogging: 1
   RunInBackground: 1
-  RpcList: []
-  DisableAutoOpenWizard: 0
+  RpcList:
+  - CardPlayedFromDeck
+  - ChangePlayerPanel
+  - Chat
+  - DeckCardSpawned
+  - DestroyRpc
+  - HandCardSpawned
+  - InstantiateRpc
+  - LaunchingGame
+  - PickupItemInit
+  - PlayCardFromDeck
+  - PlayCardFromHand
+  - PlayCardFromSideboard
+  - PlayedCardFromHand
+  - PlayedCardToSideboard
+  - PlayerWonGame
+  - PunPickup
+  - PunPickupSimple
+  - PunRespawn
+  - RequestForPickupItems
+  - RequestForPickupTimes
+  - RequestSideBoadPlay
+  - ResetStack
+  - SetupStartingAvatar
+  - SpawnedPlayerHand
+  - StartGame
+  DisableAutoOpenWizard: 1

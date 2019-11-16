@@ -20,7 +20,7 @@ public class RoomSetup : MonoBehaviour
     public void CreateRoom() {
         string roomName = roomNameText.text;
         if (!string.IsNullOrEmpty(roomName) && !string.IsNullOrWhiteSpace(roomName)) {
-            PhotonRooms.CreateOnlineGame(roomName, (int)cardSlider.value * 5);
+            StartCoroutine(GameObject.FindGameObjectWithTag("NetworkManager").GetComponent<PhotonRooms>().CreateOnlineGame(roomName, (int)cardSlider.value * 5));
         } else {
             placeholderText.text = "Enter Name";
             placeholderText.color = Color.red;

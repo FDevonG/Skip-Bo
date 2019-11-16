@@ -16,6 +16,6 @@ public class GameOptions : MonoBehaviour
     }
 
     public void CreateOfflineGame(int deckAmmount) {
-        PhotonRooms.CreateOfflineRoom(deckAmmount);
+        StartCoroutine(GameObject.FindGameObjectWithTag("NetworkManager").GetComponent<PhotonRooms>().CreateOfflineRoom(deckAmmount));
     }
 }

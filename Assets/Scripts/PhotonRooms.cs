@@ -1,31 +1,58 @@
 ﻿using UnityEngine;
+using System.Collections;
 
-public static class PhotonRooms
+public class PhotonRooms : MonoBehaviour
 {
-    public static void SetupPhotonPlayer() {
-        //FireBaseScript.GetCurrentUser();
-        PhotonPlayerSetup.BuildPhotonPlayer(PhotonNetwork.player, LocalUser.user);
+
+    public static PhotonRooms Instance { get; private set; }
+
+    private void Awake() {
+
+        if (Instance != null && Instance != this) {
+            Destroy(this.gameObject);
+        } else {
+            Instance = this;
+        }
+        DontDestroyOnLoad(gameObject);
     }
 
-    public static void JoinRandomRoom() {
-        SetupPhotonPlayer();
+    public IEnumerator SetupPhotonPlayer() {
+        var task = FireBaseScript.GetCurrentUser();
+        yield return new WaitUntil(() => task.IsCompleted);
+        User user = new User();
+        if (task.IsFaulted) {
+
+        } else {
+            user = JsonUtility.FromJson<User>(task.Result);
+            PhotonPlayerSetup.BuildPhotonPlayer(PhotonNetwork.player, user);
+        }
+    }
+
+    public IEnumerator JoinRandomRoom() {
+        yield return StartCoroutine(SetupPhotonPlayer());
         PhotonNetwork.JoinRandomRoom();
     }
 
-    public static void CreateOfflineRoom(int deckAmmount) {
-            SetupPhotonPlayer();
-            PhotonNetwork.CreateRoom(null, GetRoomOptions(deckAmmount), null);
-            SceneController.LoadGameScene();
+    public IEnumerator CreateOfflineRoom(int deckAmmount) {
+        yield return StartCoroutine(SetupPhotonPlayer());
+        PhotonNetwork.CreateRoom(null, GetRoomOptions(deckAmmount), null);
+        SceneController.LoadGameScene();
     }
 
-    public static void CreateOnlineGame(string roomName, int deckAmmount) {
+    public IEnumerator CreateOnlineGame(string roomName, int deckAmmount) {
         if (!RoomNameExistCheck(roomName)) {
-            SetupPhotonPlayer();
+            
+            yield return StartCoroutine(SetupPhotonPlayer());
             RoomOptions roomOptions = GetRoomOptions(deckAmmount);
             PhotonNetwork.CreateRoom(roomName, roomOptions, null);
         } else {
             GameObject.FindGameObjectWithTag("GameManager").GetComponent<ActivatePanel>().SwitchPanel(GameObject.FindGameObjectWithTag("GameManager").GetComponent<OnlineGameOptionsSetup>().roomNameExistsPanel);
         }
+    }
+
+    public IEnumerator JoinRoom(string name) {
+        yield return StartCoroutine(SetupPhotonPlayer());
+        PhotonNetwork.JoinRoom(name);
     }
 
     public static string DeckSize() {

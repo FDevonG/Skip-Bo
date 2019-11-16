@@ -17,6 +17,7 @@ public class Menu : MonoBehaviour
     public GameObject friendsPanel;
     public GameObject startGamePanel;
     public GameObject forgotPasswordPanel;
+    public GameObject findFriendsPanel;
 
     private ActivatePanel activatePanel;
 
@@ -30,6 +31,7 @@ public class Menu : MonoBehaviour
     {
         activatePanel = GetComponent<ActivatePanel>();
         StartCoroutine(DoesPlayerExist());
+        //activatePanel.SwitchPanel(startMenu);
     }
 
     //this is called when you fail to connect to photon
@@ -94,6 +96,10 @@ public class Menu : MonoBehaviour
             activatePanel.SwitchPanel(startMenu);
             return;
         }
+        if (activatePanel.activePanel == findFriendsPanel) {
+            activatePanel.SwitchPanel(startGamePanel);
+            return;
+        }
 
     }
 
@@ -101,12 +107,15 @@ public class Menu : MonoBehaviour
         if (!FireBaseScript.IsPlayerLoggedIn()) {
             activatePanel.SwitchPanel(startGamePanel);
         } else {
-            FireBaseScript.GetCurrentUser();
-            while (LocalUser.user == null) {
-                yield return new WaitForSeconds(0.5f);
-                FireBaseScript.GetCurrentUser();
+            var task = FireBaseScript.GetCurrentUser();
+            yield return new WaitUntil(() => task.IsCompleted);
+            User user = new User();
+            if (task.IsFaulted) {
+                Debug.Log("Failed to load profile");
+            } else {
+                user = JsonUtility.FromJson<User>(task.Result);
             }
-            if (string.IsNullOrEmpty(LocalUser.user.userName)) {
+            if (string.IsNullOrEmpty(user.userName)) {
                 activatePanel.SwitchPanel(characterCreationPanel);
             } else {
                 activatePanel.SwitchPanel(startMenu);
