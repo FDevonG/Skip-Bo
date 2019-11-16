@@ -13,9 +13,9 @@ public class FirebaseCloudFunctions : MonoBehaviour
         FirebaseFunctions functions = FirebaseFunctions.DefaultInstance;
          var function = functions.GetHttpsCallable("GetUser");
         return function.CallAsync().ContinueWith((task) => {
-            if (task.IsFaulted) {
-                Debug.Log(task.Exception.Data);
-                return null;
+            if (task.Exception != null) {
+                Debug.Log(FireBaseScript.GetErrorMessage(task.Exception));
+                return (string)task.Result.Data;
             } else {
                 return (string)task.Result.Data;
             }

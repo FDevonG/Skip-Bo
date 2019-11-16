@@ -10,7 +10,7 @@ admin.initializeApp();
 	 response.send("Hello from Firebase!");
  });
 
-exports.GetUser = functions.https.onCall((data, context) => {
+exports.GetUser = functions.https.onRequest(() => {
 	"use strict";
 	console.log("HI");
 	const database = firebase.database();
@@ -21,4 +21,5 @@ exports.GetUser = functions.https.onCall((data, context) => {
 			return JSON.parse(user);
 		}
 	}
+	return null;
 });
