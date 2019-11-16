@@ -101,13 +101,10 @@ public class Menu : MonoBehaviour
         if (!FireBaseScript.IsPlayerLoggedIn()) {
             activatePanel.SwitchPanel(startGamePanel);
         } else {
-            var task = FirebaseCloudFunctions.GetUser();
-            User user = new User();
-            yield return new WaitUntil(() => task.IsCompleted);
-            if (task.IsFaulted) {
-                Debug.Log("Failed to load User");
-            } else {
-                user = JsonUtility.FromJson<User>(task.Result);
+            FireBaseScript.GetCurrentUser();
+            while (LocalUser.user == null) {
+                yield return new WaitForSeconds(0.5f);
+                FireBaseScript.GetCurrentUser();
             }
             if (string.IsNullOrEmpty(LocalUser.user.userName)) {
                 activatePanel.SwitchPanel(characterCreationPanel);

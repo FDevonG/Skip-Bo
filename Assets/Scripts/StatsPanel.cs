@@ -17,31 +17,23 @@ public class StatsPanel : MonoBehaviour
     public Text onlineGamesWonPercentageText;
 
     private void OnEnable() {
-        StartCoroutine(SpawnStats());
-    }
 
-    private IEnumerator SpawnStats() {
-        var task = FirebaseCloudFunctions.GetUser();
-        User user = new User();
-        yield return new WaitUntil(() => task.IsCompleted);
-        if (task.IsFaulted) {
-            Debug.Log("Failed to load User");
-        } else {
-            user = JsonUtility.FromJson<User>(task.Result);
+        if (LocalUser.user == null) {
+            FireBaseScript.GetCurrentUser();
         }
 
-        int totalGamesPlayed = LocalUser.user.offlineGamesPlayed + user.onlineGamesPlayed;
-        int totalGamesWon = LocalUser.user.offlineGamesWon + user.onlineGamesWon;
+        int totalGamesPlayed = LocalUser.user.offlineGamesPlayed + LocalUser.user.onlineGamesPlayed;
+        int totalGamesWon = LocalUser.user.offlineGamesWon + LocalUser.user.onlineGamesWon;
 
         totalGamesPlayedText.text = "Total Games Played - " + totalGamesPlayed.ToString();
-        offlineGamesPlayedText.text = "Offline Games Played - " + user.offlineGamesPlayed.ToString();
-        onlineGamesPlayedText.text = "Online Games Played - " + user.onlineGamesPlayed.ToString();
+        offlineGamesPlayedText.text = "Offline Games Played - " + LocalUser.user.offlineGamesPlayed.ToString();
+        onlineGamesPlayedText.text = "Online Games Played - " + LocalUser.user.onlineGamesPlayed.ToString();
         totalGamesWonText.text = "Total Games Won - " + totalGamesWon.ToString();
-        offlineGamesWonText.text = "Offline Games Won - " + user.offlineGamesWon.ToString();
-        onelineGamesWonText.text = "Online Games Won - " + user.onlineGamesWon.ToString();
+        offlineGamesWonText.text = "Offline Games Won - " + LocalUser.user.offlineGamesWon.ToString();
+        onelineGamesWonText.text = "Online Games Won - " + LocalUser.user.onlineGamesWon.ToString();
         totalWinPercentageText.text = "Total Win Percent - " + GetPercentage(totalGamesWon, totalGamesPlayed).ToString() + "%";
-        offlineGamesWonPercentageText.text = "Offline Win Percent - " + GetPercentage(user.offlineGamesWon, user.offlineGamesPlayed) + "%";
-        onlineGamesWonPercentageText.text = "Online Win Percent - " + GetPercentage(user.onlineGamesWon, user.onlineGamesPlayed) + "%";
+        offlineGamesWonPercentageText.text = "Offline Win Percent - " + GetPercentage(LocalUser.user.offlineGamesWon, LocalUser.user.offlineGamesPlayed) + "%";
+        onlineGamesWonPercentageText.text = "Online Win Percent - " + GetPercentage(LocalUser.user.onlineGamesWon, LocalUser.user.onlineGamesPlayed) + "%";
     }
 
     private int GetPercentage(int smallNumber, int largeNumber) {
