@@ -24,7 +24,19 @@ public class SignUpPanel : MonoBehaviour
     }
 
     public void CreateNewAccount() {
-        StartCoroutine(FireBaseScript.CreateNewAccount(signUpEmailInput.GetComponent<InputField>().text, signUpPasswordInput.GetComponent<InputField>().text));
+        StartCoroutine(CreatingNewAccount());
+    }
+
+    private IEnumerator CreatingNewAccount() {
+        var task = FireBaseScript.CreateNewAccount(signUpEmailInput.GetComponent<InputField>().text, signUpPasswordInput.GetComponent<InputField>().text);
+        yield return new WaitUntil(() => task.IsCompleted);
+        if (task.IsFaulted) {
+            GameObject.FindGameObjectWithTag("GameManager").GetComponent<Menu>().signUpPanel.GetComponent<SignUpPanel>().ChangeSignUpErrorText(FireBaseScript.GetErrorMessage(task.Exception));
+        } else {
+            User newUser = new User(signUpEmailInput.GetComponent<InputField>().text, FireBaseScript.AuthenitcationKey());
+            FireBaseScript.WriteNewUser(newUser);
+            GameObject.FindGameObjectWithTag("GameManager").GetComponent<ActivatePanel>().SwitchPanel(GameObject.FindGameObjectWithTag("GameManager").GetComponent<Menu>().characterCreationPanel);
+        }
     }
 
     public void CheckSignUpButton() {
@@ -58,9 +70,7 @@ public class SignUpPanel : MonoBehaviour
     }
 
     public void ChangeSignUpErrorText(string message) {
-        if (signUpErrorText.gameObject.active == false) {
-            signUpErrorText.gameObject.SetActive(true);
-        }
+        signUpErrorText.gameObject.SetActive(true);
         signUpErrorText.text = message;
     }
 }

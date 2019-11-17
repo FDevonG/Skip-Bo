@@ -47,7 +47,6 @@ public class CharacterCreation : MonoBehaviour
         if (task.IsFaulted) {
             ErrorWithCharacterEdit("Failed to load profile");
         } else {
-            Debug.Log(task.Result);
             user = JsonUtility.FromJson<User>(task.Result);
         }
         if (string.IsNullOrEmpty(user.userName)) {
@@ -207,7 +206,7 @@ public class CharacterCreation : MonoBehaviour
             }
             if (!nameBool) {
                 user.userName = userName;
-                FireBaseScript.UpdateUser(user);
+                StartCoroutine(FireBaseScript.UpdateUser(user));
                 GameObject.FindGameObjectWithTag("GameManager").GetComponent<ActivatePanel>().SwitchPanel(GameObject.FindGameObjectWithTag("GameManager").GetComponent<Menu>().startMenu);
             } else {
                 ErrorWithCharacterEdit("Username is taken");

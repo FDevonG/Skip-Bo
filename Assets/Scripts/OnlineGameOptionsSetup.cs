@@ -20,14 +20,14 @@ public class OnlineGameOptionsSetup : MonoBehaviour
 
     public void JoinRandomRoom() {
         if (PhotonNetwork.GetRoomList().Length != 0) {
-            GameObject.FindGameObjectWithTag("GameManager").GetComponent<PhotonRooms>().JoinRandomRoom();
+            StartCoroutine(GameObject.FindGameObjectWithTag("GameManager").GetComponent<PhotonRooms>().JoinRandomRoom());
         } else {
             GameObject.FindGameObjectWithTag("GameManager").GetComponent<ActivatePanel>().SwitchPanel(noGamesPanel);
         }
     }
 
     public void LoadStartMenu() {
-        PhotonNetwork.Disconnect();
+        PhotonNetwork.LeaveRoom();
         SceneController.LoadStartMenu();
     }
 

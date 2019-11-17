@@ -20,11 +20,11 @@ public class PhotonRooms : MonoBehaviour
         var task = FireBaseScript.GetCurrentUser();
         yield return new WaitUntil(() => task.IsCompleted);
         User user = new User();
-        if (task.IsFaulted) {
-
-        } else {
+        if (!task.IsFaulted) {
             user = JsonUtility.FromJson<User>(task.Result);
             PhotonPlayerSetup.BuildPhotonPlayer(PhotonNetwork.player, user);
+        } else {
+            Debug.Log("");
         }
     }
 
@@ -41,7 +41,6 @@ public class PhotonRooms : MonoBehaviour
 
     public IEnumerator CreateOnlineGame(string roomName, int deckAmmount) {
         if (!RoomNameExistCheck(roomName)) {
-            
             yield return StartCoroutine(SetupPhotonPlayer());
             RoomOptions roomOptions = GetRoomOptions(deckAmmount);
             PhotonNetwork.CreateRoom(roomName, roomOptions, null);

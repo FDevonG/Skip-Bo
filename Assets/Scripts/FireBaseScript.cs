@@ -27,104 +27,28 @@ public class FireBaseScript : MonoBehaviour
     }
 
     #region Authentiation
-    public static IEnumerator LogIn(string email, string password) {
-        var auth = FirebaseAuth.DefaultInstance;
-        var registerTask = FirebaseAuth.DefaultInstance.SignInWithEmailAndPasswordAsync(email, password);
-        yield return new WaitUntil(() => registerTask.IsCompleted);
-        if (registerTask.Exception != null) {
-            GameObject.FindGameObjectWithTag("GameManager").GetComponent<Menu>().logInPanel.GetComponent<Login>().SetLoginInfoText(GetErrorMessage(registerTask.Exception));
-        } else {
-            var task = GetCurrentUser();
-            yield return new WaitUntil(() => task.IsCompleted);
-            User user = new User();
-            if (!task.IsFaulted) {
-                user = JsonUtility.FromJson<User>(task.Result);
-            }
-            if (string.IsNullOrEmpty(user.userName)) {
-                GameObject.FindGameObjectWithTag("GameManager").GetComponent<ActivatePanel>().SwitchPanel(GameObject.FindGameObjectWithTag("GameManager").GetComponent<Menu>().characterCreationPanel);
-            } else {
-                GameObject.FindGameObjectWithTag("GameManager").GetComponent<ActivatePanel>().SwitchPanel(GameObject.FindGameObjectWithTag("GameManager").GetComponent<Menu>().startMenu);
-            }
-        }
+    public static Task<FirebaseUser> LogIn(string email, string password) {
+        return FirebaseAuth.DefaultInstance.SignInWithEmailAndPasswordAsync(email, password).ContinueWith(task => {
+            return task.Result;
+        });
     }
 
-    public static IEnumerator LogInAnonymous() {
-        var auth = FirebaseAuth.DefaultInstance;
-        var registerTask = FirebaseAuth.DefaultInstance.SignInAnonymouslyAsync();
-        yield return new WaitUntil(() => registerTask.IsCompleted);
-        if (registerTask.Exception != null) {
-            GameObject.FindGameObjectWithTag("GameManager").GetComponent<Menu>().logInPanel.GetComponent<Login>().SetLoginInfoText(GetErrorMessage(registerTask.Exception));
-        } else {
-            User newUser = new User("GuestLogin", AuthenitcationKey());
-            WriteNewUser(newUser);
-            GameObject.FindGameObjectWithTag("GameManager").GetComponent<ActivatePanel>().SwitchPanel(GameObject.FindGameObjectWithTag("GameManager").GetComponent<Menu>().characterCreationPanel);
-        }
-
+    public static Task<FirebaseUser> LogInAnonymous() {
+        return FirebaseAuth.DefaultInstance.SignInAnonymouslyAsync().ContinueWith(task => {
+            return task.Result;
+        });
     }
 
-    public static IEnumerator CreateNewAccount(string email, string password) {
-        var auth = FirebaseAuth.DefaultInstance;
-        var registerTask = FirebaseAuth.DefaultInstance.CreateUserWithEmailAndPasswordAsync(email, password);
-        yield return new WaitUntil(() => registerTask.IsCompleted);
-        if (registerTask.Exception != null) {
-            GameObject.FindGameObjectWithTag("GameManager").GetComponent<Menu>().signUpPanel.GetComponent<SignUpPanel>().ChangeSignUpErrorText(GetErrorMessage(registerTask.Exception));
-        } else {
-            User newUser = new User(email, AuthenitcationKey());
-            WriteNewUser(newUser);
-            GameObject.FindGameObjectWithTag("GameManager").GetComponent<ActivatePanel>().SwitchPanel(GameObject.FindGameObjectWithTag("GameManager").GetComponent<Menu>().characterCreationPanel);
-        }
+    public static Task<FirebaseUser> CreateNewAccount(string email, string password) {
+        return FirebaseAuth.DefaultInstance.CreateUserWithEmailAndPasswordAsync(email, password).ContinueWith(task => {
+            return task.Result;
+        });
     }
 
-    public static IEnumerator ForgotPassword(string emailAddress) {
-        FirebaseAuth auth = FirebaseAuth.DefaultInstance;
-        var registerTask = auth.SendPasswordResetEmailAsync(emailAddress);
-        yield return new WaitUntil(() => registerTask.IsCompleted);
-        if (registerTask.Exception != null) {
-            GameObject.FindGameObjectWithTag("GameManager").GetComponent<Menu>().forgotPasswordPanel.GetComponent<ForgotPassword>().SetInfoText(GetErrorMessage(registerTask.Exception));
-        } else {
-            GameObject.FindGameObjectWithTag("GameManager").GetComponent<Menu>().forgotPasswordPanel.GetComponent<ForgotPassword>().EmailSent();
-        }
-    }
-
-    public static string GetErrorMessage(Exception exception) {
-        Firebase.FirebaseException firebaseEx = exception.GetBaseException() as Firebase.FirebaseException;
-        if (firebaseEx != null) {
-            var errorCode = (AuthError)firebaseEx.ErrorCode;
-            return GetErrorMessage(errorCode);
-        } else {
-            return "An error has occured";
-        }
-    }
-
-    private static string GetErrorMessage(AuthError errorCode) {
-        var message = "";
-        switch (errorCode) {
-            case AuthError.AccountExistsWithDifferentCredentials:
-                message = "Account exists with different credentials";
-                break;
-            case AuthError.MissingPassword:
-                message = "Password is missing";
-                break;
-            case AuthError.WeakPassword:
-                message = "Password is to weak";
-                break;
-            case AuthError.WrongPassword:
-                message = "Password is incorrect";
-                break;
-            case AuthError.EmailAlreadyInUse:
-                message = "Email is already in use";
-                break;
-            case AuthError.InvalidEmail:
-                message = "Email is not valid";
-                break;
-            case AuthError.MissingEmail:
-                message = "Email is missing";
-                break;
-            default:
-                message = "An error has occured";
-                break;
-        }
-        return message;
+    public static Task<bool> ForgotPassword(string emailAddress) {
+        return FirebaseAuth.DefaultInstance.SendPasswordResetEmailAsync(emailAddress).ContinueWith(task => {
+            return task.IsFaulted;
+        });
     }
 
     public static void SignOut() {
@@ -189,6 +113,7 @@ public class FireBaseScript : MonoBehaviour
         DatabaseReference databaseReference = FirebaseDatabase.DefaultInstance.RootReference.Child("users").Child(AuthenitcationKey());
         databaseReference.RemoveValueAsync();
     }
+
     public static Task<string> GetCurrentUser() {
         return FirebaseDatabase.DefaultInstance.GetReference("users").Child(FirebaseAuth.DefaultInstance.CurrentUser.UserId).GetValueAsync().ContinueWith(task => {
             return task.Result.GetRawJsonValue();
@@ -219,6 +144,45 @@ public class FireBaseScript : MonoBehaviour
         }
     }
 
-    
+    public static string GetErrorMessage(Exception exception) {
+        Firebase.FirebaseException firebaseEx = exception.GetBaseException() as Firebase.FirebaseException;
+        if (firebaseEx != null) {
+            var errorCode = (AuthError)firebaseEx.ErrorCode;
+            return GetErrorMessage(errorCode);
+        } else {
+            return "An error has occured";
+        }
+    }
+
+    private static string GetErrorMessage(AuthError errorCode) {
+        var message = "";
+        switch (errorCode) {
+            case AuthError.AccountExistsWithDifferentCredentials:
+                message = "Account exists with different credentials";
+                break;
+            case AuthError.MissingPassword:
+                message = "Password is missing";
+                break;
+            case AuthError.WeakPassword:
+                message = "Password is to weak";
+                break;
+            case AuthError.WrongPassword:
+                message = "Password is incorrect";
+                break;
+            case AuthError.EmailAlreadyInUse:
+                message = "Email is already in use";
+                break;
+            case AuthError.InvalidEmail:
+                message = "Email is not valid";
+                break;
+            case AuthError.MissingEmail:
+                message = "Email is missing";
+                break;
+            default:
+                message = "An error has occured";
+                break;
+        }
+        return message;
+    }
 
 }

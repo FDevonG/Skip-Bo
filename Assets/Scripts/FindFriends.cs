@@ -17,14 +17,14 @@ public class FindFriends : MonoBehaviour
     [SerializeField] Image kit;
     [SerializeField] Image body;
 
-    string email;
+    string id;//thjis is used to store the id of the found user
 
     void OnDisable() {
         searchButton.interactable = false;
         emailInput.GetComponent<InputField>().text = "";
         infoText.gameObject.SetActive(false);
         freindPanel.SetActive(false);
-        email = "";
+        id = "";
     }
 
     public void StartUserSearch() {
@@ -42,7 +42,7 @@ public class FindFriends : MonoBehaviour
                 User tempUser = JsonUtility.FromJson<User>(s.GetRawJsonValue());
                 if (tempUser.email.ToUpper() == emailInput.GetComponent<InputField>().text.ToUpper()) {
                     FoundFriend(tempUser);
-                    email = tempUser.email;
+                    id = tempUser.userID;
                     friendFound = true;
                     break;
                 }
@@ -63,7 +63,7 @@ public class FindFriends : MonoBehaviour
     }
 
     public void AddFriend() {
-        if (!string.IsNullOrEmpty(email) && !string.IsNullOrWhiteSpace(email)) {
+        if (!string.IsNullOrEmpty(id) && !string.IsNullOrWhiteSpace(id)) {
             StartCoroutine(SaveFriend());
         }
     }
@@ -77,20 +77,22 @@ public class FindFriends : MonoBehaviour
             User user = JsonUtility.FromJson<User>(task.Result);
             bool friendAlreadyAdded = false;
             for (int i = 0; i < user.friends.Count; i++) {
-                if (user.friends[i].ToUpper() == email.ToUpper()) {
+                if (user.friends[i].ToUpper() == id.ToUpper()) {
                     friendAlreadyAdded = true;
                     SetErrorMessage("Friend already added");
                 }
             }
             if (!friendAlreadyAdded) {
-                user.friends.Add(email);
-                FireBaseScript.UpdateUser(user);
+                user.friends.Add(id);
+                StartCoroutine(FireBaseScript.UpdateUser(user));
                 SetErrorMessage(nameText.text + " added");
             }
         }
     }
 
     public void CheckUserSearch() {
+        infoText.gameObject.SetActive(false);
+        freindPanel.SetActive(false);
         if (VerifyEmail.ValidateEmail(emailInput.GetComponent<InputField>().text)) {
             searchButton.interactable = true;
         } else {

@@ -5,9 +5,11 @@ public class GameOptions : MonoBehaviour
     public GameObject connectingPanel;
 
     public void OnlineGame() {
-        GameObject.FindGameObjectWithTag("NetworkManager").GetComponent<PhotonNetworking>().ConnectToPhoton();
-        PhotonNetwork.offlineMode = false;
-        GetComponent<ActivatePanel>().SwitchPanel(connectingPanel);
+        //GetComponent<ActivatePanel>().SwitchPanel(connectingPanel);
+        if (!PhotonNetwork.connected) {
+            StartCoroutine(GameObject.FindGameObjectWithTag("NetworkManager").GetComponent<PhotonNetworking>().ConnectToPhoton());
+        }
+        SceneController.LoadGameSetup();
     }
 
     public void OfflineGame() {

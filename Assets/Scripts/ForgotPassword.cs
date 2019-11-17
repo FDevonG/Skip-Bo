@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using System.Collections;
 
 public class ForgotPassword : MonoBehaviour {
     public GameObject emailInput;
@@ -7,7 +8,17 @@ public class ForgotPassword : MonoBehaviour {
     public Button sendEmailButton;
 
     public void ForgotPass() {
-        StartCoroutine(FireBaseScript.ForgotPassword(emailInput.GetComponent<InputField>().text));
+        StartCoroutine(SendPasswordEmail());
+    }
+
+    private IEnumerator SendPasswordEmail() {
+        var task = FireBaseScript.ForgotPassword(emailInput.GetComponent<InputField>().text);
+        yield return new WaitUntil(() => task.IsCompleted);
+        if (task.IsFaulted) {
+            GameObject.FindGameObjectWithTag("GameManager").GetComponent<Menu>().forgotPasswordPanel.GetComponent<ForgotPassword>().SetInfoText(FireBaseScript.GetErrorMessage(task.Exception));
+        } else {
+            GameObject.FindGameObjectWithTag("GameManager").GetComponent<Menu>().forgotPasswordPanel.GetComponent<ForgotPassword>().EmailSent();
+        }
     }
 
     public void SetInfoText(string message) {

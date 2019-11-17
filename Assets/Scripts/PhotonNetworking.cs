@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
+using System.Collections;
+using UnityEngine.SceneManagement;
 
 public class PhotonNetworking : MonoBehaviour {
-
-    private string versionNumber = "1.5";
 
     public static PhotonNetworking Instance { get; private set; }
 
@@ -14,10 +14,27 @@ public class PhotonNetworking : MonoBehaviour {
             Instance = this;
         }
         DontDestroyOnLoad(gameObject);
+        if (FireBaseScript.IsPlayerLoggedIn()) {
+            StartCoroutine(ConnectToPhoton());
+        }
     }
 
-    public void ConnectToPhoton() {
-        PhotonNetwork.ConnectUsingSettings(versionNumber);
+    void Start() {
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    // called second
+    void OnSceneLoaded(Scene scene, LoadSceneMode mode) {
+        if (scene.buildIndex == 0) {
+            StartCoroutine(ConnectToPhoton());
+        }
+    }
+
+    public IEnumerator ConnectToPhoton() {
+        if (!PhotonNetwork.connected) {
+            yield return StartCoroutine(GetComponent<PhotonRooms>().SetupPhotonPlayer());
+            PhotonNetwork.ConnectUsingSettings(GameGlobalSettings.Version());
+        }
     }
 
     private void OnConnectedToMaster() {
@@ -32,9 +49,9 @@ public class PhotonNetworking : MonoBehaviour {
     //    Debug.Log("Failed to connect to photon");
     //}
 
-    private void OnJoinedLobby() {
-        SceneController.LoadGameSetup();
-    }
+    //private void OnJoinedLobby() {
+    //    SceneController.LoadGameSetup();
+    //}
 
     //this is called when you get disconnected from photon
     private void OnDisconnectedFromPhoton() {

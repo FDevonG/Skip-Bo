@@ -47,7 +47,7 @@ public class InGameMenu : MonoBehaviour
 
     public void LeaveMatch() {
         PhotonNetwork.DestroyPlayerObjects(PhotonNetwork.player);
-        PhotonNetwork.Disconnect();
+        PhotonNetwork.LeaveRoom();
         SceneController.LoadStartMenu();
         Time.timeScale = 1;
     }
@@ -58,6 +58,7 @@ public class InGameMenu : MonoBehaviour
         }
         if (!PhotonNetwork.offlineMode) {
             PhotonNetwork.LeaveRoom();
+            SceneController.LoadGameSetup();
         }
     }
 

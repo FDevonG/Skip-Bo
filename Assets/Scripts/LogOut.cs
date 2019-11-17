@@ -7,6 +7,7 @@ public class LogOut : MonoBehaviour
             FireBaseScript.DeleteAccountData();
             FireBaseScript.DeleteAccount();
         }
+        PhotonNetwork.Disconnect();
         FireBaseScript.SignOut();
     }
 }
