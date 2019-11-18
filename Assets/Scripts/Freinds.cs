@@ -60,6 +60,7 @@ public class Freinds : MonoBehaviour
 
     void SpawnFriendPanel(User user, bool status) {
         GameObject friendPanel = Instantiate(Resources.Load<GameObject>("FriendPanel"), friendsPanelParent.transform);
+        friendPanel.transform.localScale = new Vector3(1, 1, 1);
         friendPanel.GetComponent<FriendListInfoPanel>().SetUpFriendPanel(user, status);
     }
 

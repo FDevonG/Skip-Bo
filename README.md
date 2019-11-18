@@ -11,3 +11,8 @@ Update 1.2
 Update 1.5
 -Email sign in added
 -Database storage added
+
+Update 1.6
+-Two player online play
+-UI issues fixed
+-Basic friends list implemented with more to come

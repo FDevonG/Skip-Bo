@@ -25,7 +25,7 @@ public class Chat : MonoBehaviour, IChatClientListener
     }
 
     public void ConnectToChat() {
-        chatClient.Connect(GameGlobalSettings.PhotonAppID(), GameGlobalSettings.Version(), null);
+        chatClient.Connect(GameGlobalSettings.PhotonChatAppId(), GameGlobalSettings.Version(), new Photon.Chat.AuthenticationValues());
     }
 
     public void DebugReturn(DebugLevel level, string message) {

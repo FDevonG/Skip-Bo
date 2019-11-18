@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 
-public class PlayedCardStack : MonoBehaviour {
+public class PlayedCardStack : Photon.MonoBehaviour {
 
     private Sounds sounds;
     public int currentCardValue = 0;//a int to store the current card value
@@ -12,12 +12,9 @@ public class PlayedCardStack : MonoBehaviour {
     GameControl gameControl;
     GameSetup gameSetup;
 
-    PhotonView photonView;
-
     private void Start() {
         gameSetup = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameSetup>();
         sounds = GameObject.FindGameObjectWithTag("SoundManager").GetComponent<Sounds>();
-        photonView = GetComponentInParent<PhotonView>();
         gameControl = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameControl>();
     }
 
@@ -51,11 +48,6 @@ public class PlayedCardStack : MonoBehaviour {
                 cardObjects.Remove(cardObjects[i]);
                 yield return new WaitForSeconds(0.15f);
             }
-            //if (PhotonNetwork.inRoom) {
-            //    if (!PhotonNetwork.isMasterClient) {
-            //        yield return null;
-            //    }
-            //}
             currentCardValue = 0;
         }
     }

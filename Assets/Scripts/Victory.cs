@@ -70,11 +70,12 @@ public class Victory : MonoBehaviour
             yield return new WaitForSeconds(0.5f);
         }
         if (gameControl.localPlayerPanel.GetComponent<PanelControl>().deck.transform.childCount == 0) {
-            GameObject.FindGameObjectWithTag("StatsController").GetComponent<PlayerStatsController>().AddGameWon();
+            StartCoroutine(GameObject.FindGameObjectWithTag("StatsController").GetComponent<PlayerStatsController>().AddGameWon());
         }
         for (int i = 0; i < playerStandings.Length; i++) {
             GameObject standingPanel = Instantiate(Resources.Load<GameObject>("PlayerStandingPanel") as GameObject);
             standingPanel.transform.SetParent(panelsParent.transform);
+            standingPanel.transform.localScale = new Vector3(1,1,1);
             standingPanel.GetComponent<PlayerStandingPanel>().SetUpPanel(gameControl.playerPanels[playerStandings[i]].GetComponent<PanelControl>().photonPlayer, i);
         }
     }

@@ -1,6 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+using UnityEngine.UI;
 
 public class FriendsButton : MonoBehaviour
 {
@@ -8,9 +7,9 @@ public class FriendsButton : MonoBehaviour
 
     private void OnEnable() {
         if (FireBaseScript.IsPlayerAnonymous()) {
-            friendButon.SetActive(false);
+            friendButon.GetComponent<Button>().interactable = false;
         } else {
-            friendButon.SetActive(true);
+            friendButon.GetComponent<Button>().interactable = true;
         }
     }
 

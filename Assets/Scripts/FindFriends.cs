@@ -84,7 +84,7 @@ public class FindFriends : MonoBehaviour
             }
             if (!friendAlreadyAdded) {
                 user.friends.Add(id);
-                StartCoroutine(FireBaseScript.UpdateUser(user));
+                FireBaseScript.UpdateUser(user);
                 SetErrorMessage(nameText.text + " added");
             }
         }

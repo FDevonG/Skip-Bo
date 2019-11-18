@@ -37,6 +37,7 @@ public class RoomBrowser : MonoBehaviour
 
     private void SpawnRoomButton(RoomInfo game) {
         GameObject roomInfoPanel = Instantiate(Resources.Load<GameObject>("BrowserInfoPanel") as GameObject, roomsParent.transform);//instatiate a new button for each room in the rooms list
+        roomInfoPanel.transform.localScale = new Vector3(1,1,1);
         roomButtons.Add(roomInfoPanel);//add the room button to the list so we can easily destroy them
         roomInfoPanel.GetComponent<RoomBrowserPanel>().SetText(game);//set the text up on each button to present the info
     }

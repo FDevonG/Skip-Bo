@@ -25,7 +25,7 @@ public class PlayerStatsController : MonoBehaviour
             } else {
                 user.onlineGamesPlayed += 1;
             }
-            StartCoroutine(FireBaseScript.UpdateUser(user));
+            FireBaseScript.UpdateUser(user);
         }
     }
 
@@ -39,7 +39,7 @@ public class PlayerStatsController : MonoBehaviour
             } else {
                 user.onlineGamesWon += 1;
             }
-            StartCoroutine(FireBaseScript.UpdateUser(user));
+            FireBaseScript.UpdateUser(user);
         }
     }
 }

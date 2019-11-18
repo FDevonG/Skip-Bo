@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using UnityEngine.UI;
 
 public class GameSetup : MonoBehaviour {
 
@@ -24,7 +25,7 @@ public class GameSetup : MonoBehaviour {
     }
 
     public void SetGameUp() {
-        GameObject.FindGameObjectWithTag("StatsController").GetComponent<PlayerStatsController>().AddGamePlayed();
+        StartCoroutine(GameObject.FindGameObjectWithTag("StatsController").GetComponent<PlayerStatsController>().AddGamePlayed());
         //if we are in an offline game we want to build the array to build out the game with and to store later for checking if the play is still connected
         if (!PhotonNetwork.offlineMode) {
             gameControl.connectedPlayers = GetPhotonPlayerArray();
@@ -125,6 +126,8 @@ public class GameSetup : MonoBehaviour {
         if (PhotonNetwork.room.MaxPlayers == 2) {
             for (int i = 0; i < gameControl.connectedPlayers.Length; i++) {
                 Transform panelParent = GameObject.FindGameObjectWithTag("OtherPlayerPanel").transform;
+                panelParent.GetComponent<RectTransform>().sizeDelta = new Vector2(800, 600);
+                panelParent.parent.transform.GetComponent<VerticalLayoutGroup>().childForceExpandHeight = true;
                 GameObject playerPanel = null;
                 if (gameControl.connectedPlayers[i] == null) {
                     gameControl.connectedPlayers[i] = npcCreation.CreateNpc(i);
@@ -222,11 +225,13 @@ public class GameSetup : MonoBehaviour {
         card.SetParent(panel.GetComponent<PanelControl>().deck.transform);
         card.localPosition = new Vector3(0,0,0);
         card.localScale = new Vector3(1, 1, 1);
-        if (gameControl.playerPanels[panelIndex] == gameControl.localPlayerPanel) {
-            card.localScale = new Vector3(2,2,2);
+        if (gameControl.playerPanels[panelIndex] == gameControl.localPlayerPanel || PhotonNetwork.room.MaxPlayers == 2) {
             if (panel.GetComponent<PanelControl>().deck.transform.childCount == (int)PhotonNetwork.room.CustomProperties[PhotonRooms.DeckSize()]) {
                 card.gameObject.AddComponent<CardDragHandler>();
             }
+        }
+        if (gameControl.playerPanels[panelIndex] == gameControl.localPlayerPanel || PhotonNetwork.room.MaxPlayers == 2) {
+            card.localScale = new Vector3(2, 2, 2);
         }
         if (panel.GetComponent<PanelControl>().deck.transform.childCount == (int)PhotonNetwork.room.CustomProperties[PhotonRooms.DeckSize()]) {
             card.GetComponent<Card>().SetUpCard(card.GetComponent<Card>().cardNumber);
@@ -250,9 +255,11 @@ public class GameSetup : MonoBehaviour {
         card.transform.localPosition = new Vector3(0,0,0);
         card.localScale = new Vector3(1, 1, 1);
         if (gameControl.playerPanels[panelIndex] == gameControl.localPlayerPanel) {
+            card.GetComponent<Card>().SetUpCard(card.GetComponent<Card>().cardNumber);
+        }
+        if (gameControl.playerPanels[panelIndex] == gameControl.localPlayerPanel || PhotonNetwork.room.MaxPlayers == 2) {
             card.localScale = new Vector3(2, 2, 2);
             card.gameObject.AddComponent<CardDragHandler>();
-            card.GetComponent<Card>().SetUpCard(card.GetComponent<Card>().cardNumber);
         }
     }
 }

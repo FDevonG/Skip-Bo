@@ -9,6 +9,7 @@ public class InGameMenu : MonoBehaviour
     public GameObject howToPlayWindow;
     public GameObject victoryPanel;
     public Button menuButton;
+    [SerializeField] GameObject FriendListInfoPanel;
 
     public GameObject activePanel;
 

@@ -35,7 +35,7 @@ public class PhotonRooms : MonoBehaviour
 
     public IEnumerator CreateOfflineRoom(int deckAmmount) {
         yield return StartCoroutine(SetupPhotonPlayer());
-        PhotonNetwork.CreateRoom(null, GetRoomOptions(deckAmmount, 2, true), null);
+        PhotonNetwork.CreateRoom(null, GetRoomOptions(deckAmmount, 4, true), null);
         SceneController.LoadGameScene();
     }
 

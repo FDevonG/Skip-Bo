@@ -206,7 +206,7 @@ public class CharacterCreation : MonoBehaviour
             }
             if (!nameBool) {
                 user.userName = userName;
-                StartCoroutine(FireBaseScript.UpdateUser(user));
+                FireBaseScript.UpdateUser(user);
                 GameObject.FindGameObjectWithTag("GameManager").GetComponent<ActivatePanel>().SwitchPanel(GameObject.FindGameObjectWithTag("GameManager").GetComponent<Menu>().startMenu);
             } else {
                 ErrorWithCharacterEdit("Username is taken");
