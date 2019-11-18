@@ -35,14 +35,14 @@ public class PhotonRooms : MonoBehaviour
 
     public IEnumerator CreateOfflineRoom(int deckAmmount) {
         yield return StartCoroutine(SetupPhotonPlayer());
-        PhotonNetwork.CreateRoom(null, GetRoomOptions(deckAmmount), null);
+        PhotonNetwork.CreateRoom(null, GetRoomOptions(deckAmmount, 2, true), null);
         SceneController.LoadGameScene();
     }
 
-    public IEnumerator CreateOnlineGame(string roomName, int deckAmmount) {
+    public IEnumerator CreateOnlineGame(string roomName, int deckAmmount, byte maxPlayers, bool priv) {
         if (!RoomNameExistCheck(roomName)) {
             yield return StartCoroutine(SetupPhotonPlayer());
-            RoomOptions roomOptions = GetRoomOptions(deckAmmount);
+            RoomOptions roomOptions = GetRoomOptions(deckAmmount, maxPlayers, priv);
             PhotonNetwork.CreateRoom(roomName, roomOptions, null);
         } else {
             GameObject.FindGameObjectWithTag("GameManager").GetComponent<ActivatePanel>().SwitchPanel(GameObject.FindGameObjectWithTag("GameManager").GetComponent<OnlineGameOptionsSetup>().roomNameExistsPanel);
@@ -58,15 +58,21 @@ public class PhotonRooms : MonoBehaviour
         return "DeckSize";
     }
 
-    public static byte MaxPlayers() {
-        return 4;
+    public static string PrivateRoom() {
+        return "Private";
     }
 
-    private static RoomOptions GetRoomOptions(int deckAmmount) {
+    //public static byte MaxPlayers() {
+    //    return 4;
+    //}
+
+    private static RoomOptions GetRoomOptions(int deckAmmount, byte maxPlayers, bool priv) {
         RoomOptions roomOptions = new RoomOptions();//create a new room options
-        roomOptions.MaxPlayers = MaxPlayers();//the max number of players in the game is 4
+        roomOptions.MaxPlayers = maxPlayers;//the max number of players in the game is 4
+        roomOptions.IsVisible = priv;
         roomOptions.CustomRoomProperties = new ExitGames.Client.Photon.Hashtable();//create a new custom room properties
         roomOptions.CustomRoomProperties[DeckSize()] = deckAmmount;
+        roomOptions.CustomRoomProperties[PrivateRoom()] = priv;
         roomOptions.PublishUserId = true;
         roomOptions.CustomRoomPropertiesForLobby = new string[] {
             DeckSize(),

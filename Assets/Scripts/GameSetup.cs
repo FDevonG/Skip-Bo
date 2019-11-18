@@ -99,31 +99,52 @@ public class GameSetup : MonoBehaviour {
 
         gameControl.playerPanels = new GameObject[PhotonNetwork.room.MaxPlayers];
 
-        int playerPosition = 0;
-        //if we are playing online we want use the array of connected players to spawn the panels
-        for (int i = 0; i < gameControl.connectedPlayers.Length; i++) {
-            Transform panelParent = GameObject.FindGameObjectWithTag("OtherPlayerPanel").transform;
-            GameObject playerPanel = null;
-            if (gameControl.connectedPlayers[i] == null) {
-                gameControl.connectedPlayers[i] = npcCreation.CreateNpc(i);
-            }
+        if (PhotonNetwork.room.MaxPlayers == 4) {
+            int playerPosition = 0;
+            //if we are playing online we want use the array of connected players to spawn the panels
+            for (int i = 0; i < gameControl.connectedPlayers.Length; i++) {
+                Transform panelParent = GameObject.FindGameObjectWithTag("OtherPlayerPanel").transform;
+                GameObject playerPanel = null;
+                if (gameControl.connectedPlayers[i] == null) {
+                    gameControl.connectedPlayers[i] = npcCreation.CreateNpc(i);
+                }
 
-            if (gameControl.connectedPlayers[i] != PhotonNetwork.player) {
-                playerPanel = Instantiate(Resources.Load<GameObject>("OtherPlayerPanel") as GameObject, panelParent);
-                playerPanel.transform.localScale = new Vector3(1, 1, 1);
-                gameControl.playerPanels[i] = playerPanel;
-                SpawnPanelInfo(playerPanel, gameControl.connectedPlayers[i]);
-            } else {
-                gameControl.playerPanels[i] = gameControl.localPlayerPanel;
-                playerPosition = i;
-            }            
+                if (gameControl.connectedPlayers[i] != PhotonNetwork.player) {
+                    playerPanel = Instantiate(Resources.Load<GameObject>("OtherPlayerPanel") as GameObject, panelParent);
+                    playerPanel.transform.localScale = new Vector3(1, 1, 1);
+                    gameControl.playerPanels[i] = playerPanel;
+                    SpawnPanelInfo(playerPanel, gameControl.connectedPlayers[i]);
+                } else {
+                    gameControl.playerPanels[i] = gameControl.localPlayerPanel;
+                    playerPosition = i;
+                }
+            }
+            AdjustPanels(playerPosition);
+        }
+
+        if (PhotonNetwork.room.MaxPlayers == 2) {
+            for (int i = 0; i < gameControl.connectedPlayers.Length; i++) {
+                Transform panelParent = GameObject.FindGameObjectWithTag("OtherPlayerPanel").transform;
+                GameObject playerPanel = null;
+                if (gameControl.connectedPlayers[i] == null) {
+                    gameControl.connectedPlayers[i] = npcCreation.CreateNpc(i);
+                }
+
+                if (gameControl.connectedPlayers[i] != PhotonNetwork.player) {
+                    playerPanel = Instantiate(Resources.Load<GameObject>("MainPlayerPanel") as GameObject, panelParent);
+                    playerPanel.transform.localScale = new Vector3(1, 1, 1);
+                    gameControl.playerPanels[i] = playerPanel;
+                    SpawnPanelInfo(playerPanel, gameControl.connectedPlayers[i]);
+                } else {
+                    gameControl.playerPanels[i] = gameControl.localPlayerPanel;
+                }
+            }
         }
 
         if (PhotonNetwork.isMasterClient) {
             SpawnStartingCards();
             photonView.RPC("StartGame", PhotonTargets.All, gameControl.turnIndex);
         }
-        AdjustPanels(playerPosition);
     }
 
     //this changes the panels around so the flow of the turn order works properly

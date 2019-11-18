@@ -31,7 +31,9 @@ public class Lobby : MonoBehaviour
         leaveButton.gameObject.SetActive(true);
         if (PhotonNetwork.isMasterClient && !PhotonNetwork.offlineMode) {
             PhotonNetwork.room.IsOpen = true;
-            PhotonNetwork.room.IsVisible = true;
+            if ((bool)PhotonNetwork.room.CustomProperties[PhotonRooms.PrivateRoom()] == false) {
+                PhotonNetwork.room.IsVisible = true;
+            }
         }
     }
 
