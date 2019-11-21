@@ -42,6 +42,7 @@ public class PhotonNetworking : MonoBehaviour {
         PhotonNetwork.JoinLobby(TypedLobby.Default);
         PhotonNetwork.automaticallySyncScene = true;
         PhotonNetwork.autoCleanUpPlayerObjects = true;
+        GameObject.FindGameObjectWithTag("Chat").GetComponent<Chat>().ConnectToChat();
     }
 
     //this is called when you fail to connect to photon

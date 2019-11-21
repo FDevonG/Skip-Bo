@@ -9,6 +9,7 @@ TagManager:
   - SoundManager
   - AdManager
   - StatsController
+  - Chat
   layers:
   - Default
   - TransparentFX

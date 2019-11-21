@@ -7,9 +7,14 @@ using ExitGames.Client.Photon;
 public class Chat : MonoBehaviour, IChatClientListener
 {
     public static Chat Instance { get; private set; }
-    ChatClient chatClient = new ChatClient(Instance);
+    ChatClient chatClient;
 
     bool chatConnected = false;
+
+    ExitGames.Client.Photon.ConnectionProtocol connectProtocol = ExitGames.Client.Photon.ConnectionProtocol.Udp;
+
+    string globalChannel = "global";
+    string gameInvitesChannel = "gameInvites";
 
     private void Awake() {
         if (Instance != null && Instance != this) {
@@ -17,30 +22,31 @@ public class Chat : MonoBehaviour, IChatClientListener
         } else {
             Instance = this;
         }
+        chatClient = new ChatClient(Instance, connectProtocol);
         DontDestroyOnLoad(gameObject);
     }
 
-    private void Start() {
-        ConnectToChat();
-    }
-
     public void ConnectToChat() {
-        chatClient.Connect(GameGlobalSettings.PhotonChatAppId(), GameGlobalSettings.Version(), new Photon.Chat.AuthenticationValues());
+        Photon.Chat.AuthenticationValues authValues = new Photon.Chat.AuthenticationValues();
+        authValues.UserId = PhotonNetwork.player.NickName;
+        authValues.AuthType = Photon.Chat.CustomAuthenticationType.None;
+        chatClient.Connect(GameGlobalSettings.PhotonChatAppId(), GameGlobalSettings.Version(), authValues);
+        
     }
 
     public void DebugReturn(DebugLevel level, string message) {
-        throw new System.NotImplementedException();
+        Debug.Log(message);
     }
 
     public void OnChatStateChange(ChatState state) {
-        throw new System.NotImplementedException();
+        Debug.Log(state);
     }
 
     public void OnConnected() {
-        Debug.Log("Hi");
         chatConnected = true;
         chatClient.ChatRegion = "Us";
-        chatClient.Subscribe(new string[] { "global" });
+        chatClient.Subscribe(new string[] { globalChannel });
+        chatClient.Subscribe(new string[] { gameInvitesChannel });
         chatClient.SetOnlineStatus(ChatUserStatus.Online);
         StartCoroutine(UpdateFriends());
     }
@@ -50,11 +56,17 @@ public class Chat : MonoBehaviour, IChatClientListener
     }
 
     public void OnGetMessages(string channelName, string[] senders, object[] messages) {
-        throw new System.NotImplementedException();
+        for (int i = 0; i < messages.Length; i++) { //go through each received msg
+            string sender = senders[i];
+            string msg = (string)messages[i];
+            Debug.Log(sender + ": " + msg);
+        }
     }
 
     public void OnPrivateMessage(string sender, object message, string channelName) {
-        throw new System.NotImplementedException();
+        if (channelName == gameInvitesChannel) {
+            Debug.Log("Invited to game from" + sender);
+        }
     }
 
     public void OnStatusUpdate(string user, int status, bool gotMessage, object message) {
@@ -62,7 +74,7 @@ public class Chat : MonoBehaviour, IChatClientListener
     }
 
     public void OnSubscribed(string[] channels, bool[] results) {
-        throw new System.NotImplementedException();
+        Debug.Log("Connected to channel");
     }
 
     public void OnUnsubscribed(string[] channels) {
@@ -86,15 +98,17 @@ public class Chat : MonoBehaviour, IChatClientListener
             friends[i] = user.friends[i];
         }
         chatClient.AddFriends(friends);
-        Debug.Log("Friends Added");
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (chatClient == null || !chatClient.CanChat) {
-            return;
+        if (chatClient != null) {
+            chatClient.Service();
         }
-        chatClient.Service();
+    }
+
+    void OnApplicationQuit() {
+        if (chatClient != null) { chatClient.Disconnect(); }
     }
 }

@@ -21,6 +21,8 @@ public class Menu : MonoBehaviour
 
     private ActivatePanel activatePanel;
 
+    [SerializeField] Canvas canvas;
+
     private void Awake() {
         Screen.sleepTimeout = SleepTimeout.NeverSleep;//keep the screen from fading
         Application.runInBackground = true;
@@ -110,6 +112,7 @@ public class Menu : MonoBehaviour
             var task = FireBaseScript.GetCurrentUser();
             yield return new WaitUntil(() => task.IsCompleted);
             User user = new User();
+            canvas.gameObject.SetActive(true);
             if (task.IsFaulted) {
                 Debug.Log("Failed to load profile");
             } else {
