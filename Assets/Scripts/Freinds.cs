@@ -28,15 +28,12 @@ public class Freinds : MonoBehaviour
                 }
             }
         }
-
-        //here we are converting the list of friends into an array so we can pass it to the PhotonNetworkfindfriends function
-        string[] userFriendsArray = new string[user.friends.Count];
-        for (int i = 0; i < user.friends.Count; i++) {
-            userFriendsArray[i] = user.friends[i];
+        if (!PhotonNetwork.connectedAndReady) {
+            yield return new WaitUntil(() => PhotonNetwork.connectedAndReady);
         }
-        Debug.Log(userFriendsArray);
-        //FriendPanel
-        PhotonNetwork.FindFriends(userFriendsArray);
+        if (user.friends.Count > 0) {
+            PhotonNetwork.FindFriends(user.friends.ToArray());
+        }
         Debug.Log(PhotonNetwork.Friends);
         if (PhotonNetwork.Friends != null) {
             for (int i = 0; i < PhotonNetwork.Friends.Count; i++) {
@@ -56,8 +53,10 @@ public class Freinds : MonoBehaviour
                 }
             }
         }
-        for (int i = 0; i < friends.Count; i++) {
-            SpawnFriendPanel(friends[i], false);
+        if (friends.Count > 0) {
+            for (int i = 0; i < friends.Count; i++) {
+                SpawnFriendPanel(friends[i], false);
+            }
         }
     }
 

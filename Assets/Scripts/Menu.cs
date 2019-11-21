@@ -107,6 +107,7 @@ public class Menu : MonoBehaviour
 
     private IEnumerator DoesPlayerExist() {
         if (!FireBaseScript.IsPlayerLoggedIn()) {
+            canvas.gameObject.SetActive(true);
             activatePanel.SwitchPanel(startGamePanel);
         } else {
             var task = FireBaseScript.GetCurrentUser();

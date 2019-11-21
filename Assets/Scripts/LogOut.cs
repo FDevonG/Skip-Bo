@@ -8,6 +8,7 @@ public class LogOut : MonoBehaviour
             FireBaseScript.DeleteAccount();
         }
         PhotonNetwork.Disconnect();
+        GameObject.FindGameObjectWithTag("Chat").GetComponent<Chat>().Disconnect();
         FireBaseScript.SignOut();
     }
 }

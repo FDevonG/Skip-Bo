@@ -12,7 +12,7 @@ public class InviteFriendsToGame : MonoBehaviour {
     private void OnEnable() {
         BuildFriendsList();
     }
-
+    
     private void OnDisable() {
         infoText.gameObject.SetActive(false);
     }

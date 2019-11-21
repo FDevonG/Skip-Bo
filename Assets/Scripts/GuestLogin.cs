@@ -15,7 +15,7 @@ public class GuestLogin : MonoBehaviour
         } else {
             User newUser = new User("", FireBaseScript.AuthenitcationKey());
             FireBaseScript.WriteNewUser(newUser);
-            StartCoroutine(GameObject.FindGameObjectWithTag("NetworkManager").GetComponent<PhotonNetworking>().ConnectToPhoton());
+            //StartCoroutine(GameObject.FindGameObjectWithTag("NetworkManager").GetComponent<PhotonNetworking>().ConnectToPhoton());
             GameObject.FindGameObjectWithTag("GameManager").GetComponent<ActivatePanel>().SwitchPanel(GameObject.FindGameObjectWithTag("GameManager").GetComponent<Menu>().characterCreationPanel);
         }
     }

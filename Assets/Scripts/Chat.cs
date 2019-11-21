@@ -46,7 +46,6 @@ public class Chat : MonoBehaviour, IChatClientListener
         chatClient.Subscribe(new string[] { globalChannel });
         chatClient.SetOnlineStatus(ChatUserStatus.Online);
         StartCoroutine(UpdateFriends());
-        Debug.Log(chatClient.UserId);
     }
 
     public void OnDisconnected() {
@@ -90,15 +89,15 @@ public class Chat : MonoBehaviour, IChatClientListener
         var task = FireBaseScript.GetCurrentUser();
         yield return new WaitUntil(() => task.IsCompleted);
         User user = JsonUtility.FromJson<User>(task.Result);
-        string[] friends = new string[user.friends.Count];
-        for (int i = 0; i < user.friends.Count; i++) {
-            friends[i] = user.friends[i];
-        }
-        chatClient.AddFriends(friends);
+        chatClient.AddFriends(user.friends.ToArray());
     }
 
     public void SendGameInvite(string userId, string message) {
         chatClient.SendPrivateMessage(userId, message);
+    }
+
+    public void Disconnect() {
+        chatClient.Disconnect();
     }
 
     // Update is called once per frame

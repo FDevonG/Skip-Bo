@@ -33,7 +33,6 @@ public class PhotonNetworking : MonoBehaviour {
     public IEnumerator ConnectToPhoton() {
         if (!PhotonNetwork.connected) {
             yield return StartCoroutine(GetComponent<PhotonRooms>().SetupPhotonPlayer());
-            Debug.Log(PhotonNetwork.player.UserId);
             PhotonNetwork.ConnectUsingSettings(GameGlobalSettings.Version());
         }
     }

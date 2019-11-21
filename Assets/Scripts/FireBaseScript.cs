@@ -71,16 +71,16 @@ public class FireBaseScript : MonoBehaviour
 
     public static void UpdateUser(User user) {
         DatabaseReference databaseReference = FirebaseDatabase.DefaultInstance.RootReference;
-        databaseReference.Child("users").Child(FirebaseAuth.DefaultInstance.CurrentUser.UserId).Child("userName").SetValueAsync(user.userName);
-        databaseReference.Child("users").Child(FirebaseAuth.DefaultInstance.CurrentUser.UserId).Child("hair").SetValueAsync(user.hair);
-        databaseReference.Child("users").Child(FirebaseAuth.DefaultInstance.CurrentUser.UserId).Child("face").SetValueAsync(user.face);
-        databaseReference.Child("users").Child(FirebaseAuth.DefaultInstance.CurrentUser.UserId).Child("kit").SetValueAsync(user.kit);
-        databaseReference.Child("users").Child(FirebaseAuth.DefaultInstance.CurrentUser.UserId).Child("body").SetValueAsync(user.body);
-        databaseReference.Child("users").Child(FirebaseAuth.DefaultInstance.CurrentUser.UserId).Child("offlineGamesPlayed").SetValueAsync(user.offlineGamesPlayed);
-        databaseReference.Child("users").Child(FirebaseAuth.DefaultInstance.CurrentUser.UserId).Child("onlineGamesPlayed").SetValueAsync(user.onlineGamesPlayed);
-        databaseReference.Child("users").Child(FirebaseAuth.DefaultInstance.CurrentUser.UserId).Child("offlineGamesWon").SetValueAsync(user.offlineGamesWon);
-        databaseReference.Child("users").Child(FirebaseAuth.DefaultInstance.CurrentUser.UserId).Child("onlineGamesWon").SetValueAsync(user.onlineGamesWon);
-        databaseReference.Child("users").Child(FirebaseAuth.DefaultInstance.CurrentUser.UserId).Child("friends").SetValueAsync(user.friends);
+        databaseReference.Child("users").Child(AuthenitcationKey()).Child("userName").SetValueAsync(user.userName);
+        databaseReference.Child("users").Child(AuthenitcationKey()).Child("hair").SetValueAsync(user.hair);
+        databaseReference.Child("users").Child(AuthenitcationKey()).Child("face").SetValueAsync(user.face);
+        databaseReference.Child("users").Child(AuthenitcationKey()).Child("kit").SetValueAsync(user.kit);
+        databaseReference.Child("users").Child(AuthenitcationKey()).Child("body").SetValueAsync(user.body);
+        databaseReference.Child("users").Child(AuthenitcationKey()).Child("offlineGamesPlayed").SetValueAsync(user.offlineGamesPlayed);
+        databaseReference.Child("users").Child(AuthenitcationKey()).Child("onlineGamesPlayed").SetValueAsync(user.onlineGamesPlayed);
+        databaseReference.Child("users").Child(AuthenitcationKey()).Child("offlineGamesWon").SetValueAsync(user.offlineGamesWon);
+        databaseReference.Child("users").Child(AuthenitcationKey()).Child("onlineGamesWon").SetValueAsync(user.onlineGamesWon);
+        databaseReference.Child("users").Child(AuthenitcationKey()).Child("friends").SetValueAsync(user.friends);
     }
 
     public static void DeleteAccountData() {
@@ -89,7 +89,7 @@ public class FireBaseScript : MonoBehaviour
     }
 
     public static Task<string> GetCurrentUser() {
-        return FirebaseDatabase.DefaultInstance.GetReference("users").Child(FirebaseAuth.DefaultInstance.CurrentUser.UserId).GetValueAsync().ContinueWith(task => {
+        return FirebaseDatabase.DefaultInstance.GetReference("users").Child(AuthenitcationKey()).GetValueAsync().ContinueWith(task => {
             return task.Result.GetRawJsonValue();
         });
     }

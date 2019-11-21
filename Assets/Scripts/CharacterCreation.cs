@@ -208,6 +208,7 @@ public class CharacterCreation : MonoBehaviour
                 user.userName = userName;
                 FireBaseScript.UpdateUser(user);
                 GameObject.FindGameObjectWithTag("GameManager").GetComponent<ActivatePanel>().SwitchPanel(GameObject.FindGameObjectWithTag("GameManager").GetComponent<Menu>().startMenu);
+                StartCoroutine(GameObject.FindGameObjectWithTag("NetworkManager").GetComponent<PhotonNetworking>().ConnectToPhoton());
             } else {
                 ErrorWithCharacterEdit("Username is taken");
                 NameError();
