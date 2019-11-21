@@ -14,7 +14,6 @@ public class Chat : MonoBehaviour, IChatClientListener
     ExitGames.Client.Photon.ConnectionProtocol connectProtocol = ExitGames.Client.Photon.ConnectionProtocol.Udp;
 
     string globalChannel = "global";
-    string gameInvitesChannel = "gameInvites";
 
     private void Awake() {
         if (Instance != null && Instance != this) {
@@ -28,10 +27,9 @@ public class Chat : MonoBehaviour, IChatClientListener
 
     public void ConnectToChat() {
         Photon.Chat.AuthenticationValues authValues = new Photon.Chat.AuthenticationValues();
-        authValues.UserId = PhotonNetwork.player.NickName;
+        authValues.UserId = PhotonNetwork.player.UserId;
         authValues.AuthType = Photon.Chat.CustomAuthenticationType.None;
         chatClient.Connect(GameGlobalSettings.PhotonChatAppId(), GameGlobalSettings.Version(), authValues);
-        
     }
 
     public void DebugReturn(DebugLevel level, string message) {
@@ -46,9 +44,9 @@ public class Chat : MonoBehaviour, IChatClientListener
         chatConnected = true;
         chatClient.ChatRegion = "Us";
         chatClient.Subscribe(new string[] { globalChannel });
-        chatClient.Subscribe(new string[] { gameInvitesChannel });
         chatClient.SetOnlineStatus(ChatUserStatus.Online);
         StartCoroutine(UpdateFriends());
+        Debug.Log(chatClient.UserId);
     }
 
     public void OnDisconnected() {
@@ -64,9 +62,8 @@ public class Chat : MonoBehaviour, IChatClientListener
     }
 
     public void OnPrivateMessage(string sender, object message, string channelName) {
-        if (channelName == gameInvitesChannel) {
-            Debug.Log("Invited to game from" + sender);
-        }
+        GameObject invitePanel = Instantiate(Resources.Load<GameObject>("GameInvitePanel"), GameObject.Find("Canvas").transform);
+        invitePanel.GetComponent<InvitedToGamePanel>().SetUpAcceptButton((string)message);
     }
 
     public void OnStatusUpdate(string user, int status, bool gotMessage, object message) {
@@ -98,6 +95,10 @@ public class Chat : MonoBehaviour, IChatClientListener
             friends[i] = user.friends[i];
         }
         chatClient.AddFriends(friends);
+    }
+
+    public void SendGameInvite(string userId, string message) {
+        chatClient.SendPrivateMessage(userId, message);
     }
 
     // Update is called once per frame

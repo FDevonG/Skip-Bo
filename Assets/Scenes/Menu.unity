@@ -2505,7 +2505,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_UiScaleMode: 1
-  m_ReferencePixelsPerUnit: 100
+  m_ReferencePixelsPerUnit: 300
   m_ScaleFactor: 1
   m_ReferenceResolution: {x: 1080, y: 1920}
   m_ScreenMatchMode: 0
@@ -10523,7 +10523,7 @@ MonoBehaviour:
   startGamePanel: {fileID: 5851475698171402631}
   forgotPasswordPanel: {fileID: 1926140308}
   findFriendsPanel: {fileID: 1880585461}
-  canvas: {fileID: 0}
+  canvas: {fileID: 352276160}
 --- !u!4 &1311493707
 Transform:
   m_ObjectHideFlags: 0
@@ -15712,7 +15712,7 @@ MonoBehaviour:
   m_Spacing: 50
   m_ChildForceExpandWidth: 0
   m_ChildForceExpandHeight: 0
-  m_ChildControlWidth: 1
+  m_ChildControlWidth: 0
   m_ChildControlHeight: 1
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0

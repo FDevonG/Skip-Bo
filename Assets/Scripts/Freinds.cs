@@ -34,13 +34,16 @@ public class Freinds : MonoBehaviour
         for (int i = 0; i < user.friends.Count; i++) {
             userFriendsArray[i] = user.friends[i];
         }
+        Debug.Log(userFriendsArray);
         //FriendPanel
         PhotonNetwork.FindFriends(userFriendsArray);
+        Debug.Log(PhotonNetwork.Friends);
         if (PhotonNetwork.Friends != null) {
             for (int i = 0; i < PhotonNetwork.Friends.Count; i++) {
                 User friend = new User();
                 for (int x =0; x < friends.Count; x++) {
                     if (friends[x].userID == PhotonNetwork.Friends[i].UserId) {
+                        Debug.Log(PhotonNetwork.Friends[i].IsOnline);
                         friend = friends[x];
                         friends.Remove(friends[x]);
                         break;

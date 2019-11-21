@@ -4,24 +4,24 @@ using UnityEngine;
 
 public class Lobby : MonoBehaviour
 {
-    [SerializeField]
-    Text roomNameText;
-    [SerializeField]
-    Text infoText;
-    [SerializeField]
-    Text numberText;
-    [SerializeField]
-    PhotonView photonView;
-    [SerializeField]
-    Image loadinImage;
-    [SerializeField]
-    Button leaveButton;
+    [SerializeField]  Text roomNameText;
+    [SerializeField]  Text infoText;
+    [SerializeField]  Text numberText;
+    [SerializeField]  PhotonView photonView;
+    [SerializeField]  Image loadinImage;
+    [SerializeField] Button leaveButton;
+    [SerializeField] Button inviteFriendsButton;
 
     bool gameStarting = false;
 
     private void OnEnable() {
         UpdateWaitingPanel();
         roomNameText.text = "Room Name: " + PhotonNetwork.room.Name;
+        if (FireBaseScript.IsPlayerAnonymous()) {
+            inviteFriendsButton.interactable = false;
+        } else {
+            inviteFriendsButton.interactable = true;
+        }
     }
 
     public void UpdateWaitingPanel() {
