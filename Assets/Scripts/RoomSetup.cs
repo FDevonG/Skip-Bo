@@ -4,7 +4,7 @@ using UnityEngine.UI;
 public class RoomSetup : MonoBehaviour {
 
     public Text placeholderText;
-    public Text roomNameText;
+    [SerializeField] GameObject roomNameInput;
     public Text cardsText;
     public Slider cardSlider;
 
@@ -22,7 +22,7 @@ public class RoomSetup : MonoBehaviour {
     }
 
     public void CreateRoom() {
-        string roomName = roomNameText.text;
+        string roomName = roomNameInput.GetComponent<InputField>().text;
         if (!string.IsNullOrEmpty(roomName) && !string.IsNullOrWhiteSpace(roomName)) {
             byte players = 0;
             if (twoPlayerToggle.isOn) {
@@ -31,7 +31,7 @@ public class RoomSetup : MonoBehaviour {
             if (fourPlayerToggle.isOn) {
                 players = 4;
             }
-            StartCoroutine(GameObject.FindGameObjectWithTag("NetworkManager").GetComponent<PhotonRooms>().CreateOnlineGame(roomName, ((int)cardSlider.value * 5), players, privateToggle.isOn));
+            GameObject.FindGameObjectWithTag("NetworkManager").GetComponent<PhotonRooms>().CreateOnlineGame(roomName, ((int)cardSlider.value * 5), players, privateToggle.isOn);
         } else {
             placeholderText.text = "Enter Name";
             placeholderText.color = Color.red;
@@ -52,6 +52,10 @@ public class RoomSetup : MonoBehaviour {
         } else {
             twoPlayerToggle.isOn = true;
         }
+    }
+
+    void OnDisable() {
+        roomNameInput.GetComponent<InputField>().text = "";
     }
 
 }

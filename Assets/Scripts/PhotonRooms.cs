@@ -16,42 +16,26 @@ public class PhotonRooms : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
-    public IEnumerator SetupPhotonPlayer() {
-        var task = FireBaseScript.GetCurrentUser();
-        yield return new WaitUntil(() => task.IsCompleted);
-        User user = new User();
-        if (!task.IsFaulted) {
-            user = JsonUtility.FromJson<User>(task.Result);
-            PhotonPlayerSetup.BuildPhotonPlayer(PhotonNetwork.player, user);
-        } else {
-            Debug.Log("");
-        }
-    }
+    //public void SetupPhotonPlayer() {
+    //    PhotonPlayerSetup.BuildPhotonPlayer(PhotonNetwork.player, LocalUser.locUser);
+    //}
 
-    public IEnumerator JoinRandomRoom() {
-        yield return StartCoroutine(SetupPhotonPlayer());
+    public void JoinRandomRoom() {
         PhotonNetwork.JoinRandomRoom();
     }
 
-    public IEnumerator CreateOfflineRoom(int deckAmmount) {
-        yield return StartCoroutine(SetupPhotonPlayer());
+    public void CreateOfflineRoom(int deckAmmount) {
         PhotonNetwork.CreateRoom(null, GetRoomOptions(deckAmmount, 4, true), null);
         SceneController.LoadGameScene();
     }
 
-    public IEnumerator CreateOnlineGame(string roomName, int deckAmmount, byte maxPlayers, bool priv) {
+    public void CreateOnlineGame(string roomName, int deckAmmount, byte maxPlayers, bool priv) {
         if (!RoomNameExistCheck(roomName)) {
-            yield return StartCoroutine(SetupPhotonPlayer());
             RoomOptions roomOptions = GetRoomOptions(deckAmmount, maxPlayers, priv);
             PhotonNetwork.CreateRoom(roomName, roomOptions, null);
         } else {
             GameObject.FindGameObjectWithTag("GameManager").GetComponent<ActivatePanel>().SwitchPanel(GameObject.FindGameObjectWithTag("GameManager").GetComponent<OnlineGameOptionsSetup>().roomNameExistsPanel);
         }
-    }
-
-    public IEnumerator JoinRoom(string name) {
-        yield return StartCoroutine(SetupPhotonPlayer());
-        PhotonNetwork.JoinRoom(name);
     }
 
     public static string DeckSize() {

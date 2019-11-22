@@ -69,23 +69,29 @@ public class FindFriends : MonoBehaviour
     }
 
     private IEnumerator SaveFriend() {
-        var task = FireBaseScript.GetCurrentUser();
-        yield return new WaitUntil(() => task.IsCompleted);
-        if (task.IsFaulted) {
-            SetErrorMessage("Failed to add friend");
-        } else {
-            User user = JsonUtility.FromJson<User>(task.Result);
-            bool friendAlreadyAdded = false;
-            for (int i = 0; i < user.friends.Count; i++) {
-                if (user.friends[i].ToUpper() == id.ToUpper()) {
-                    friendAlreadyAdded = true;
-                    SetErrorMessage("Friend already added");
-                }
+        bool friendAlreadyAdded = false;
+        for (int i = 0; i < LocalUser.locUser.friends.Count; i++) {
+            if (LocalUser.locUser.friends[i].ToUpper() == id.ToUpper()) {
+                friendAlreadyAdded = true;
+                SetErrorMessage("Friend already added");
             }
-            if (!friendAlreadyAdded) {
-                user.friends.Add(id);
-                FireBaseScript.UpdateUser(user);
+        }
+        if (!friendAlreadyAdded) {
+            LocalUser.locUser.friends.Add(id);
+            var usersTask = FireBaseScript.GetUsers();
+            var addFriendTask = FireBaseScript.UpdateUserFriends(LocalUser.locUser.friends);
+            yield return new WaitUntil(() => addFriendTask.IsCompleted && usersTask.IsCompleted);
+            if (addFriendTask.IsFaulted || usersTask.IsFaulted) {
+                SetErrorMessage("Failed to add " + nameText.text);
+            } else {
                 SetErrorMessage(nameText.text + " added");
+                foreach (DataSnapshot snap in usersTask.Result.Children) {
+                    User tempUser = JsonUtility.FromJson<User>(snap.GetRawJsonValue());
+                    if (tempUser.userID == id) {
+                        Friends.friends.Add(tempUser);
+                    }
+                }
+                GameObject.FindGameObjectWithTag("Chat").GetComponent<Chat>().UpdateFriends();
             }
         }
     }

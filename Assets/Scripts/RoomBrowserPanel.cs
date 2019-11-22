@@ -18,7 +18,7 @@ public class RoomBrowserPanel : MonoBehaviour
 
     public void JoinRoom() {
         if (gameInfo.IsOpen) {
-            StartCoroutine(GameObject.FindGameObjectWithTag("NetworkManager").GetComponent<PhotonRooms>().JoinRoom(nameText.text));
+            PhotonNetwork.JoinRoom(nameText.text);
         } else {
             GameObject.FindGameObjectWithTag("GameManager").GetComponent<ActivatePanel>().SwitchPanel(GetComponentInParent<RoomBrowser>().roomFullPanel);
         }

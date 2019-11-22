@@ -18,6 +18,7 @@ public class Menu : MonoBehaviour
     public GameObject startGamePanel;
     public GameObject forgotPasswordPanel;
     public GameObject findFriendsPanel;
+    public GameObject friendsSettingsPanel;
 
     private ActivatePanel activatePanel;
 
@@ -102,7 +103,10 @@ public class Menu : MonoBehaviour
             activatePanel.SwitchPanel(startGamePanel);
             return;
         }
-
+        if (activatePanel.activePanel == friendsSettingsPanel) {
+            activatePanel.SwitchPanel(friendsPanel);
+            return;
+        }
     }
 
     private IEnumerator DoesPlayerExist() {
@@ -110,18 +114,14 @@ public class Menu : MonoBehaviour
             canvas.gameObject.SetActive(true);
             activatePanel.SwitchPanel(startGamePanel);
         } else {
-            var task = FireBaseScript.GetCurrentUser();
-            yield return new WaitUntil(() => task.IsCompleted);
-            User user = new User();
+            yield return StartCoroutine(LocalUser.LoadUser());
+            StartCoroutine(Friends.GetStartFriends());
             canvas.gameObject.SetActive(true);
-            if (task.IsFaulted) {
-                Debug.Log("Failed to load profile");
-            } else {
-                user = JsonUtility.FromJson<User>(task.Result);
-            }
-            if (string.IsNullOrEmpty(user.userName)) {
+            if (string.IsNullOrEmpty(LocalUser.locUser.userName)) {
                 activatePanel.SwitchPanel(characterCreationPanel);
             } else {
+                PhotonPlayerSetup.BuildPhotonPlayer(PhotonNetwork.player, LocalUser.locUser);
+                GameObject.FindGameObjectWithTag("NetworkManager").GetComponent<PhotonNetworking>().ConnectToPhoton();
                 activatePanel.SwitchPanel(startMenu);
             }
         }

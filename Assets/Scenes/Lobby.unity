@@ -1254,7 +1254,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   friendsPanelParent: {fileID: 755855273}
-  infoText: {fileID: 0}
+  infoText: {fileID: 1672827979}
 --- !u!114 &687998514
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1964,7 +1964,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 673411af67c7d44e1b24a3c53f233765, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  activePanel: {fileID: 0}
+  activePanel: {fileID: 864487461}
 --- !u!1001 &1489413901
 PrefabInstance:
   m_ObjectHideFlags: 0

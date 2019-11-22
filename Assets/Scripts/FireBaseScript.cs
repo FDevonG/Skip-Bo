@@ -7,6 +7,7 @@ using Firebase.Auth;
 using Firebase.Database;
 using System;
 using System.Threading.Tasks;
+using Object = System.Object;
 
 public class FireBaseScript : MonoBehaviour
 {
@@ -69,18 +70,24 @@ public class FireBaseScript : MonoBehaviour
         databaseReference.Child("users").Child(AuthenitcationKey()).SetRawJsonValueAsync(json);
     }
 
-    public static void UpdateUser(User user) {
+    public static Task<bool> UpdateUser(string saveName, string varToSave) {
         DatabaseReference databaseReference = FirebaseDatabase.DefaultInstance.RootReference;
-        databaseReference.Child("users").Child(AuthenitcationKey()).Child("userName").SetValueAsync(user.userName);
-        databaseReference.Child("users").Child(AuthenitcationKey()).Child("hair").SetValueAsync(user.hair);
-        databaseReference.Child("users").Child(AuthenitcationKey()).Child("face").SetValueAsync(user.face);
-        databaseReference.Child("users").Child(AuthenitcationKey()).Child("kit").SetValueAsync(user.kit);
-        databaseReference.Child("users").Child(AuthenitcationKey()).Child("body").SetValueAsync(user.body);
-        databaseReference.Child("users").Child(AuthenitcationKey()).Child("offlineGamesPlayed").SetValueAsync(user.offlineGamesPlayed);
-        databaseReference.Child("users").Child(AuthenitcationKey()).Child("onlineGamesPlayed").SetValueAsync(user.onlineGamesPlayed);
-        databaseReference.Child("users").Child(AuthenitcationKey()).Child("offlineGamesWon").SetValueAsync(user.offlineGamesWon);
-        databaseReference.Child("users").Child(AuthenitcationKey()).Child("onlineGamesWon").SetValueAsync(user.onlineGamesWon);
-        databaseReference.Child("users").Child(AuthenitcationKey()).Child("friends").SetValueAsync(user.friends);
+        return databaseReference.Child("users").Child(AuthenitcationKey()).Child(saveName).SetValueAsync(varToSave).ContinueWith((task) => {
+            return task.IsCompleted;
+        });
+    }
+
+    public static Task<bool> UpdateUserStats(string saveName, int varToSave) {
+        DatabaseReference databaseReference = FirebaseDatabase.DefaultInstance.RootReference;
+        return databaseReference.Child("users").Child(AuthenitcationKey()).Child(saveName).SetValueAsync(varToSave).ContinueWith((task) => {
+            return task.IsCompleted;
+        });
+    }
+    public static Task<bool> UpdateUserFriends(List<string> friends) {
+        DatabaseReference databaseReference = FirebaseDatabase.DefaultInstance.RootReference;
+        return databaseReference.Child("users").Child(AuthenitcationKey()).Child("friends").SetValueAsync(friends).ContinueWith((task) => {
+            return task.IsCompleted;
+        });
     }
 
     public static void DeleteAccountData() {

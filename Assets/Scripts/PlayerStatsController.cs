@@ -22,10 +22,12 @@ public class PlayerStatsController : MonoBehaviour
             User user = JsonUtility.FromJson<User>(task.Result);
             if (PhotonNetwork.offlineMode) {
                 user.offlineGamesPlayed += 1;
+                var saveTask = FireBaseScript.UpdateUserStats("offlineGamesPlayed", user.offlineGamesPlayed);
             } else {
                 user.onlineGamesPlayed += 1;
+                var saveTask = FireBaseScript.UpdateUserStats("onlineGamesPlayed", user.onlineGamesPlayed);
             }
-            FireBaseScript.UpdateUser(user);
+            
         }
     }
 
@@ -36,10 +38,11 @@ public class PlayerStatsController : MonoBehaviour
             User user = JsonUtility.FromJson<User>(task.Result);
             if (PhotonNetwork.offlineMode) {
                 user.offlineGamesWon += 1;
+                var saveTask = FireBaseScript.UpdateUserStats("offlineGamesWon", user.offlineGamesWon);
             } else {
                 user.onlineGamesWon += 1;
+                var saveTask = FireBaseScript.UpdateUserStats("onlineGamesWon", user.onlineGamesWon);
             }
-            FireBaseScript.UpdateUser(user);
         }
     }
 }

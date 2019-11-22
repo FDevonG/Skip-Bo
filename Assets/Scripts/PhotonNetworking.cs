@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.SceneManagement;
+using Firebase.Database;
+using System.Collections.Generic;
 
 public class PhotonNetworking : MonoBehaviour {
 
@@ -14,9 +16,9 @@ public class PhotonNetworking : MonoBehaviour {
             Instance = this;
         }
         DontDestroyOnLoad(gameObject);
-        if (FireBaseScript.IsPlayerLoggedIn()) {
-            StartCoroutine(ConnectToPhoton());
-        }
+        //if (FireBaseScript.IsPlayerLoggedIn()) {
+        //    ConnectToPhoton();
+        //}
     }
 
     void Start() {
@@ -26,13 +28,13 @@ public class PhotonNetworking : MonoBehaviour {
     // called second
     void OnSceneLoaded(Scene scene, LoadSceneMode mode) {
         if (scene.buildIndex == 0) {
-            StartCoroutine(ConnectToPhoton());
+            ConnectToPhoton();
         }
     }
 
-    public IEnumerator ConnectToPhoton() {
+    public void ConnectToPhoton() {
         if (!PhotonNetwork.connected) {
-            yield return StartCoroutine(GetComponent<PhotonRooms>().SetupPhotonPlayer());
+            PhotonPlayerSetup.BuildPhotonPlayer(PhotonNetwork.player, LocalUser.locUser);
             PhotonNetwork.ConnectUsingSettings(GameGlobalSettings.Version());
         }
     }

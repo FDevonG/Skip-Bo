@@ -6,7 +6,6 @@ using Firebase.Database;
 
 public class CharacterCreation : MonoBehaviour
 {
-    [SerializeField] GameObject avatarPanel;
     public Image cbody;//used to display the body
     public Image cface;//used to display the face
     public Image chair;//used to display the hair
@@ -27,7 +26,11 @@ public class CharacterCreation : MonoBehaviour
 
     public Button startMenuCancelButton;
 
-    private User user;
+    private float timeTakenDuringLerp = 1.0f;
+    private float timeStartedLerping;
+    private bool imagesLerping = false;
+    private Color visibleColor = new Color(1,1,1,1);
+    private Color invisibleColor = new Color(1,1,1,0);
 
     private void OnEnable() {
         StartCoroutine(BuildCharacter());
@@ -37,13 +40,16 @@ public class CharacterCreation : MonoBehaviour
         nameInput.GetComponent<InputField>().text = "";
         nameInput.GetComponent<Outline>().enabled = false;
         infoText.gameObject.SetActive(false);
+        chair.color = invisibleColor;
+        cface.color = invisibleColor;
+        ckit.color = invisibleColor;
+        cbody.color = invisibleColor;
     }
 
     private IEnumerator BuildCharacter() {
         var task = FireBaseScript.GetCurrentUser();
         yield return new WaitUntil(() => task.IsCompleted);
-        avatarPanel.SetActive(true);
-        user = new User();
+        User user = new User();
         if (task.IsFaulted) {
             ErrorWithCharacterEdit("Failed to load profile");
         } else {
@@ -53,7 +59,7 @@ public class CharacterCreation : MonoBehaviour
             RandomizeCharacter();
             startMenuCancelButton.gameObject.SetActive(false);
         } else {
-            BuildSavedCharacter();
+            BuildSavedCharacter(user);
             startMenuCancelButton.gameObject.SetActive(true);
         }
     }
@@ -67,19 +73,21 @@ public class CharacterCreation : MonoBehaviour
 
         //set the body parts
         cbody.sprite = body[cbodyIndex];
-        user.body = body[cbodyIndex].name;
+        //user.body = body[cbodyIndex].name;
 
         cface.sprite = face[cfaceIndex];
-        user.face = face[cfaceIndex].name;
+        //user.face = face[cfaceIndex].name;
 
         chair.sprite = hair[chairIndex];
-        user.hair = hair[chairIndex].name;
+        //user.hair = hair[chairIndex].name;
 
         ckit.sprite = kit[ckitIndex];
-        user.kit = kit[ckitIndex].name;
+        //user.kit = kit[ckitIndex].name;
+
+        StartImagesLerp();
     }
 
-    private void BuildSavedCharacter() {
+    private void BuildSavedCharacter(User user) {
         //User user = FireBaseScript.GetCurrentUser();
         nameInput.GetComponent<InputField>().text = user.userName;
         
@@ -88,6 +96,13 @@ public class CharacterCreation : MonoBehaviour
         cface.sprite = Resources.Load<Sprite>("Faces/Faces/" + user.face) as Sprite;
         chair.sprite = Resources.Load<Sprite>("Faces/Hairs/" + user.hair) as Sprite;
         ckit.sprite = Resources.Load<Sprite>("Faces/Kits/" + user.kit) as Sprite;
+
+        StartImagesLerp();
+    }
+
+    public void StartImagesLerp() {
+        imagesLerping = true;
+        timeStartedLerping = Time.time;//get the time this all started
     }
 
     //changes the hair to the next one
@@ -98,7 +113,7 @@ public class CharacterCreation : MonoBehaviour
             chairIndex++;
         }
         chair.sprite = hair[chairIndex];
-        user.hair = hair[chairIndex].name;
+        //user.hair = hair[chairIndex].name;
     }
 
     //changes the hair to the previous one
@@ -109,7 +124,7 @@ public class CharacterCreation : MonoBehaviour
             chairIndex--;
         }
         chair.sprite = hair[chairIndex];
-        user.hair = hair[chairIndex].name;
+        //user.hair = hair[chairIndex].name;
     }
 
     //changes the face to the next one
@@ -120,7 +135,7 @@ public class CharacterCreation : MonoBehaviour
             cfaceIndex++;
         }
         cface.sprite = face[cfaceIndex];
-        user.face = face[cfaceIndex].name;
+        //user.face = face[cfaceIndex].name;
     }
 
     //changes the face to the previous face
@@ -131,7 +146,7 @@ public class CharacterCreation : MonoBehaviour
             cfaceIndex--;
         }
         cface.sprite = face[cfaceIndex];
-        user.face = face[cfaceIndex].name;
+        //user.face = face[cfaceIndex].name;
     }
 
     //change the clothes to the next clothes
@@ -142,7 +157,7 @@ public class CharacterCreation : MonoBehaviour
             ckitIndex++;
         }
         ckit.sprite = kit[ckitIndex];
-        user.face = kit[ckitIndex].name;
+        //user.face = kit[ckitIndex].name;
     }
 
     //changes the clothes to the previous clothes
@@ -153,7 +168,7 @@ public class CharacterCreation : MonoBehaviour
             ckitIndex--;
         }
         ckit.sprite = kit[ckitIndex];
-        user.kit = kit[ckitIndex].name;
+        //user.kit = kit[ckitIndex].name;
     }
 
     //changes the body type to the next body
@@ -164,7 +179,7 @@ public class CharacterCreation : MonoBehaviour
             cbodyIndex++;
         }
         cbody.sprite = body[cbodyIndex];
-        user.body = body[cbodyIndex].name;
+        //user.body = body[cbodyIndex].name;
     }
 
     //changes the body type to previous sprite
@@ -175,7 +190,7 @@ public class CharacterCreation : MonoBehaviour
             cbodyIndex--;
         }
         cbody.sprite = body[cbodyIndex];
-        user.body = body[cbodyIndex].name;
+        //user.body = body[cbodyIndex].name;
     }
 
     public void SavePlayer() {
@@ -205,10 +220,21 @@ public class CharacterCreation : MonoBehaviour
                 }
             }
             if (!nameBool) {
-                user.userName = userName;
-                FireBaseScript.UpdateUser(user);
-                GameObject.FindGameObjectWithTag("GameManager").GetComponent<ActivatePanel>().SwitchPanel(GameObject.FindGameObjectWithTag("GameManager").GetComponent<Menu>().startMenu);
-                StartCoroutine(GameObject.FindGameObjectWithTag("NetworkManager").GetComponent<PhotonNetworking>().ConnectToPhoton());
+                var userNameTask = FireBaseScript.UpdateUser("userName", userName);
+                var hairTask = FireBaseScript.UpdateUser("hair", hair[chairIndex].name);
+                var faceTask = FireBaseScript.UpdateUser("face", face[cfaceIndex].name);
+                var kitTask = FireBaseScript.UpdateUser("kit", kit[ckitIndex].name);
+                var bodyTask = FireBaseScript.UpdateUser("body", body[cbodyIndex].name);
+                yield return new WaitUntil(() => userNameTask.IsCompleted && hairTask.IsCompleted && faceTask.IsCompleted && kitTask.IsCompleted && bodyTask.IsCompleted);
+
+                if (userNameTask.IsFaulted || hairTask.IsFaulted || faceTask.IsFaulted || kitTask.IsFaulted || bodyTask.IsFaulted) {
+                    ErrorWithCharacterEdit("Failed to save character");
+                } else {
+                    yield return StartCoroutine(LocalUser.LoadUser());
+                    PhotonPlayerSetup.BuildPhotonPlayer(PhotonNetwork.player, LocalUser.locUser);
+                    GameObject.FindGameObjectWithTag("NetworkManager").GetComponent<PhotonNetworking>().ConnectToPhoton();
+                    GameObject.FindGameObjectWithTag("GameManager").GetComponent<ActivatePanel>().SwitchPanel(GameObject.FindGameObjectWithTag("GameManager").GetComponent<Menu>().startMenu);
+                }
             } else {
                 ErrorWithCharacterEdit("Username is taken");
                 NameError();
@@ -223,6 +249,20 @@ public class CharacterCreation : MonoBehaviour
 
     private void NameError() {
         nameInput.GetComponent<Outline>().enabled = true;
+    }
+
+    private void Update() {
+        if (imagesLerping) {
+            float timeSinceStarted = Time.time - timeStartedLerping;
+            float percentageComplete = timeSinceStarted / timeTakenDuringLerp;
+            chair.color = Color.Lerp(invisibleColor, visibleColor, percentageComplete * 20);
+            cface.color = Color.Lerp(invisibleColor, visibleColor, percentageComplete * 20);
+            ckit.color = Color.Lerp(invisibleColor, visibleColor, percentageComplete * 20);
+            cbody.color = Color.Lerp(invisibleColor, visibleColor, percentageComplete * 20);
+            if (percentageComplete >= timeTakenDuringLerp) {
+                imagesLerping = false;
+            }
+        }
     }
 
 }

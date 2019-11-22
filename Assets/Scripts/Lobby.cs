@@ -73,7 +73,7 @@ public class Lobby : MonoBehaviour
 
     public void LeaveRoom() {
         PhotonNetwork.LeaveRoom();
-        SceneController.LoadGameSetup();
+        SceneController.LoadStartMenu();
     }
 
     private void Update() {

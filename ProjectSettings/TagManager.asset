@@ -10,6 +10,11 @@ TagManager:
   - AdManager
   - StatsController
   - Chat
+  - Lobby
+  - NotificationPanel
+  - OtherPlayerPanel
+  - VictoryPanel
+  - GameInvitePanel
   layers:
   - Default
   - TransparentFX

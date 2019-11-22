@@ -109,7 +109,7 @@ GameObject:
   - component: {fileID: 5567033056894621822}
   m_Layer: 5
   m_Name: GameInvitePanel
-  m_TagString: Untagged
+  m_TagString: GameInvitePanel
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -157,13 +157,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.392}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
-  m_Type: 1
+  m_Sprite: {fileID: 21300000, guid: 15805a850b88c4d868a188b7ec82bbae, type: 3}
+  m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
@@ -210,7 +210,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_HorizontalFit: 0
-  m_VerticalFit: 2
+  m_VerticalFit: 1
 --- !u!114 &5567033056894621822
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -223,8 +223,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 86e2c142652bf4146aa61f85cd6117d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  closePanelButton: {fileID: 0}
-  acceptInviteButton: {fileID: 0}
+  closePanelButton: {fileID: 365597594955677725}
+  acceptInviteButton: {fileID: 365597593622025984}
+  inviteText: {fileID: 5604242028317772614}
 --- !u!1001 &5604242027954849143
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -355,6 +356,18 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 5604242027954849143}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &365597593622025984 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5247988230175085175, guid: 2d80c77b21de041babe6ac38894d9be5,
+    type: 3}
+  m_PrefabInstance: {fileID: 5604242027954849143}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &5604242029289034346
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -485,3 +498,15 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 5604242029289034346}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &365597594955677725 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5247988230175085175, guid: 2d80c77b21de041babe6ac38894d9be5,
+    type: 3}
+  m_PrefabInstance: {fileID: 5604242029289034346}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
