@@ -91,7 +91,10 @@ public class FindFriends : MonoBehaviour
                         Friends.friends.Add(tempUser);
                     }
                 }
-                GameObject.FindGameObjectWithTag("Chat").GetComponent<Chat>().UpdateFriends();
+                string[] addedFriend = new string[1];
+                addedFriend[0] = id;
+                PhotonNetwork.FindFriends(LocalUser.locUser.friends.ToArray());
+                GameObject.FindGameObjectWithTag("Chat").GetComponent<Chat>().AddFriend(addedFriend);
             }
         }
     }

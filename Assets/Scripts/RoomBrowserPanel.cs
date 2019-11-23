@@ -17,10 +17,15 @@ public class RoomBrowserPanel : MonoBehaviour
     }
 
     public void JoinRoom() {
-        if (gameInfo.IsOpen) {
-            PhotonNetwork.JoinRoom(nameText.text);
-        } else {
-            GameObject.FindGameObjectWithTag("GameManager").GetComponent<ActivatePanel>().SwitchPanel(GetComponentInParent<RoomBrowser>().roomFullPanel);
+
+        foreach (RoomInfo game in PhotonNetwork.GetRoomList()) {
+            if (game.Name == gameInfo.Name) {
+                if (game.IsOpen) {
+                    PhotonNetwork.JoinRoom(game.Name);
+                } else {
+                    GameObject.FindGameObjectWithTag("GameManager").GetComponent<ActivatePanel>().SwitchPanel(GetComponentInParent<RoomBrowser>().roomFullPanel);
+                }
+            }
         }
     }
 }

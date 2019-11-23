@@ -46,6 +46,7 @@ public class RoomBrowser : MonoBehaviour
         foreach (GameObject button in roomButtons) {
             Destroy(button);
         }
+        roomButtons.Clear();
     }
 
     public void SetFilter(int filterAmmount) {

@@ -115,7 +115,9 @@ public class Menu : MonoBehaviour
             activatePanel.SwitchPanel(startGamePanel);
         } else {
             yield return StartCoroutine(LocalUser.LoadUser());
-            StartCoroutine(Friends.GetStartFriends());
+            if (LocalUser.locUser.friends.Count > 0) {
+                StartCoroutine(Friends.GetStartFriends());
+            }
             canvas.gameObject.SetActive(true);
             if (string.IsNullOrEmpty(LocalUser.locUser.userName)) {
                 activatePanel.SwitchPanel(characterCreationPanel);

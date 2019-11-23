@@ -16,3 +16,8 @@ Update 1.6
 -Two player online play
 -UI issues fixed
 -Basic friends list implemented with more to come
+
+Update 1.7
+-Send game invites to players on your friends list
+-Quickly join friends in games
+-Status updates on friends

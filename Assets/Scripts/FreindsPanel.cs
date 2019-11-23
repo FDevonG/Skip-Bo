@@ -7,18 +7,22 @@ public class FreindsPanel : MonoBehaviour
 {
 
     [SerializeField] GameObject friendsPanelParent;
+    List<GameObject> friendPanels = new List<GameObject>();
 
     private void OnEnable() {
-        BuildFriends();
+        StartCoroutine(BuildFriends());
     }
 
-    private void BuildFriends() {
+    private IEnumerator BuildFriends() {
         DeleteFriends();
-
+        PhotonNetwork.Friends = null;
         if (LocalUser.locUser.friends.Count > 0) {
             PhotonNetwork.FindFriends(LocalUser.locUser.friends.ToArray());
+            while (PhotonNetwork.Friends == null) {
+                yield return new WaitForSeconds(1);
+                PhotonNetwork.FindFriends(LocalUser.locUser.friends.ToArray());
+            }
         }
-        
         if (PhotonNetwork.Friends != null) {
             for (int i = 0; i < PhotonNetwork.Friends.Count; i++) {
                 User friend = new User();
@@ -41,12 +45,14 @@ public class FreindsPanel : MonoBehaviour
         GameObject friendPanel = Instantiate(Resources.Load<GameObject>("FriendPanel"), friendsPanelParent.transform);
         friendPanel.transform.localScale = new Vector3(1, 1, 1);
         friendPanel.GetComponent<FriendListInfoPanel>().SetUpFriendPanel(user, status);
+        friendPanels.Add(friendPanel);
     }
 
     private void DeleteFriends() {
-        for (int i = 0; i < friendsPanelParent.transform.childCount; i++) {
-            Destroy(friendsPanelParent.transform.GetChild(0).gameObject);
+        foreach (GameObject panel in friendPanels) {
+            Destroy(panel);
         }
+        friendPanels.Clear();
     }
 
 }

@@ -18,6 +18,7 @@ public class FriendListInfoPanel : MonoBehaviour {
         } else {
             statusPanel.GetComponent<Image>().color = Color.red;
         }
+        friendSettingsButton.onClick.AddListener(() => GameObject.FindGameObjectWithTag("GameManager").GetComponent<Menu>().friendsSettingsPanel.GetComponent<FriendSettingsPanel>().SetUpFriendPanel(friend));
         friendSettingsButton.onClick.AddListener(() => GameObject.FindGameObjectWithTag("GameManager").GetComponent<ActivatePanel>().SwitchPanel(GameObject.FindGameObjectWithTag("GameManager").GetComponent<Menu>().friendsSettingsPanel));
     }
 }

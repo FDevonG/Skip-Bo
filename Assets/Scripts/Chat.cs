@@ -96,6 +96,14 @@ public class Chat : MonoBehaviour, IChatClientListener
         chatClient.AddFriends(LocalUser.locUser.friends.ToArray());
     }
 
+    public void AddFriend(string[] friends) {
+        chatClient.AddFriends(friends);
+    }
+
+    public void DeleteFriends(string[] friends) {
+        chatClient.RemoveFriends(friends);
+    }
+
     void UpdateOnlineFriends(string user, int status) {
         if (status == 2) {
             friendsOnline.Add(user);
