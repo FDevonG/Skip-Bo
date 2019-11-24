@@ -19,4 +19,34 @@ public static class Friends
             }
         }
     }
+
+    public static void DeleteFriend(User friend) {
+
+        foreach (User friendUser in friends) {
+            if (friendUser == friend) {
+                friends.Remove(friendUser);
+                break;
+            }
+        }
+
+        for (int i = 0; i < LocalUser.locUser.friends.Count; i++) {
+            if (LocalUser.locUser.friends[i] == friend.userID) {
+                string[] removedFriend = new string[1];
+                removedFriend[0] = LocalUser.locUser.friends[i];
+                GameObject.FindGameObjectWithTag("Chat").GetComponent<Chat>().DeleteFriends(removedFriend);
+                LocalUser.locUser.friends.Remove(LocalUser.locUser.friends[i]);
+                break;
+            }
+        }
+        PhotonNetwork.Friends = null;
+        if (LocalUser.locUser.friends.Count > 0) {
+            PhotonNetwork.FindFriends(LocalUser.locUser.friends.ToArray());
+        }
+        FireBaseScript.UpdateUser("friends", LocalUser.locUser.friends);
+    }
+
+    public static void BlockFriend(User friend) {
+        LocalUser.locUser.blocked.Add(friend.userID);
+        FireBaseScript.UpdateUser("blocked", LocalUser.locUser.blocked);
+    }
 }

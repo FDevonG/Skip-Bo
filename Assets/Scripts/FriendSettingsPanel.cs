@@ -13,16 +13,20 @@ public class FriendSettingsPanel : MonoBehaviour
     [SerializeField] Image kit;
     [SerializeField] Image body;
     [SerializeField] Button deleteFriendButton;
+    [SerializeField] Button blockUserButton;
     [SerializeField] Button joinRoomButton;
     [SerializeField] Button closeButton;
     [SerializeField] Text infoText;
+
     [SerializeField] GameObject deleteFriendPanel;
     [SerializeField] Text areYouSureText;
+    [SerializeField] Button confirmActionButton;
 
     User friend;
 
     public void SetUpFriendPanel(User user) {
         friend = user;
+        //deleteFriendButton.onClick.AddListener(() => Friends.DeleteFriend(friend));
         nameText.text = user.userName;
         hair.sprite = Resources.Load<Sprite>("Faces/Hairs/" + user.hair) as Sprite;
         face.sprite = Resources.Load<Sprite>("Faces/Faces/" + user.face) as Sprite;
@@ -53,12 +57,23 @@ public class FriendSettingsPanel : MonoBehaviour
 
     public void ShowDeleteFrindPanel() {
         deleteFriendPanel.SetActive(true);
-        areYouSureText.text = "Are you sure you want to delete " + friend.userName;
         nameText.gameObject.SetActive(false);
         character.gameObject.SetActive(false);
         deleteFriendButton.gameObject.SetActive(false);
+        blockUserButton.gameObject.SetActive(false);
         joinRoomButton.gameObject.SetActive(false);
         closeButton.gameObject.SetActive(false);
+    }
+
+    public void SetUpDeletePanle() {
+        areYouSureText.text = "Are you sure you want to delete " + friend.userName + "?";
+        confirmActionButton.onClick.AddListener(() => Friends.DeleteFriend(friend));
+    }
+
+    public void SetUpBlockPanel() {
+        areYouSureText.text = "Are you sure you want to block " + friend.userName + "?";
+        confirmActionButton.onClick.AddListener(() => Friends.BlockFriend(friend));
+        confirmActionButton.onClick.AddListener(() => Friends.DeleteFriend(friend));
     }
 
     public void HideDeleteFriendPanel() {
@@ -66,34 +81,9 @@ public class FriendSettingsPanel : MonoBehaviour
         nameText.gameObject.SetActive(true);
         character.gameObject.SetActive(true);
         deleteFriendButton.gameObject.SetActive(true);
+        blockUserButton.gameObject.SetActive(true);
         joinRoomButton.gameObject.SetActive(true);
         closeButton.gameObject.SetActive(true);
-    }
-
-    public void DeleteFriend() {
-        
-        foreach (User friendUser in Friends.friends) {
-            if (friendUser == friend) {
-                Friends.friends.Remove(friendUser);
-                break;
-            }
-        }
-
-        for (int i = 0; i < LocalUser.locUser.friends.Count; i++) {
-            if (LocalUser.locUser.friends[i] == friend.userID) {
-                string[] removedFriend = new string[1];
-                removedFriend[0] = LocalUser.locUser.friends[i];
-                GameObject.FindGameObjectWithTag("Chat").GetComponent<Chat>().DeleteFriends(removedFriend);
-                LocalUser.locUser.friends.Remove(LocalUser.locUser.friends[i]);
-                break;
-            }
-        }
-        PhotonNetwork.Friends = null;
-        if (LocalUser.locUser.friends.Count > 0) {
-            PhotonNetwork.FindFriends(LocalUser.locUser.friends.ToArray());
-        }
-        FireBaseScript.UpdateUserFriends(LocalUser.locUser.friends);
-        GameObject.FindGameObjectWithTag("GameManager").GetComponent<ActivatePanel>().SwitchPanel(GameObject.FindGameObjectWithTag("GameManager").GetComponent<Menu>().friendsPanel);
     }
 
     private void OnDisable() {

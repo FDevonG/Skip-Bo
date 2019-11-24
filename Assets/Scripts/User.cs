@@ -18,6 +18,7 @@ public class User {
     public int onlineGamesWon;
 
     public List<string> friends = new List<string>();
+    public List<string> blocked = new List<string>();
 
     public User(string userEmail, string id) {
         email = userEmail;

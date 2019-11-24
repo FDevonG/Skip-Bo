@@ -41,10 +41,19 @@ public class FindFriends : MonoBehaviour
             foreach (DataSnapshot s in task.Result.Children) {
                 User tempUser = JsonUtility.FromJson<User>(s.GetRawJsonValue());
                 if (tempUser.email.ToUpper() == emailInput.GetComponent<InputField>().text.ToUpper()) {
-                    FoundFriend(tempUser);
-                    id = tempUser.userID;
-                    friendFound = true;
-                    break;
+                    bool blocked = false;
+                    foreach (string userID in tempUser.blocked) {
+                        if (userID == FireBaseScript.AuthenitcationKey()) {
+                            blocked = true;
+                            break;
+                        }
+                        if (!blocked) {
+                            FoundFriend(tempUser);
+                            id = tempUser.userID;
+                            friendFound = true;
+                            break;
+                        }
+                    }
                 }
             }
             if (!friendFound) {
@@ -79,7 +88,7 @@ public class FindFriends : MonoBehaviour
         if (!friendAlreadyAdded) {
             LocalUser.locUser.friends.Add(id);
             var usersTask = FireBaseScript.GetUsers();
-            var addFriendTask = FireBaseScript.UpdateUserFriends(LocalUser.locUser.friends);
+            var addFriendTask = FireBaseScript.UpdateUser("friends", LocalUser.locUser.friends);
             yield return new WaitUntil(() => addFriendTask.IsCompleted && usersTask.IsCompleted);
             if (addFriendTask.IsFaulted || usersTask.IsFaulted) {
                 SetErrorMessage("Failed to add " + nameText.text);
