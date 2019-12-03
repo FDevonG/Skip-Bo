@@ -367,7 +367,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1131485627}
   m_HandleRect: {fileID: 1131485626}
   m_Direction: 2
-  m_Value: 0
+  m_Value: 1
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -567,6 +567,11 @@ PrefabInstance:
       propertyPath: m_Pivot.y
       value: 0.5
       objectReference: {fileID: 0}
+    - target: {fileID: 5247988231874175569, guid: 2d80c77b21de041babe6ac38894d9be5,
+        type: 3}
+      propertyPath: m_Text
+      value: Invite Friends
+      objectReference: {fileID: 0}
     - target: {fileID: 5247988230175085175, guid: 2d80c77b21de041babe6ac38894d9be5,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
@@ -602,11 +607,6 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgument
       value: 
       objectReference: {fileID: 687998511}
-    - target: {fileID: 5247988231874175569, guid: 2d80c77b21de041babe6ac38894d9be5,
-        type: 3}
-      propertyPath: m_Text
-      value: Invite Friends
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2d80c77b21de041babe6ac38894d9be5, type: 3}
 --- !u!224 &282402478 stripped
@@ -962,6 +962,11 @@ PrefabInstance:
       propertyPath: m_Pivot.y
       value: 0.5
       objectReference: {fileID: 0}
+    - target: {fileID: 5247988231874175569, guid: 2d80c77b21de041babe6ac38894d9be5,
+        type: 3}
+      propertyPath: m_Text
+      value: Leave Lobby
+      objectReference: {fileID: 0}
     - target: {fileID: 5247988230175085175, guid: 2d80c77b21de041babe6ac38894d9be5,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
@@ -981,7 +986,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 864487466}
+      objectReference: {fileID: 0}
     - target: {fileID: 5247988230175085175, guid: 2d80c77b21de041babe6ac38894d9be5,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
@@ -991,11 +996,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
-      objectReference: {fileID: 0}
-    - target: {fileID: 5247988231874175569, guid: 2d80c77b21de041babe6ac38894d9be5,
-        type: 3}
-      propertyPath: m_Text
-      value: Leave Lobby
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2d80c77b21de041babe6ac38894d9be5, type: 3}
@@ -1227,7 +1227,7 @@ RectTransform:
   m_GameObject: {fileID: 687998511}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.99998903, y: 0.99998903, z: 0.99998903}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1575317973}
   - {fileID: 1672827977}
@@ -1353,7 +1353,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
   m_AnchoredPosition: {x: -25, y: 449.99988}
-  m_SizeDelta: {x: 750, y: 25}
+  m_SizeDelta: {x: 750, y: 30}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &755855275
 MonoBehaviour:
@@ -1442,11 +1442,9 @@ GameObject:
   - component: {fileID: 864487465}
   - component: {fileID: 864487464}
   - component: {fileID: 864487463}
-  - component: {fileID: 864487466}
-  - component: {fileID: 864487467}
   m_Layer: 5
   m_Name: LobbyWaitingPanel
-  m_TagString: Lobby
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1537,52 +1535,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 864487461}
   m_CullTransparentMesh: 0
---- !u!114 &864487466
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 864487461}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 24ba8364c87934efc862bbc395c35b75, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  roomNameText: {fileID: 326245754}
-  infoText: {fileID: 612198528}
-  numberText: {fileID: 1198927657}
-  photonView: {fileID: 864487467}
-  loadinImage: {fileID: 429128436}
-  leaveButton: {fileID: 585668163}
-  inviteFriendsButton: {fileID: 606078168}
---- !u!114 &864487467
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 864487461}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ownerId: 0
-  group: 0
-  OwnerShipWasTransfered: 0
-  prefixBackup: -1
-  synchronization: 0
-  onSerializeTransformOption: 3
-  onSerializeRigidBodyOption: 2
-  ownershipTransfer: 0
-  ObservedComponents:
-  - {fileID: 0}
-  ObservedComponentsFoldoutOpen: 1
-  viewIdField: 100
-  instantiationId: 100
-  currentMasterID: -1
-  isRuntimeInstantiated: 0
 --- !u!1 &929406636
 GameObject:
   m_ObjectHideFlags: 0
@@ -1863,10 +1815,12 @@ GameObject:
   - component: {fileID: 1478450897}
   - component: {fileID: 1478450896}
   - component: {fileID: 1478450895}
+  - component: {fileID: 1478450901}
+  - component: {fileID: 1478450900}
   - component: {fileID: 1478450899}
   m_Layer: 5
   m_Name: Canvas
-  m_TagString: Untagged
+  m_TagString: Lobby
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1965,6 +1919,52 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   activePanel: {fileID: 864487461}
+--- !u!114 &1478450900
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1478450894}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ownerId: 0
+  group: 0
+  OwnerShipWasTransfered: 0
+  prefixBackup: -1
+  synchronization: 0
+  onSerializeTransformOption: 3
+  onSerializeRigidBodyOption: 2
+  ownershipTransfer: 0
+  ObservedComponents:
+  - {fileID: 0}
+  ObservedComponentsFoldoutOpen: 1
+  viewIdField: 1
+  instantiationId: 1
+  currentMasterID: -1
+  isRuntimeInstantiated: 0
+--- !u!114 &1478450901
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1478450894}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 24ba8364c87934efc862bbc395c35b75, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  roomNameText: {fileID: 326245754}
+  infoText: {fileID: 612198528}
+  numberText: {fileID: 1198927657}
+  photonView: {fileID: 1478450900}
+  loadinImage: {fileID: 429128436}
+  leaveButton: {fileID: 585668163}
+  inviteFriendsButton: {fileID: 606078168}
 --- !u!1001 &1489413901
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2082,6 +2082,11 @@ PrefabInstance:
       propertyPath: m_Pivot.y
       value: 0.5
       objectReference: {fileID: 0}
+    - target: {fileID: 5247988231874175569, guid: 2d80c77b21de041babe6ac38894d9be5,
+        type: 3}
+      propertyPath: m_Text
+      value: Close
+      objectReference: {fileID: 0}
     - target: {fileID: 5247988230175085175, guid: 2d80c77b21de041babe6ac38894d9be5,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
@@ -2117,11 +2122,6 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgument
       value: 
       objectReference: {fileID: 864487461}
-    - target: {fileID: 5247988231874175569, guid: 2d80c77b21de041babe6ac38894d9be5,
-        type: 3}
-      propertyPath: m_Text
-      value: Close
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2d80c77b21de041babe6ac38894d9be5, type: 3}
 --- !u!224 &1489413902 stripped

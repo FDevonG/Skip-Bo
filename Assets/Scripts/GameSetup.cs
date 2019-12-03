@@ -113,6 +113,9 @@ public class GameSetup : MonoBehaviour {
                 if (gameControl.connectedPlayers[i] != PhotonNetwork.player) {
                     playerPanel = Instantiate(Resources.Load<GameObject>("OtherPlayerPanel") as GameObject, panelParent);
                     playerPanel.transform.localScale = new Vector3(1, 1, 1);
+                    if (!PhotonNetwork.offlineMode) {
+                        playerPanel.GetComponent<PanelControl>().avatarPanel.AddComponent<OpenPlayerInfoPanel>();
+                    }
                     gameControl.playerPanels[i] = playerPanel;
                     SpawnPanelInfo(playerPanel, gameControl.connectedPlayers[i]);
                 } else {
@@ -136,6 +139,13 @@ public class GameSetup : MonoBehaviour {
                 if (gameControl.connectedPlayers[i] != PhotonNetwork.player) {
                     playerPanel = Instantiate(Resources.Load<GameObject>("MainPlayerPanel") as GameObject, panelParent);
                     playerPanel.transform.localScale = new Vector3(1, 1, 1);
+                    if (!PhotonNetwork.offlineMode) {
+                        playerPanel.GetComponent<PanelControl>().avatarPanel.AddComponent<OpenPlayerInfoPanel>();
+                        playerPanel.GetComponent<CanvasGroup>().blocksRaycasts = true;
+                    }
+                    playerPanel.GetComponent<PanelControl>().deck.GetComponent<CanvasGroup>().blocksRaycasts = false;
+                    playerPanel.GetComponent<PanelControl>().handSlots[0].transform.parent.GetComponent<CanvasGroup>().blocksRaycasts = false;
+                    playerPanel.GetComponent<PanelControl>().sideBarSlots[0].transform.parent.GetComponent<CanvasGroup>().blocksRaycasts = false;
                     gameControl.playerPanels[i] = playerPanel;
                     SpawnPanelInfo(playerPanel, gameControl.connectedPlayers[i]);
                 } else {
@@ -167,7 +177,7 @@ public class GameSetup : MonoBehaviour {
         
         PanelControl panelControl = playerPanel.GetComponent<PanelControl>();
         panelControl.photonPlayer = photonPlayer;
-        
+
         panelControl.nameText.text = (string)panelControl.photonPlayer.CustomProperties["name"];
         panelControl.cbody.sprite = Resources.Load<Sprite>("Faces/Bodies/" + (string)panelControl.photonPlayer.CustomProperties["body"]) as Sprite;
         panelControl.cface.sprite = Resources.Load<Sprite>("Faces/Faces/" + (string)panelControl.photonPlayer.CustomProperties["face"]) as Sprite;

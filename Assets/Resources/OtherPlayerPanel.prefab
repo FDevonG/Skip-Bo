@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 7398176142198866596}
   - component: {fileID: 7398176142198866594}
   - component: {fileID: 7398176142198866597}
+  - component: {fileID: 2595514275547272301}
   m_Layer: 5
   m_Name: Deckpanel
   m_TagString: Untagged
@@ -75,6 +76,18 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!225 &2595514275547272301
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7398176142198866599}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 0
+  m_BlocksRaycasts: 0
+  m_IgnoreParentGroups: 0
 --- !u!1 &7398176142206196703
 GameObject:
   m_ObjectHideFlags: 0
@@ -618,6 +631,7 @@ GameObject:
   - component: {fileID: 7398176142763630193}
   - component: {fileID: 7398176142763630192}
   - component: {fileID: 7398176142763630195}
+  - component: {fileID: 8516662264945707606}
   m_Layer: 5
   m_Name: SidebarPanel
   m_TagString: Untagged
@@ -709,6 +723,18 @@ MonoBehaviour:
   m_ChildControlHeight: 0
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
+--- !u!225 &8516662264945707606
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7398176142763630197}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 0
+  m_BlocksRaycasts: 0
+  m_IgnoreParentGroups: 0
 --- !u!1 &7398176143236469219
 GameObject:
   m_ObjectHideFlags: 0
@@ -721,6 +747,7 @@ GameObject:
   - component: {fileID: 7398176143236469150}
   - component: {fileID: 7398176143236469217}
   - component: {fileID: 2753934128606615431}
+  - component: {fileID: 4271731521376618136}
   m_Layer: 5
   m_Name: AvatarPanel
   m_TagString: Untagged
@@ -798,6 +825,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   imageComponent: {fileID: 7398176143236469217}
+--- !u!225 &4271731521376618136
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7398176143236469219}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &7398176143314193467
 GameObject:
   m_ObjectHideFlags: 0
@@ -1049,6 +1088,7 @@ GameObject:
   - component: {fileID: 7398176143530668523}
   - component: {fileID: 7398176143530668522}
   - component: {fileID: 7398176143530668525}
+  - component: {fileID: 4723398712786192261}
   m_Layer: 5
   m_Name: HandPanel
   m_TagString: Untagged
@@ -1140,6 +1180,18 @@ MonoBehaviour:
   m_Spacing: {x: -45, y: 0}
   m_Constraint: 0
   m_ConstraintCount: 2
+--- !u!225 &4723398712786192261
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7398176143530668527}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 0
+  m_BlocksRaycasts: 0
+  m_IgnoreParentGroups: 0
 --- !u!1 &7398176143761071639
 GameObject:
   m_ObjectHideFlags: 0
@@ -1349,7 +1401,7 @@ CanvasGroup:
   m_Enabled: 1
   m_Alpha: 1
   m_Interactable: 1
-  m_BlocksRaycasts: 0
+  m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
 --- !u!1 &7398176144106706267
 GameObject:

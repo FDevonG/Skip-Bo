@@ -15,6 +15,7 @@ TagManager:
   - OtherPlayerPanel
   - VictoryPanel
   - GameInvitePanel
+  - VoteToKick
   layers:
   - Default
   - TransparentFX

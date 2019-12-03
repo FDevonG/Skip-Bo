@@ -15,7 +15,6 @@ public class NotificationPanel : MonoBehaviour
     public IEnumerator StartCountdown(float countdownValue = 5) {
         currCountdownValue = countdownValue;
         while (currCountdownValue > 0) {
-            //Debug.Log("Countdown: " + currCountdownValue);
             yield return new WaitForSeconds(1.0f);
             currCountdownValue--;
         }
@@ -24,14 +23,6 @@ public class NotificationPanel : MonoBehaviour
 
     public void SetText(string message) {
         notificationtext.text = message;
-    }
-
-    private void Update() {
-        if (transform.parent == null) {
-            if (GameObject.Find("Canvas") != null) {
-                transform.SetParent(GameObject.Find("Canvas").transform);
-            }
-        }
     }
 
 }

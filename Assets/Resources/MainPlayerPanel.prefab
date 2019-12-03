@@ -520,6 +520,7 @@ GameObject:
   - component: {fileID: 1147126458416543512}
   - component: {fileID: 1147126458416543519}
   - component: {fileID: 8081454938740598697}
+  - component: {fileID: 7013675882347827042}
   m_Layer: 5
   m_Name: AvatarPanel
   m_TagString: Untagged
@@ -597,6 +598,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   imageComponent: {fileID: 1147126458416543519}
+--- !u!225 &7013675882347827042
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1147126458416543517}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &1147126458512662867
 GameObject:
   m_ObjectHideFlags: 0
@@ -681,6 +694,7 @@ GameObject:
   - component: {fileID: 1147126458545413549}
   - component: {fileID: 1147126458545413551}
   - component: {fileID: 1147126458545413550}
+  - component: {fileID: 5600149595903802654}
   m_Layer: 5
   m_Name: PlayerDeck
   m_TagString: Untagged
@@ -743,6 +757,18 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!225 &5600149595903802654
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1147126458545413548}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &1147126458586699934
 GameObject:
   m_ObjectHideFlags: 0
@@ -830,6 +856,7 @@ GameObject:
   - component: {fileID: 1147126458632109810}
   - component: {fileID: 1147126458632109809}
   - component: {fileID: 1147126458632109808}
+  - component: {fileID: 6806960019299059560}
   m_Layer: 5
   m_Name: HandPanel
   m_TagString: Untagged
@@ -921,6 +948,18 @@ MonoBehaviour:
   m_Spacing: {x: -20, y: 0}
   m_Constraint: 1
   m_ConstraintCount: 5
+--- !u!225 &6806960019299059560
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1147126458632109814}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &1147126459117118830
 GameObject:
   m_ObjectHideFlags: 0
@@ -1509,6 +1548,7 @@ GameObject:
   - component: {fileID: 1147126459723588901}
   - component: {fileID: 1147126459723588900}
   - component: {fileID: 1147126459723588923}
+  - component: {fileID: 7944567875390214316}
   m_Layer: 5
   m_Name: DiscardPanel
   m_TagString: Untagged
@@ -1599,6 +1639,18 @@ MonoBehaviour:
   m_Spacing: {x: 20, y: 0}
   m_Constraint: 1
   m_ConstraintCount: 5
+--- !u!225 &7944567875390214316
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1147126459723588921}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1001 &5633749535018945191
 PrefabInstance:
   m_ObjectHideFlags: 0

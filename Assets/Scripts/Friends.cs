@@ -20,6 +20,32 @@ public static class Friends
         }
     }
 
+    public static IEnumerator AddFriend(string UserID) {
+        if (!string.IsNullOrEmpty(UserID) && !string.IsNullOrWhiteSpace(UserID)) {
+            LocalUser.locUser.friends.Add(UserID);
+            var usersTask = FireBaseScript.GetUsers();
+            var addFriendTask = FireBaseScript.UpdateUser("friends", LocalUser.locUser.friends);
+            yield return new WaitUntil(() => addFriendTask.IsCompleted && usersTask.IsCompleted);
+            if (addFriendTask.IsFaulted || usersTask.IsFaulted) {
+                yield return "Failed to add friend";
+            } else {
+                foreach (DataSnapshot snap in usersTask.Result.Children) {
+                    User tempUser = JsonUtility.FromJson<User>(snap.GetRawJsonValue());
+                    if (tempUser.userID == UserID) {
+                        friends.Add(tempUser);
+                    }
+                }
+                string[] addedFriend = new string[1];
+                addedFriend[0] = UserID;
+                PhotonNetwork.FindFriends(LocalUser.locUser.friends.ToArray());
+                GameObject.FindGameObjectWithTag("Chat").GetComponent<Chat>().AddFriend(addedFriend);
+                yield return "Friend added";
+            }
+        } else {
+            yield return "Failed to add friend";
+        }
+    }
+
     public static void DeleteFriend(User friend) {
 
         foreach (User friendUser in friends) {
@@ -45,8 +71,40 @@ public static class Friends
         FireBaseScript.UpdateUser("friends", LocalUser.locUser.friends);
     }
 
-    public static void BlockFriend(User friend) {
-        LocalUser.locUser.blocked.Add(friend.userID);
-        FireBaseScript.UpdateUser("blocked", LocalUser.locUser.blocked);
+    public static void BlockFriend(string userID) {
+        bool alreadyBlocked = false;
+        foreach(string block in LocalUser.locUser.blocked) {
+            if (block == userID) {
+                alreadyBlocked = true;
+                break;
+            }
+        }
+        if (!alreadyBlocked) {
+            LocalUser.locUser.blocked.Add(userID);
+            FireBaseScript.UpdateUser("blocked", LocalUser.locUser.blocked);
+        }
+    }
+
+    public static bool FriendAlreadyAdded(string userID) {
+        bool friendAlreadyAdded = false;
+        for (int i = 0; i < LocalUser.locUser.friends.Count; i++) {
+            if (!string.IsNullOrEmpty(userID) && !string.IsNullOrWhiteSpace(userID)) {
+                if (LocalUser.locUser.friends[i].ToUpper() == userID.ToUpper()) {
+                    friendAlreadyAdded = true;
+                }
+            }
+        }
+        return friendAlreadyAdded;
+    }
+
+    public static bool AmIBlocked(User friend) {
+        bool blocked = false;
+        foreach (string block in friend.blocked) {
+            if (block == LocalUser.locUser.userID) {
+                blocked = true;
+                break;
+            }
+        }
+        return blocked;
     }
 }

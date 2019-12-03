@@ -72,7 +72,7 @@ public class FriendSettingsPanel : MonoBehaviour
 
     public void SetUpBlockPanel() {
         areYouSureText.text = "Are you sure you want to block " + friend.userName + "?";
-        confirmActionButton.onClick.AddListener(() => Friends.BlockFriend(friend));
+        confirmActionButton.onClick.AddListener(() => Friends.BlockFriend(friend.userID));
         confirmActionButton.onClick.AddListener(() => Friends.DeleteFriend(friend));
     }
 

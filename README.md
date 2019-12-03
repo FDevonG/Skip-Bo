@@ -21,3 +21,8 @@ Update 1.7
 -Send game invites to players on your friends list
 -Quickly join friends in games
 -Status updates on friends
+
+Update 1.8
+-Delete Friends
+-Block People
+-Vote to kick players

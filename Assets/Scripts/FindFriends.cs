@@ -40,12 +40,14 @@ public class FindFriends : MonoBehaviour
             bool friendFound = false;
             foreach (DataSnapshot s in task.Result.Children) {
                 User tempUser = JsonUtility.FromJson<User>(s.GetRawJsonValue());
-                if (tempUser.email.ToUpper() == emailInput.GetComponent<InputField>().text.ToUpper()) {
-                    bool blocked = false;
-                    foreach (string userID in tempUser.blocked) {
-                        if (userID == FireBaseScript.AuthenitcationKey()) {
-                            blocked = true;
-                            break;
+                if (tempUser.email != null) {
+                    if (tempUser.email.ToUpper() == emailInput.GetComponent<InputField>().text.ToUpper()) {
+                        bool blocked = false;
+                        foreach (string userID in tempUser.blocked) {
+                            if (userID == FireBaseScript.AuthenitcationKey()) {
+                                blocked = true;
+                                break;
+                            }
                         }
                         if (!blocked) {
                             FoundFriend(tempUser);
@@ -78,33 +80,12 @@ public class FindFriends : MonoBehaviour
     }
 
     private IEnumerator SaveFriend() {
-        bool friendAlreadyAdded = false;
-        for (int i = 0; i < LocalUser.locUser.friends.Count; i++) {
-            if (LocalUser.locUser.friends[i].ToUpper() == id.ToUpper()) {
-                friendAlreadyAdded = true;
-                SetErrorMessage("Friend already added");
-            }
-        }
-        if (!friendAlreadyAdded) {
-            LocalUser.locUser.friends.Add(id);
-            var usersTask = FireBaseScript.GetUsers();
-            var addFriendTask = FireBaseScript.UpdateUser("friends", LocalUser.locUser.friends);
-            yield return new WaitUntil(() => addFriendTask.IsCompleted && usersTask.IsCompleted);
-            if (addFriendTask.IsFaulted || usersTask.IsFaulted) {
-                SetErrorMessage("Failed to add " + nameText.text);
-            } else {
-                SetErrorMessage(nameText.text + " added");
-                foreach (DataSnapshot snap in usersTask.Result.Children) {
-                    User tempUser = JsonUtility.FromJson<User>(snap.GetRawJsonValue());
-                    if (tempUser.userID == id) {
-                        Friends.friends.Add(tempUser);
-                    }
-                }
-                string[] addedFriend = new string[1];
-                addedFriend[0] = id;
-                PhotonNetwork.FindFriends(LocalUser.locUser.friends.ToArray());
-                GameObject.FindGameObjectWithTag("Chat").GetComponent<Chat>().AddFriend(addedFriend);
-            }
+        if (!Friends.FriendAlreadyAdded(id)) {
+            CoroutineWithData cd = new CoroutineWithData(this, Friends.AddFriend(id));
+            yield return cd.coroutine;
+            SetErrorMessage((string)cd.result);
+        } else {
+            SetErrorMessage("Friend already added");
         }
     }
 

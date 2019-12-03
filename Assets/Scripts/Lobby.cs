@@ -29,6 +29,7 @@ public class Lobby : MonoBehaviour
         numberText.text = PhotonNetwork.room.PlayerCount + "/" + PhotonNetwork.room.MaxPlayers;
         loadinImage.gameObject.SetActive(true);
         leaveButton.gameObject.SetActive(true);
+        inviteFriendsButton.gameObject.SetActive(true);
         if (PhotonNetwork.isMasterClient && !PhotonNetwork.offlineMode) {
             PhotonNetwork.room.IsOpen = true;
             if ((bool)PhotonNetwork.room.CustomProperties[PhotonRooms.PrivateRoom()] == false) {
@@ -39,7 +40,7 @@ public class Lobby : MonoBehaviour
 
     public void CheckReadyState() {
         if (PhotonNetwork.isMasterClient) {
-            if (PhotonNetwork.playerList.Length == PhotonNetwork.room.MaxPlayers) {
+            if (PhotonNetwork.room.PlayerCount == PhotonNetwork.room.MaxPlayers) {
                 PhotonNetwork.room.IsOpen = false;
                 PhotonNetwork.room.IsVisible = false;
                 photonView.RPC("LaunchingGame", PhotonTargets.All);
@@ -48,7 +49,7 @@ public class Lobby : MonoBehaviour
     }
 
     [PunRPC]
-    private IEnumerator LaunchingGame() {
+    public IEnumerator LaunchingGame() {
         gameStarting = true;
         yield return new WaitForSeconds(1);
         int countDown = 3;
@@ -56,6 +57,7 @@ public class Lobby : MonoBehaviour
         numberText.text = countDown + "!";
         loadinImage.gameObject.SetActive(false);
         leaveButton.gameObject.SetActive(false);
+        inviteFriendsButton.gameObject.SetActive(false);
         while (countDown > 0) {
             yield return new WaitForSeconds(1);
             if (PhotonNetwork.room.PlayerCount != PhotonNetwork.room.MaxPlayers) {

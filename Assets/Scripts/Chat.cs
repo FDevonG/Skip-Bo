@@ -146,7 +146,7 @@ public class Chat : MonoBehaviour, IChatClientListener
                 break;
             }
         }
-        GameObject notificationPanel = Instantiate(Resources.Load<GameObject>("NotificationPanel"), GameObject.Find("Canvas").transform);
+        GameObject notificationPanel = Instantiate(Resources.Load<GameObject>("NotificationPanel"));
         notificationPanel.transform.localScale = new Vector3(1,1,1);
         if (status == 2) {
             notificationPanel.GetComponent<NotificationPanel>().SetText(userName + " has logged on");

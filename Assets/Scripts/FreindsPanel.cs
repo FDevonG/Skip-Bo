@@ -32,20 +32,24 @@ public class FreindsPanel : MonoBehaviour
                         break;
                     }
                 }
-                if (PhotonNetwork.Friends[i].IsOnline) {
-                    SpawnFriendPanel(friend, true);
-                } else {
-                    SpawnFriendPanel(friend, false);
+                if (!Friends.AmIBlocked(friend)) {
+                    if (PhotonNetwork.Friends[i].IsOnline) {
+                        SpawnFriendPanel(friend, true);
+                    } else {
+                        SpawnFriendPanel(friend, false);
+                    }
                 }
             }
         }
     }
 
     void SpawnFriendPanel(User user, bool status) {
-        GameObject friendPanel = Instantiate(Resources.Load<GameObject>("FriendPanel"), friendsPanelParent.transform);
-        friendPanel.transform.localScale = new Vector3(1, 1, 1);
-        friendPanel.GetComponent<FriendListInfoPanel>().SetUpFriendPanel(user, status);
-        friendPanels.Add(friendPanel);
+        if (!string.IsNullOrEmpty(user.userName) && !string.IsNullOrWhiteSpace(user.userName)) {
+            GameObject friendPanel = Instantiate(Resources.Load<GameObject>("FriendPanel"), friendsPanelParent.transform);
+            friendPanel.transform.localScale = new Vector3(1, 1, 1);
+            friendPanel.GetComponent<FriendListInfoPanel>().SetUpFriendPanel(user, status);
+            friendPanels.Add(friendPanel);
+        }
     }
 
     private void DeleteFriends() {
