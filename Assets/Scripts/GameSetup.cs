@@ -129,6 +129,7 @@ public class GameSetup : MonoBehaviour {
         if (PhotonNetwork.room.MaxPlayers == 2) {
             for (int i = 0; i < gameControl.connectedPlayers.Length; i++) {
                 Transform panelParent = GameObject.FindGameObjectWithTag("OtherPlayerPanel").transform;
+                panelParent.GetComponent<VerticalLayoutGroup>().childAlignment = TextAnchor.MiddleCenter; 
                 panelParent.GetComponent<RectTransform>().sizeDelta = new Vector2(800, 600);
                 panelParent.parent.transform.GetComponent<VerticalLayoutGroup>().childForceExpandHeight = true;
                 GameObject playerPanel = null;

@@ -25,11 +25,37 @@ public class InGamePlayerInfoTab : MonoBehaviour {
         closeButton.gameObject.SetActive(true);
         nameText.text = (string)photonPlayer.CustomProperties["name"];
 
-        //if (PhotonNetwork.room.MaxPlayers == 4) {
+        if (PhotonNetwork.room.MaxPlayers == 4) {
             voteToKickButton.gameObject.SetActive(true);
-        //} else {
-        //    voteToKickButton.gameObject.SetActive(false);
-        //}
+        } else {
+            voteToKickButton.gameObject.SetActive(false);
+        }
+
+        if (Friends.FriendAlreadyAdded(photonPlayer.UserId)) {
+            addFriendButton.GetComponentInChildren<Text>().text = "Delete Friend";
+            addFriendButton.onClick.AddListener(() => DeleteFriend());
+        }
+        if (!Friends.FriendAlreadyAdded(photonPlayer.UserId)) {
+            addFriendButton.GetComponentInChildren<Text>().text = "Add Friend";
+            addFriendButton.onClick.AddListener(() => StartCoroutine(AddingFriend()));
+        }
+
+        if (Friends.IsPlayerAlreadyBlocked(photonPlayer.UserId)) {
+            blockButton.GetComponentInChildren<Text>().text = "Unblock";
+            blockButton.onClick.AddListener(UnBlock);
+        } else {
+            blockButton.GetComponentInChildren<Text>().text = "Block";
+            blockButton.onClick.AddListener(Block);
+        }
+
+        //here we will check to see if we are logged in anonoum and set the buttons acordingly
+        if (FireBaseScript.IsPlayerAnonymous()) {
+            blockButton.interactable = false;
+            addFriendButton.interactable = false;
+        } else {
+            blockButton.interactable = true;
+            addFriendButton.interactable = true;
+        }
     }
 
     public void KickPlayer() {
@@ -46,23 +72,50 @@ public class InGamePlayerInfoTab : MonoBehaviour {
         StartCoroutine(GameObject.FindGameObjectWithTag("VoteToKick").GetComponent<VoteToKickPanel>().SetUpKickPanel(photonPlayerToKick));
     }
 
-    public void AddFriend() {
-        StartCoroutine(AddingFriend());
-    }
-
     public IEnumerator AddingFriend() {
         if (!Friends.FriendAlreadyAdded(photonPlayer.UserId)) {
             CoroutineWithData cd = new CoroutineWithData(this, Friends.AddFriend(photonPlayer.UserId));
             yield return cd.coroutine;
             SetInfoText((string)cd.result);
-        } else {
-            SetInfoText("Friend already added");
+            if ((string)cd.result == "Friend added") {
+                addFriendButton.GetComponentInChildren<Text>().text = "Delete Friend";
+                addFriendButton.onClick.RemoveListener(() => StartCoroutine(AddingFriend()));
+                addFriendButton.onClick.AddListener(DeleteFriend);
+            }
+        } //else {
+        //    SetInfoText("Friend already added");
+        //}
+    }
+
+    private void DeleteFriend() {
+        User friendToDelete = new User();
+        foreach (User friend in Friends.friends) {
+            if (friend.userID == photonPlayer.UserId) {
+                friendToDelete = friend;
+                break;
+            }
         }
+        Friends.DeleteFriend(friendToDelete);
+        SetInfoText("Friend Deleted");
+        addFriendButton.GetComponentInChildren<Text>().text = "Add Friend";
+        addFriendButton.onClick.RemoveListener(DeleteFriend);
+        addFriendButton.onClick.AddListener(() => StartCoroutine(AddingFriend()));
     }
 
     public void Block() {
         Friends.BlockFriend(photonPlayer.UserId);
         SetInfoText((string)photonPlayer.CustomProperties["name"] + " has been blocked");
+        blockButton.onClick.RemoveListener(Block);
+        blockButton.onClick.AddListener(UnBlock);
+        blockButton.GetComponentInChildren<Text>().text = "Unblock";
+    }
+
+    public void UnBlock() {
+        Friends.UnblockPlayer(photonPlayer.UserId);
+        SetInfoText(photonPlayer.CustomProperties["name"] + " has been unblocked");
+        blockButton.onClick.RemoveListener(UnBlock);
+        blockButton.onClick.AddListener(Block);
+        blockButton.GetComponentInChildren<Text>().text = "Block";
     }
 
     public void ClosePanel() {

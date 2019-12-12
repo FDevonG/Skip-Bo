@@ -1,23 +1,40 @@
 ﻿using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class NotificationPanel : MonoBehaviour
 {
-    float currCountdownValue;
+    int currCountdownValue;
+    int storedTime = 6;
     [SerializeField] Text notificationtext;
 
     private void Start() {
         StartCoroutine(StartCountdown());
         DontDestroyOnLoad(gameObject);
+        SceneManager.sceneLoaded += OnSceneLoaded;
+        GameObject.FindGameObjectWithTag("SoundManager").GetComponent<Sounds>().PlayerNotification();
     }
 
-    public IEnumerator StartCountdown(float countdownValue = 5) {
-        currCountdownValue = countdownValue;
+    void OnSceneLoaded(Scene scene, LoadSceneMode mode) {
+        gameObject.SetActive(false);
+        gameObject.SetActive(true);
+        StartCoroutine(StartCountdown());
+    }
+
+    public IEnumerator StartCountdown(int countdownValue = 5) {
+        if (storedTime == 6) {
+            currCountdownValue = countdownValue;
+        } else {
+            currCountdownValue = storedTime;
+        }
+        
         while (currCountdownValue > 0) {
             yield return new WaitForSeconds(1.0f);
             currCountdownValue--;
+            storedTime = currCountdownValue;
         }
+        SceneManager.sceneLoaded -= OnSceneLoaded;
         Destroy(gameObject);
     }
 

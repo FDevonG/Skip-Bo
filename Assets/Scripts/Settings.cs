@@ -16,7 +16,6 @@ public class Settings : MonoBehaviour
         });
         soundEffectsToggle.onValueChanged.AddListener(delegate {
             sounds.PlayButtonClick();
-
         });
     }
 

@@ -37,7 +37,6 @@ public static class Friends
                 }
                 string[] addedFriend = new string[1];
                 addedFriend[0] = UserID;
-                PhotonNetwork.FindFriends(LocalUser.locUser.friends.ToArray());
                 GameObject.FindGameObjectWithTag("Chat").GetComponent<Chat>().AddFriend(addedFriend);
                 yield return "Friend added";
             }
@@ -64,25 +63,30 @@ public static class Friends
                 break;
             }
         }
-        PhotonNetwork.Friends = null;
-        if (LocalUser.locUser.friends.Count > 0) {
-            PhotonNetwork.FindFriends(LocalUser.locUser.friends.ToArray());
-        }
         FireBaseScript.UpdateUser("friends", LocalUser.locUser.friends);
     }
 
     public static void BlockFriend(string userID) {
+        if (!IsPlayerAlreadyBlocked(userID)) {
+            LocalUser.locUser.blocked.Add(userID);
+            FireBaseScript.UpdateUser("blocked", LocalUser.locUser.blocked);
+        }
+    }
+
+    public static bool IsPlayerAlreadyBlocked(string userID) {
         bool alreadyBlocked = false;
-        foreach(string block in LocalUser.locUser.blocked) {
+        foreach (string block in LocalUser.locUser.blocked) {
             if (block == userID) {
                 alreadyBlocked = true;
                 break;
             }
         }
-        if (!alreadyBlocked) {
-            LocalUser.locUser.blocked.Add(userID);
-            FireBaseScript.UpdateUser("blocked", LocalUser.locUser.blocked);
-        }
+        return alreadyBlocked;
+    }
+
+    public static void UnblockPlayer(string userId) {
+        LocalUser.locUser.blocked.Remove(userId);
+        FireBaseScript.UpdateUser("blocked", LocalUser.locUser.blocked);
     }
 
     public static bool FriendAlreadyAdded(string userID) {

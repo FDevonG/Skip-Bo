@@ -28,12 +28,14 @@ public class InviteFriendsToGame : MonoBehaviour {
                 }
             }
             if (!Friends.AmIBlocked(friend)) {
-                GameObject button = Instantiate(Resources.Load<GameObject>("Button"), friendsPanelParent.transform);
-                button.transform.GetChild(0).GetComponent<Text>().text = friend.userName;
-                button.transform.localScale = new Vector3(1, 1, 1);
-                button.GetComponent<Button>().onClick.AddListener(() => GameObject.FindGameObjectWithTag("Chat").GetComponent<Chat>().SendGameInvite(friend.userID, PhotonNetwork.room.Name + "@" + LocalUser.locUser.userName));
-                button.GetComponent<Button>().onClick.AddListener(() => SetInfoText(friend.userName + " has been invited"));
-                button.GetComponent<Button>().onClick.AddListener(() => button.GetComponent<Button>().interactable = false);
+                GameObject playerTab = Instantiate(Resources.Load<GameObject>("FriendInvitePanel"), friendsPanelParent.transform);
+                playerTab.transform.localScale = new Vector3(1,1,1);
+                playerTab.GetComponent<FriendInvitePanel>().emailText.text = friend.userName;
+                playerTab.GetComponent<FriendInvitePanel>().inviteButton.onClick.AddListener(() => {
+                    GameObject.FindGameObjectWithTag("Chat").GetComponent<Chat>().SendGameInvite(friend.userID, PhotonNetwork.room.Name + "@" + LocalUser.locUser.userName);
+                    SetInfoText(friend.userName + " has been invited");
+                    playerTab.GetComponent<FriendInvitePanel>().inviteButton.interactable = false;
+                });
             }
         }
     }

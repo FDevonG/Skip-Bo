@@ -26,7 +26,6 @@ public class FriendSettingsPanel : MonoBehaviour
 
     public void SetUpFriendPanel(User user) {
         friend = user;
-        //deleteFriendButton.onClick.AddListener(() => Friends.DeleteFriend(friend));
         nameText.text = user.userName;
         hair.sprite = Resources.Load<Sprite>("Faces/Hairs/" + user.hair) as Sprite;
         face.sprite = Resources.Load<Sprite>("Faces/Faces/" + user.face) as Sprite;
@@ -53,6 +52,28 @@ public class FriendSettingsPanel : MonoBehaviour
                 }
             }
         }
+        SetBlockedButton();
+    }
+
+    private void SetBlockedButton() {
+        if (Friends.IsPlayerAlreadyBlocked(friend.userID)) {
+            blockUserButton.GetComponentInChildren<Text>().text = "Unblock";
+            blockUserButton.onClick.AddListener(() => {
+                Friends.UnblockPlayer(friend.userID);
+                blockUserButton.onClick.RemoveAllListeners();
+                blockUserButton.GetComponentInChildren<Text>().text = "Block";
+                blockUserButton.onClick.AddListener(() => {
+                    ShowDeleteFrindPanel();
+                    SetUpBlockPanel();
+                });
+            });
+        } else {
+            blockUserButton.GetComponentInChildren<Text>().text = "Block";
+            blockUserButton.onClick.AddListener(() => {
+                ShowDeleteFrindPanel();
+                SetUpBlockPanel();
+            });
+        }
     }
 
     public void ShowDeleteFrindPanel() {
@@ -60,9 +81,9 @@ public class FriendSettingsPanel : MonoBehaviour
         nameText.gameObject.SetActive(false);
         character.gameObject.SetActive(false);
         deleteFriendButton.gameObject.SetActive(false);
-        blockUserButton.gameObject.SetActive(false);
         joinRoomButton.gameObject.SetActive(false);
         closeButton.gameObject.SetActive(false);
+        blockUserButton.gameObject.SetActive(false);
     }
 
     public void SetUpDeletePanle() {
@@ -73,7 +94,6 @@ public class FriendSettingsPanel : MonoBehaviour
     public void SetUpBlockPanel() {
         areYouSureText.text = "Are you sure you want to block " + friend.userName + "?";
         confirmActionButton.onClick.AddListener(() => Friends.BlockFriend(friend.userID));
-        confirmActionButton.onClick.AddListener(() => Friends.DeleteFriend(friend));
     }
 
     public void HideDeleteFriendPanel() {
@@ -81,9 +101,11 @@ public class FriendSettingsPanel : MonoBehaviour
         nameText.gameObject.SetActive(true);
         character.gameObject.SetActive(true);
         deleteFriendButton.gameObject.SetActive(true);
-        blockUserButton.gameObject.SetActive(true);
         joinRoomButton.gameObject.SetActive(true);
         closeButton.gameObject.SetActive(true);
+        blockUserButton.gameObject.SetActive(true);
+
+        SetBlockedButton();
     }
 
     private void OnDisable() {

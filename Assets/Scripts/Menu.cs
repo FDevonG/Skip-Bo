@@ -19,6 +19,7 @@ public class Menu : MonoBehaviour
     public GameObject forgotPasswordPanel;
     public GameObject findFriendsPanel;
     public GameObject friendsSettingsPanel;
+    public GameObject blockedPanel;
 
     private ActivatePanel activatePanel;
 
@@ -104,6 +105,10 @@ public class Menu : MonoBehaviour
             return;
         }
         if (activatePanel.activePanel == friendsSettingsPanel) {
+            activatePanel.SwitchPanel(friendsPanel);
+            return;
+        }
+        if (activatePanel.activePanel == blockedPanel) {
             activatePanel.SwitchPanel(friendsPanel);
             return;
         }

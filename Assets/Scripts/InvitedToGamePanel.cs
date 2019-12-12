@@ -2,25 +2,42 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class InvitedToGamePanel : MonoBehaviour
 {
-    float currCountdownValue;
+    int currCountdownValue;
+    int storedTime = 11;
     [SerializeField] Button closePanelButton;
     [SerializeField] Button acceptInviteButton;
     [SerializeField] Text inviteText;
 
     private void Start() {
         DontDestroyOnLoad(gameObject);
+        StartCoroutine(StartCountdown());
+        SceneManager.sceneLoaded += OnSceneLoaded;
+        GameObject.FindGameObjectWithTag("SoundManager").GetComponent<Sounds>().PlayerNotification();
     }
 
-    public IEnumerator StartCountdown(float countdownValue = 10) {
-        currCountdownValue = countdownValue;
+    void OnSceneLoaded(Scene scene, LoadSceneMode mode) {
+        gameObject.SetActive(false);
+        gameObject.SetActive(true);
+        StartCoroutine(StartCountdown());
+    }
+
+    public IEnumerator StartCountdown(int countdownValue = 10) {
+        if (storedTime == 11) {
+            currCountdownValue = countdownValue;
+        } else {
+            currCountdownValue = storedTime;
+        }
+        
         while (currCountdownValue > 0) {
-            //Debug.Log("Countdown: " + currCountdownValue);
             yield return new WaitForSeconds(1.0f);
             currCountdownValue--;
+            storedTime = currCountdownValue;
         }
+        SceneManager.sceneLoaded -= OnSceneLoaded;
         Destroy(gameObject);
     }
 

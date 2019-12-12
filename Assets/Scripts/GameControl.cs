@@ -6,9 +6,9 @@ public class GameControl : MonoBehaviour
 {
     PhotonView photonView;
 
-    [SerializeField]
-    GameSetup gameSetup;
+    [SerializeField] GameSetup gameSetup;
     NPCTurn npcTurn;
+    Sounds sounds;
 
     public List<int> mainDeck;
     public int wildNumber = 100;
@@ -28,6 +28,7 @@ public class GameControl : MonoBehaviour
 
     private void Start() {
         npcTurn = GetComponent<NPCTurn>();
+        sounds = GameObject.FindGameObjectWithTag("SoundManager").GetComponent<Sounds>();
         photonView = GetComponent<PhotonView>();
     }
 
@@ -52,6 +53,7 @@ public class GameControl : MonoBehaviour
         }
         if (playerPanels[turnIndex] == localPlayerPanel) {
             localPlayerPanel.GetComponent<CanvasGroup>().blocksRaycasts = true;
+            sounds.YourTurn();
         } 
         playerPanels[turnIndex].GetComponent<PanelControl>().avatarPanel.GetComponent<ColorLerp>().StartColorLerp(true, false);
     }
@@ -146,6 +148,7 @@ public class GameControl : MonoBehaviour
 
         if (playerPanels[newTurn] == localPlayerPanel) {
             localPlayerPanel.GetComponent<CanvasGroup>().blocksRaycasts = true;
+            sounds.YourTurn();
         }
         playerPanels[newTurn].GetComponent<PanelControl>().avatarPanel.GetComponent<ColorLerp>().StartColorLerp(true, false);
     }

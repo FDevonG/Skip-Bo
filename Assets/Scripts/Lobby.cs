@@ -11,6 +11,7 @@ public class Lobby : MonoBehaviour
     [SerializeField]  Image loadinImage;
     [SerializeField] Button leaveButton;
     [SerializeField] Button inviteFriendsButton;
+    [SerializeField] GameObject lobbyPanel;
 
     bool gameStarting = false;
 
@@ -52,6 +53,7 @@ public class Lobby : MonoBehaviour
     public IEnumerator LaunchingGame() {
         gameStarting = true;
         yield return new WaitForSeconds(1);
+        gameObject.GetComponent<ActivatePanel>().SwitchPanel(lobbyPanel);
         int countDown = 3;
         infoText.text = "Game Starting In";
         numberText.text = countDown + "!";
