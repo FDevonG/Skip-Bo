@@ -15,34 +15,23 @@ public class PlayerStatsController : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
-    public IEnumerator AddGamePlayed() {
-        var task = FireBaseScript.GetCurrentUser();
-        yield return new WaitUntil(() => task.IsCompleted);
-        if (!task.IsFaulted) {
-            User user = JsonUtility.FromJson<User>(task.Result);
-            if (PhotonNetwork.offlineMode) {
-                user.offlineGamesPlayed += 1;
-                var saveTask = FireBaseScript.UpdateUser("offlineGamesPlayed", user.offlineGamesPlayed);
-            } else {
-                user.onlineGamesPlayed += 1;
-                var saveTask = FireBaseScript.UpdateUser("onlineGamesPlayed", user.onlineGamesPlayed);
-            }
-            
+    public void AddGamePlayed() {
+        if (PhotonNetwork.offlineMode) {
+            LocalUser.locUser.offlineGamesPlayed++;
+            FireBaseScript.UpdateUser("offlineGamesPlayed", LocalUser.locUser.offlineGamesPlayed);
+        } else {
+            LocalUser.locUser.onlineGamesPlayed++;
+            FireBaseScript.UpdateUser("onlineGamesPlayed", LocalUser.locUser.onlineGamesPlayed);
         }
     }
 
-    public IEnumerator AddGameWon() {
-        var task = FireBaseScript.GetCurrentUser();
-        yield return new WaitUntil(() => task.IsCompleted);
-        if (!task.IsFaulted) {
-            User user = JsonUtility.FromJson<User>(task.Result);
-            if (PhotonNetwork.offlineMode) {
-                user.offlineGamesWon += 1;
-                var saveTask = FireBaseScript.UpdateUser("offlineGamesWon", user.offlineGamesWon);
-            } else {
-                user.onlineGamesWon += 1;
-                var saveTask = FireBaseScript.UpdateUser("onlineGamesWon", user.onlineGamesWon);
-            }
+    public void AddGameWon() {
+        if (PhotonNetwork.offlineMode) {
+            LocalUser.locUser.offlineGamesWon++;
+            FireBaseScript.UpdateUser("offlineGamesWon", LocalUser.locUser.offlineGamesWon);
+        } else {
+            LocalUser.locUser.onlineGamesWon++;
+            FireBaseScript.UpdateUser("onlineGamesWon", LocalUser.locUser.onlineGamesWon);
         }
     }
 }

@@ -62,15 +62,11 @@ public class Victory : MonoBehaviour
             child.SetActive(true);
         }
 
-        //if (PhotonNetwork.offlineMode) {
-        //    playAgainButton.SetActive(true);
-        //}
-
         while (playerStandings.Length == 0) {
             yield return new WaitForSeconds(0.5f);
         }
         if (gameControl.localPlayerPanel.GetComponent<PanelControl>().deck.transform.childCount == 0) {
-            StartCoroutine(GameObject.FindGameObjectWithTag("StatsController").GetComponent<PlayerStatsController>().AddGameWon());
+            GameObject.FindGameObjectWithTag("StatsController").GetComponent<PlayerStatsController>().AddGameWon();
         }
         for (int i = 0; i < playerStandings.Length; i++) {
             GameObject standingPanel = Instantiate(Resources.Load<GameObject>("PlayerStandingPanel") as GameObject);
