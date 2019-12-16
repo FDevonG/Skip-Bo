@@ -20,6 +20,7 @@ public class Menu : MonoBehaviour
     public GameObject findFriendsPanel;
     public GameObject friendsSettingsPanel;
     public GameObject blockedPanel;
+    public GameObject leaderboardPanel;
 
     private ActivatePanel activatePanel;
 
@@ -110,6 +111,10 @@ public class Menu : MonoBehaviour
         }
         if (activatePanel.activePanel == blockedPanel) {
             activatePanel.SwitchPanel(friendsPanel);
+            return;
+        }
+        if (activatePanel.activePanel == leaderboardPanel) {
+            activatePanel.SwitchPanel(statsPanel);
             return;
         }
     }

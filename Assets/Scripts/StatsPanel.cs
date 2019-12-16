@@ -24,7 +24,7 @@ public class StatsPanel : MonoBehaviour
         
         int totalGamesPlayed = LocalUser.locUser.offlineGamesPlayed + LocalUser.locUser.onlineGamesPlayed;
         int totalGamesWon = LocalUser.locUser.offlineGamesWon + LocalUser.locUser.onlineGamesWon;
-        Debug.Log(LocalUser.locUser.offlineGamesPlayed);
+        
         totalGamesPlayedText.text = "Total Games Played - " + totalGamesPlayed;
         offlineGamesPlayedText.text = "Offline Games Played - " + LocalUser.locUser.offlineGamesPlayed;
         onlineGamesPlayedText.text = "Online Games Played - " + LocalUser.locUser.onlineGamesPlayed;

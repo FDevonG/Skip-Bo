@@ -101,7 +101,6 @@ public class PhotonNetworking : MonoBehaviour {
     private void OnMasterClientSwitched() {
         if (PhotonNetwork.isMasterClient) {
             if (GameObject.FindGameObjectWithTag("GameManager") != null) {
-                Debug.Log("Master Switched");
                 GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameControl>().DetermineNPCTurn();
             }
         }
