@@ -47,6 +47,9 @@ public class InGameMenu : MonoBehaviour
     }
 
     public void LeaveMatch() {
+        if (!PhotonNetwork.offlineMode) {
+            GameObject.FindGameObjectWithTag("Chat").GetComponent<Chat>().UnsubscribeToChannel(PhotonNetwork.room.Name);
+        }
         PhotonNetwork.DestroyPlayerObjects(PhotonNetwork.player);
         PhotonNetwork.LeaveRoom();
         SceneController.LoadStartMenu();
@@ -58,6 +61,7 @@ public class InGameMenu : MonoBehaviour
             SceneController.ReloadScene();
         }
         if (!PhotonNetwork.offlineMode) {
+            GameObject.FindGameObjectWithTag("Chat").GetComponent<Chat>().UnsubscribeToChannel(PhotonNetwork.room.Name);
             PhotonNetwork.LeaveRoom();
             SceneController.LoadGameSetup();
         }

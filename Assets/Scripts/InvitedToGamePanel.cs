@@ -20,8 +20,6 @@ public class InvitedToGamePanel : MonoBehaviour
     }
 
     void OnSceneLoaded(Scene scene, LoadSceneMode mode) {
-        gameObject.SetActive(false);
-        gameObject.SetActive(true);
         StartCoroutine(StartCountdown());
     }
 
@@ -69,14 +67,6 @@ public class InvitedToGamePanel : MonoBehaviour
         }
         if (!roomFound) {
             inviteText.text = "Room Not Found";
-        }
-    }
-
-    private void Update() {
-        if (transform.parent == null) {
-            if (GameObject.Find("Canvas") != null) {
-                transform.SetParent(GameObject.Find("Canvas").transform);
-            }
         }
     }
 }

@@ -8,9 +8,6 @@ public class Victory : MonoBehaviour
     GameControl gameControl;
     public int[] playerStandings = new int[0];
 
-    [SerializeField]
-    GameObject playAgainButton;
-
     public GameObject panelsParent;
     public GameObject[] children;
 

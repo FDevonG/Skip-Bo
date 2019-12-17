@@ -5,8 +5,8 @@ using UnityEngine.EventSystems;
 public class ButtonClick : MonoBehaviour, IPointerClickHandler
 {
     public void OnPointerClick(PointerEventData eventData) {
-        if (GetComponent<Toggle>()) {
-            Sounds sounds = GameObject.FindGameObjectWithTag("SoundManager").GetComponent<Sounds>();
+        Sounds sounds = GameObject.FindGameObjectWithTag("SoundManager").GetComponent<Sounds>();
+        if (GetComponent<Toggle>() || GetComponent<Dropdown>()) {
             sounds.PlayButtonClick();
         }
     }

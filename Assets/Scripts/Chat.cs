@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Chat;
 using ExitGames.Client.Photon;
-using Firebase.Database;
 
 public class Chat : MonoBehaviour, IChatClientListener
 {
@@ -47,7 +46,7 @@ public class Chat : MonoBehaviour, IChatClientListener
 
     public void OnConnected() {
         chatConnected = true;
-        chatClient.ChatRegion = "Us";
+        chatClient.ChatRegion = "US";
         chatClient.Subscribe(new string[] { globalChannel });
         chatClient.SetOnlineStatus(ChatUserStatus.Online);
         UpdateFriends();
@@ -61,7 +60,7 @@ public class Chat : MonoBehaviour, IChatClientListener
         for (int i = 0; i < messages.Length; i++) { //go through each received msg
             string sender = senders[i];
             string msg = (string)messages[i];
-            Debug.Log(sender + ": " + msg);
+            GameObject.FindGameObjectWithTag("ChatPanel").GetComponent<ChatPanel>().ReceiveMessage(sender, msg);
         }
     }
 
@@ -76,8 +75,18 @@ public class Chat : MonoBehaviour, IChatClientListener
         UpdateOnlineFriends(user, status);
     }
 
+    public void SubcsribeToChannel(string name) {
+        chatClient.Subscribe(new string[] { name });
+        SendPublicMessage(name, "Has joined.");
+    }
+
     public void OnSubscribed(string[] channels, bool[] results) {
         Debug.Log("Connected to channel");
+    }
+
+    public void UnsubscribeToChannel(string channelName) {
+        SendPublicMessage(channelName, "Has left.");
+        chatClient.Unsubscribe(new string[] { channelName });
     }
 
     public void OnUnsubscribed(string[] channels) {
@@ -90,6 +99,10 @@ public class Chat : MonoBehaviour, IChatClientListener
 
     public void OnUserUnsubscribed(string channel, string user) {
         throw new System.NotImplementedException();
+    }
+
+    public void SendPublicMessage(string channelName, string message) {
+        chatClient.PublishMessage(channelName, message);
     }
 
     public void UpdateFriends() {
@@ -130,7 +143,7 @@ public class Chat : MonoBehaviour, IChatClientListener
         while (GameObject.FindGameObjectWithTag("GameInvitePanel") != null && CardDragHandler.itemBeingDragged != null) {
             yield return new WaitForSeconds(1);
         }
-        GameObject invitePanel = Instantiate(Resources.Load<GameObject>("GameInvitePanel"), GameObject.Find("Canvas").transform);
+        GameObject invitePanel = Instantiate(Resources.Load<GameObject>("GameInvitePanel"));
         invitePanel.transform.localScale = new Vector3(1, 1, 1);
         invitePanel.GetComponent<InvitedToGamePanel>().SetUpAcceptButton(message);
     }

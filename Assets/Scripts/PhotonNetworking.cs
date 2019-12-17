@@ -1,8 +1,5 @@
 ﻿using UnityEngine;
-using System.Collections;
 using UnityEngine.SceneManagement;
-using Firebase.Database;
-using System.Collections.Generic;
 
 public class PhotonNetworking : MonoBehaviour {
 
@@ -16,9 +13,6 @@ public class PhotonNetworking : MonoBehaviour {
             Instance = this;
         }
         DontDestroyOnLoad(gameObject);
-        //if (FireBaseScript.IsPlayerLoggedIn()) {
-        //    ConnectToPhoton();
-        //}
     }
 
     void Start() {
@@ -65,20 +59,19 @@ public class PhotonNetworking : MonoBehaviour {
     }
 
     private void OnCreatedRoom() {
-        Debug.Log("Room Created");
         if (!PhotonNetwork.offlineMode) {
             SceneController.LoadLobbyScene();
+            GameObject.FindGameObjectWithTag("Chat").GetComponent<Chat>().SubcsribeToChannel(PhotonNetwork.room.Name);
         }
     }
 
     //this method is called when you join a room automatically
     private void OnJoinedRoom() {
-        Debug.Log("Joined room");
         SceneController.LoadLobbyScene();
+        GameObject.FindGameObjectWithTag("Chat").GetComponent<Chat>().SubcsribeToChannel(PhotonNetwork.room.Name);
     }
 
     private void OnPhotonPlayerConnected(PhotonPlayer player) {
-        Debug.Log("Player Connected");
         Lobby lobby = GameObject.FindGameObjectWithTag("Lobby").GetComponent<Lobby>();
         lobby.UpdateWaitingPanel();
         if (PhotonNetwork.isMasterClient) {
@@ -87,7 +80,6 @@ public class PhotonNetworking : MonoBehaviour {
     }
 
     private void OnPhotonPlayerDisconnected(PhotonPlayer photonPlayer) {
-        Debug.Log("Player Disconected");
         if (GameObject.FindGameObjectWithTag("Lobby") != null) {
             GameObject.FindGameObjectWithTag("Lobby").GetComponent<Lobby>().UpdateWaitingPanel();
         }

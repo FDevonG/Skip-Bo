@@ -50,9 +50,10 @@ public class Leaderboards : MonoBehaviour
     private void SpawnLeaderPanels(List<Leaderboard> leaders) {
         for (int i = 0; i < leaders.Count; i++) {
             GameObject leaderboardPanel = Instantiate(Resources.Load<GameObject>("LeaderboardInfoPanel"), leadeboardInfoParent);
+            leaderboardPanel.transform.localScale = new Vector3(1,1,1);
             leaderboardPanels.Add(leaderboardPanel);
             LeaderboardInfoPanel leaderboardInfoPanel = leaderboardPanel.GetComponent<LeaderboardInfoPanel>();
-            leaderboardInfoPanel.standingText.text = (i + 1).ToString();
+            leaderboardInfoPanel.standingText.text = (i + 1).ToString() + ".";
             leaderboardInfoPanel.nameText.text = leaders[i].name;
             if (selection.value == 0) {
                 leaderboardInfoPanel.infoText.text = leaders[i].onlineWins.ToString();
@@ -77,12 +78,8 @@ public class Leaderboards : MonoBehaviour
     }
 
     private void ScrollToPlayerPanel() {
-        Debug.Log("HI");
-        float normalizePosition = scrollHolder.GetComponent<RectTransform>().anchorMin.y - playersPanel.GetComponent<RectTransform>().anchoredPosition.y;
-        normalizePosition += (float)playersPanel.transform.GetSiblingIndex() / (float)scrollHolder.GetComponent<ScrollRect>().content.transform.childCount;
-        normalizePosition /= 1000f;
-        normalizePosition = Mathf.Clamp01(1 - normalizePosition);
-        scrollHolder.GetComponent<ScrollRect>().verticalNormalizedPosition = normalizePosition;
+        Canvas.ForceUpdateCanvases();
+        leadeboardInfoParent.GetComponent<RectTransform>().anchoredPosition = (Vector2)scrollHolder.GetComponent<ScrollRect>().transform.InverseTransformPoint(leadeboardInfoParent.GetComponent<RectTransform>().position) - (Vector2)scrollHolder.GetComponent<ScrollRect>().transform.InverseTransformPoint(playersPanel.position);
     }
 
     private List<Leaderboard> GetArray(DataSnapshot snap) {

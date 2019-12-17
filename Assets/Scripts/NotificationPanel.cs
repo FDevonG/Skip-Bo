@@ -17,8 +17,6 @@ public class NotificationPanel : MonoBehaviour
     }
 
     void OnSceneLoaded(Scene scene, LoadSceneMode mode) {
-        gameObject.SetActive(false);
-        gameObject.SetActive(true);
         StartCoroutine(StartCountdown());
     }
 
