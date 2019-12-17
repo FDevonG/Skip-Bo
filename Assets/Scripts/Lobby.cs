@@ -2,13 +2,12 @@
 using UnityEngine.UI;
 using UnityEngine;
 
-public class Lobby : MonoBehaviour
-{
-    [SerializeField]  Text roomNameText;
-    [SerializeField]  Text infoText;
-    [SerializeField]  Text numberText;
-    [SerializeField]  PhotonView photonView;
-    [SerializeField]  Image loadinImage;
+public class Lobby : MonoBehaviour {
+    [SerializeField] Text roomNameText;
+    [SerializeField] Text infoText;
+    [SerializeField] Text numberText;
+    [SerializeField] PhotonView photonView;
+    [SerializeField] Image loadinImage;
     [SerializeField] Button leaveButton;
     [SerializeField] Button inviteFriendsButton;
     [SerializeField] GameObject lobbyPanel;
@@ -31,6 +30,7 @@ public class Lobby : MonoBehaviour
         loadinImage.gameObject.SetActive(true);
         leaveButton.gameObject.SetActive(true);
         inviteFriendsButton.gameObject.SetActive(true);
+        GameObject.FindGameObjectWithTag("ChatButton").SetActive(true);
         if (PhotonNetwork.isMasterClient && !PhotonNetwork.offlineMode) {
             PhotonNetwork.room.IsOpen = true;
             if ((bool)PhotonNetwork.room.CustomProperties[PhotonRooms.PrivateRoom()] == false) {
@@ -54,6 +54,10 @@ public class Lobby : MonoBehaviour
         gameStarting = true;
         yield return new WaitForSeconds(1);
         gameObject.GetComponent<ActivatePanel>().SwitchPanel(lobbyPanel);
+        GameObject.FindGameObjectWithTag("ChatButton").SetActive(false);
+        if (GameObject.FindGameObjectWithTag("ChatPanel").GetComponent<ChatPanel>().chatOpen) {
+            GameObject.FindGameObjectWithTag("ChatPanel").GetComponent<ChatPanel>().ChatPanelControl();
+        }
         int countDown = 3;
         infoText.text = "Game Starting In";
         numberText.text = countDown + "!";

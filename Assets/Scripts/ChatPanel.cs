@@ -19,7 +19,7 @@ public class ChatPanel : MonoBehaviour
     float timeStartedLerping;
     float timeTakenDuringLerp = 1f;
 
-    bool chatOpen = false;
+    public bool chatOpen = false;
     bool chatOpening = false;
     bool chatClosing = false;
 
@@ -40,8 +40,17 @@ public class ChatPanel : MonoBehaviour
     }
 
     void OnSceneLoaded(Scene scene, LoadSceneMode mode) {
-        SceneManager.MoveGameObjectToScene(gameObject, SceneManager.GetActiveScene());
-        SceneManager.sceneLoaded -= OnSceneLoaded;
+        if (scene.buildIndex == 3) {
+            GameObject[] objects = Resources.FindObjectsOfTypeAll<GameObject>();
+            foreach (GameObject child in objects) {
+                if (child.tag == "ChatButton") {
+                    child.SetActive(true);
+                    break;
+                }
+            }
+            SceneManager.MoveGameObjectToScene(gameObject, SceneManager.GetActiveScene());
+            SceneManager.sceneLoaded -= OnSceneLoaded;
+        }
     }
 
     public void ChatPanelControl() {
@@ -50,6 +59,8 @@ public class ChatPanel : MonoBehaviour
             chatOpen = true;
             chatOpening = true;
             chatClosing = false;
+            messageCounter = 0;
+            numberText.text = "";
             return;
         }
         if (chatOpen) {
@@ -69,7 +80,7 @@ public class ChatPanel : MonoBehaviour
     public void ReceiveMessage(string user, string message) {
         if (!chatOpen) {
             messageCounter++;
-
+            numberText.text = messageCounter.ToString();
         }
         GameObject text = Instantiate(Resources.Load<GameObject>("MessageText"), contentParent);
         if (messages.Count >= maxHistory) {

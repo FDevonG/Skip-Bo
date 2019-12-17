@@ -16,10 +16,6 @@ public class PhotonRooms : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
-    //public void SetupPhotonPlayer() {
-    //    PhotonPlayerSetup.BuildPhotonPlayer(PhotonNetwork.player, LocalUser.locUser);
-    //}
-
     public void JoinRandomRoom() {
         PhotonNetwork.JoinRandomRoom();
     }
@@ -45,10 +41,6 @@ public class PhotonRooms : MonoBehaviour
     public static string PrivateRoom() {
         return "Private";
     }
-
-    //public static byte MaxPlayers() {
-    //    return 4;
-    //}
 
     private static RoomOptions GetRoomOptions(int deckAmmount, byte maxPlayers, bool priv) {
         RoomOptions roomOptions = new RoomOptions();//create a new room options

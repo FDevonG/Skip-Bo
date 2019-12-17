@@ -68,7 +68,9 @@ public class PhotonNetworking : MonoBehaviour {
     //this method is called when you join a room automatically
     private void OnJoinedRoom() {
         SceneController.LoadLobbyScene();
-        GameObject.FindGameObjectWithTag("Chat").GetComponent<Chat>().SubcsribeToChannel(PhotonNetwork.room.Name);
+        if (!PhotonNetwork.isMasterClient) {
+            GameObject.FindGameObjectWithTag("Chat").GetComponent<Chat>().SubcsribeToChannel(PhotonNetwork.room.Name);
+        }
     }
 
     private void OnPhotonPlayerConnected(PhotonPlayer player) {

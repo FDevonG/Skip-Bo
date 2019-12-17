@@ -47,7 +47,6 @@ public class Chat : MonoBehaviour, IChatClientListener
     public void OnConnected() {
         chatConnected = true;
         chatClient.ChatRegion = "US";
-        chatClient.Subscribe(new string[] { globalChannel });
         chatClient.SetOnlineStatus(ChatUserStatus.Online);
         UpdateFriends();
     }
