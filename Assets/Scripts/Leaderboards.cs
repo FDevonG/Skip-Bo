@@ -13,7 +13,7 @@ public class Leaderboards : MonoBehaviour
     [SerializeField] Dropdown selection;
     [SerializeField] GameObject failedText;
     [SerializeField] GameObject scrollHolder;
-    Transform playersPanel;
+    Transform playersPanel;//this is used to store the users panel
 
     private void OnEnable() {
         BuildLeaderboards();
@@ -80,6 +80,7 @@ public class Leaderboards : MonoBehaviour
     private void ScrollToPlayerPanel() {
         Canvas.ForceUpdateCanvases();
         leadeboardInfoParent.GetComponent<RectTransform>().anchoredPosition = (Vector2)scrollHolder.GetComponent<ScrollRect>().transform.InverseTransformPoint(leadeboardInfoParent.GetComponent<RectTransform>().position) - (Vector2)scrollHolder.GetComponent<ScrollRect>().transform.InverseTransformPoint(playersPanel.position);
+        leadeboardInfoParent.GetComponent<RectTransform>().localPosition = new Vector3(-25, leadeboardInfoParent.GetComponent<RectTransform>().localPosition.y, leadeboardInfoParent.GetComponent<RectTransform>().localPosition.z);
     }
 
     private List<Leaderboard> GetArray(DataSnapshot snap) {

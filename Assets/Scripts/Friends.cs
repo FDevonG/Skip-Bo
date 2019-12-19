@@ -67,13 +67,13 @@ public static class Friends
     }
 
     public static void BlockFriend(string userID) {
-        if (!IsPlayerAlreadyBlocked(userID)) {
+        if (!IsPlayerBlocked(userID)) {
             LocalUser.locUser.blocked.Add(userID);
             FireBaseScript.UpdateUser("blocked", LocalUser.locUser.blocked);
         }
     }
 
-    public static bool IsPlayerAlreadyBlocked(string userID) {
+    public static bool IsPlayerBlocked(string userID) {
         bool alreadyBlocked = false;
         foreach (string block in LocalUser.locUser.blocked) {
             if (block == userID) {

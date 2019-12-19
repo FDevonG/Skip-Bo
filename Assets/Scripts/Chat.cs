@@ -33,6 +33,7 @@ public class Chat : MonoBehaviour, IChatClientListener
             authValues.UserId = PhotonNetwork.player.UserId;
             authValues.AuthType = Photon.Chat.CustomAuthenticationType.None;
             chatClient.Connect(GameGlobalSettings.PhotonChatAppId(), GameGlobalSettings.Version(), authValues);
+            chatClient.MessageLimit = 25;
         }
     }
 
@@ -152,19 +153,23 @@ public class Chat : MonoBehaviour, IChatClientListener
             yield return new WaitForSeconds(1);
         }
         string userName = "";
-        foreach (User friend in Friends.friends) {
+        User friend = new User();
+        foreach (User frie in Friends.friends) {
             if (friend.userID == user) {
-                userName = friend.userName;
+                userName = frie.userName;
+                friend = frie;
                 break;
             }
         }
-        GameObject notificationPanel = Instantiate(Resources.Load<GameObject>("NotificationPanel"));
-        notificationPanel.transform.localScale = new Vector3(1,1,1);
-        if (status == 2) {
-            notificationPanel.GetComponent<NotificationPanel>().SetText(userName + " has logged on");
-        }
-        if (status == 0) {
-            notificationPanel.GetComponent<NotificationPanel>().SetText(userName + " has logged off");
+        if (!Friends.AmIBlocked(friend)) {
+            GameObject notificationPanel = Instantiate(Resources.Load<GameObject>("NotificationPanel"));
+            notificationPanel.transform.localScale = new Vector3(1, 1, 1);
+            if (status == 2) {
+                notificationPanel.GetComponent<NotificationPanel>().SetText(userName + " has logged on");
+            }
+            if (status == 0) {
+                notificationPanel.GetComponent<NotificationPanel>().SetText(userName + " has logged off");
+            }
         }
     }
 

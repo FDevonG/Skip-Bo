@@ -82,6 +82,9 @@ public class PhotonNetworking : MonoBehaviour {
     }
 
     private void OnPhotonPlayerDisconnected(PhotonPlayer photonPlayer) {
+        if (GameObject.FindGameObjectWithTag("ChatPanel") != null) {
+            GameObject.FindGameObjectWithTag("ChatPanel").GetComponent<ChatPanel>().ReceiveMessage(photonPlayer.UserId, "Has left.");
+        }
         if (GameObject.FindGameObjectWithTag("Lobby") != null) {
             GameObject.FindGameObjectWithTag("Lobby").GetComponent<Lobby>().UpdateWaitingPanel();
         }

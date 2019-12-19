@@ -56,7 +56,7 @@ public class FriendSettingsPanel : MonoBehaviour
     }
 
     private void SetBlockedButton() {
-        if (Friends.IsPlayerAlreadyBlocked(friend.userID)) {
+        if (Friends.IsPlayerBlocked(friend.userID)) {
             blockUserButton.GetComponentInChildren<Text>().text = "Unblock";
             blockUserButton.onClick.AddListener(() => {
                 Friends.UnblockPlayer(friend.userID);

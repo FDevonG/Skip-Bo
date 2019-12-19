@@ -40,7 +40,7 @@ public class InGamePlayerInfoTab : MonoBehaviour {
             addFriendButton.onClick.AddListener(() => StartCoroutine(AddingFriend()));
         }
 
-        if (Friends.IsPlayerAlreadyBlocked(photonPlayer.UserId)) {
+        if (Friends.IsPlayerBlocked(photonPlayer.UserId)) {
             blockButton.GetComponentInChildren<Text>().text = "Unblock";
             blockButton.onClick.AddListener(UnBlock);
         } else {

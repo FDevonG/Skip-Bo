@@ -78,17 +78,19 @@ public class ChatPanel : MonoBehaviour
     }
 
     public void ReceiveMessage(string user, string message) {
-        if (!chatOpen) {
-            messageCounter++;
-            numberText.text = messageCounter.ToString();
+        if (!Friends.IsPlayerBlocked(user)) {
+            if (!chatOpen) {
+                messageCounter++;
+                numberText.text = messageCounter.ToString();
+            }
+            GameObject text = Instantiate(Resources.Load<GameObject>("MessageText"), contentParent);
+            if (messages.Count >= maxHistory) {
+                Destroy(messages[0]);
+                messages.Remove(messages[0]);
+            }
+            messages.Add(text);
+            text.GetComponent<Text>().text = GetUserName(user) + " : " + message;
         }
-        GameObject text = Instantiate(Resources.Load<GameObject>("MessageText"), contentParent);
-        if (messages.Count >= maxHistory) {
-            Destroy(messages[0]);
-            messages.Remove(messages[0]);
-        }
-        messages.Add(text);
-        text.GetComponent<Text>().text = GetUserName(user) + " : " + message; 
     }
 
     private string GetUserName(string user) {
