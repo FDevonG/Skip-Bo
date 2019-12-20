@@ -80,6 +80,7 @@ public class Lobby : MonoBehaviour {
     }
 
     public void LeaveRoom() {
+        GameObject.FindGameObjectWithTag("Chat").GetComponent<Chat>().UnsubscribeToChannel(PhotonNetwork.room.Name);
         PhotonNetwork.LeaveRoom();
         SceneController.LoadStartMenu();
     }

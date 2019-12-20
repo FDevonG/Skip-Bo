@@ -5688,7 +5688,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerStandings: 
-  playAgainButton: {fileID: 1884396812}
   panelsParent: {fileID: 2075823411}
   children:
   - {fileID: 87621215}
@@ -7092,7 +7091,7 @@ MonoBehaviour:
     m_Left: 0
     m_Right: 0
     m_Top: 0
-    m_Bottom: 100
+    m_Bottom: 150
   m_ChildAlignment: 4
   m_Spacing: 50
   m_ChildForceExpandWidth: 1
@@ -8016,12 +8015,6 @@ PrefabInstance:
 --- !u!224 &1884396811 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 5247988230175085174, guid: 2d80c77b21de041babe6ac38894d9be5,
-    type: 3}
-  m_PrefabInstance: {fileID: 1884396810}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &1884396812 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5247988230175085169, guid: 2d80c77b21de041babe6ac38894d9be5,
     type: 3}
   m_PrefabInstance: {fileID: 1884396810}
   m_PrefabAsset: {fileID: 0}

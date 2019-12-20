@@ -26,3 +26,7 @@ Update 1.8
 -Delete Friends
 -Block People
 -Vote to kick players
+
+Update 1.10
+-Leaderboards
+-Chat

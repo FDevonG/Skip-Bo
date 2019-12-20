@@ -34,9 +34,9 @@ public class ChatPanel : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        chat = GameObject.FindGameObjectWithTag("Chat").GetComponent<Chat>();
         DontDestroyOnLoad(gameObject);
         SceneManager.sceneLoaded += OnSceneLoaded;
+        chat = GameObject.FindGameObjectWithTag("Chat").GetComponent<Chat>();
     }
 
     void OnSceneLoaded(Scene scene, LoadSceneMode mode) {
@@ -50,6 +50,10 @@ public class ChatPanel : MonoBehaviour
             }
             SceneManager.MoveGameObjectToScene(gameObject, SceneManager.GetActiveScene());
             SceneManager.sceneLoaded -= OnSceneLoaded;
+        }
+        if (scene.buildIndex == 0 || scene.buildIndex == 1) {
+            SceneManager.sceneLoaded -= OnSceneLoaded;
+            Destroy(gameObject);
         }
     }
 
@@ -91,6 +95,20 @@ public class ChatPanel : MonoBehaviour
             messages.Add(text);
             text.GetComponent<Text>().text = GetUserName(user) + " : " + message;
         }
+    }
+
+    public void PlayerLeft(string message) {
+        if (!chatOpen) {
+            messageCounter++;
+            numberText.text = messageCounter.ToString();
+        }
+        GameObject text = Instantiate(Resources.Load<GameObject>("MessageText"), contentParent);
+        if (messages.Count >= maxHistory) {
+            Destroy(messages[0]);
+            messages.Remove(messages[0]);
+        }
+        messages.Add(text);
+        text.GetComponent<Text>().text = message;
     }
 
     private string GetUserName(string user) {

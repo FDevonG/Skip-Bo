@@ -58,7 +58,9 @@ public class InvitedToGamePanel : MonoBehaviour
             if (game.Name == roomName) {
                 roomFound = true;
                 if (game.IsOpen) {
+                    StopAllCoroutines();
                     PhotonNetwork.JoinRoom(game.Name);
+                    SceneManager.sceneLoaded -= OnSceneLoaded;
                     Destroy(gameObject);
                 } else {
                     inviteText.text = "Room Is Full";

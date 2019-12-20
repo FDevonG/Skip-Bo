@@ -85,7 +85,7 @@ public class Chat : MonoBehaviour, IChatClientListener
     }
 
     public void UnsubscribeToChannel(string channelName) {
-        SendPublicMessage(channelName, "Has left.");
+        //SendPublicMessage(channelName, "Has left.");
         chatClient.Unsubscribe(new string[] { channelName });
     }
 
@@ -155,7 +155,7 @@ public class Chat : MonoBehaviour, IChatClientListener
         string userName = "";
         User friend = new User();
         foreach (User frie in Friends.friends) {
-            if (friend.userID == user) {
+            if (frie.userID == user) {
                 userName = frie.userName;
                 friend = frie;
                 break;

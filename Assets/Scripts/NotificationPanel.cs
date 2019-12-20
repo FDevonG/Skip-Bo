@@ -40,4 +40,10 @@ public class NotificationPanel : MonoBehaviour
         notificationtext.text = message;
     }
 
+    public void DestroyPanel() {
+        StopAllCoroutines();
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+        Destroy(gameObject);
+    }
+
 }
