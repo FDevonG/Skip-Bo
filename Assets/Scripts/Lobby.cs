@@ -85,12 +85,12 @@ public class Lobby : MonoBehaviour {
         SceneController.LoadStartMenu();
     }
 
-    private void Update() {
-        if (Input.GetKeyDown(KeyCode.Escape)) {
-            if (!gameStarting) {
-                LeaveRoom();
-            }
-        }
-    }
+    //private void Update() {
+    //    if (Input.GetKeyDown(KeyCode.Escape)) {
+    //        if (!gameStarting) {
+    //            LeaveRoom();
+    //        }
+    //    }
+    //}
 
 }

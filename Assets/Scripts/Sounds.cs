@@ -4,8 +4,9 @@ public class Sounds : MonoBehaviour
 {
     [SerializeField] AudioSource musicSource;
     [SerializeField] AudioSource buttonClickSource;
-    [SerializeField] AudioSource yourTurn;
     [SerializeField] AudioSource playerNotification;
+    [SerializeField] AudioSource gameInvite;
+    [SerializeField] AudioSource chat;
 
     public static Sounds Instance { get; private set; }
 
@@ -69,15 +70,21 @@ public class Sounds : MonoBehaviour
         }
     }
 
-    public void YourTurn() {
-        if (IsSoundEffectsActive()) {
-            yourTurn.Play();
-        }
-    }
-
     public void PlayerNotification() {
         if (IsSoundEffectsActive()) {
             playerNotification.Play();
+        }
+    }
+
+    public void PlayGameInvite() {
+        if (IsSoundEffectsActive()) {
+            gameInvite.Play();
+        }
+    }
+
+    public void NewMessage() {
+        if (IsSoundEffectsActive()) {
+            chat.Play();
         }
     }
 

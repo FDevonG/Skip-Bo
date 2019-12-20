@@ -18,6 +18,7 @@ TagManager:
   - VoteToKick
   - ChatPanel
   - ChatButton
+  - Announcer
   layers:
   - Default
   - TransparentFX

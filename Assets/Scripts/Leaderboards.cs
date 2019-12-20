@@ -42,6 +42,7 @@ public class Leaderboards : MonoBehaviour
         yield return new WaitUntil(() => task.IsCompleted);
         if (task.IsFaulted) {
             failedText.SetActive(true);
+            GameObject.FindGameObjectWithTag("Announcer").GetComponent<Announcer>().AnnouncerAnError();
         } else {
             SpawnLeaderPanels(GetArray(task.Result));
         }

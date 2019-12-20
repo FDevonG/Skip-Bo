@@ -30,3 +30,7 @@ Update 1.8
 Update 1.10
 -Leaderboards
 -Chat
+
+Update 1.11
+-Login issue fixed
+-New music and sound effects

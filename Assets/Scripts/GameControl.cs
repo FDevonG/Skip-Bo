@@ -8,7 +8,7 @@ public class GameControl : MonoBehaviour
 
     [SerializeField] GameSetup gameSetup;
     NPCTurn npcTurn;
-    Sounds sounds;
+    Announcer announcer;
 
     public List<int> mainDeck;
     public int wildNumber = 100;
@@ -28,7 +28,7 @@ public class GameControl : MonoBehaviour
 
     private void Start() {
         npcTurn = GetComponent<NPCTurn>();
-        sounds = GameObject.FindGameObjectWithTag("SoundManager").GetComponent<Sounds>();
+        announcer = GameObject.FindGameObjectWithTag("Announcer").GetComponent<Announcer>();
         photonView = GetComponent<PhotonView>();
     }
 
@@ -51,9 +51,9 @@ public class GameControl : MonoBehaviour
         while (playerPanels[turnIndex] == null) {
             yield return new WaitForSeconds(0.5f);
         }
+        announcer.AnnouncePlayerTurn(turnIndex);
         if (playerPanels[turnIndex] == localPlayerPanel) {
             localPlayerPanel.GetComponent<CanvasGroup>().blocksRaycasts = true;
-            sounds.YourTurn();
         } 
         playerPanels[turnIndex].GetComponent<PanelControl>().avatarPanel.GetComponent<ColorLerp>().StartColorLerp(true, false);
     }
@@ -144,11 +144,11 @@ public class GameControl : MonoBehaviour
     }
 
     [PunRPC]
-    private void ChangePlayerPanel (int newTurn) { 
+    private void ChangePlayerPanel (int newTurn) {
 
+        announcer.AnnouncePlayerTurn(newTurn);
         if (playerPanels[newTurn] == localPlayerPanel) {
             localPlayerPanel.GetComponent<CanvasGroup>().blocksRaycasts = true;
-            sounds.YourTurn();
         }
         playerPanels[newTurn].GetComponent<PanelControl>().avatarPanel.GetComponent<ColorLerp>().StartColorLerp(true, false);
     }

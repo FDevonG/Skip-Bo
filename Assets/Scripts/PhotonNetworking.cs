@@ -84,7 +84,7 @@ public class PhotonNetworking : MonoBehaviour {
     private void OnPhotonPlayerDisconnected(PhotonPlayer photonPlayer) {
         if (!Friends.IsPlayerBlocked(photonPlayer.UserId)) {
             if (GameObject.FindGameObjectWithTag("ChatPanel") != null) {
-                GameObject.FindGameObjectWithTag("ChatPanel").GetComponent<ChatPanel>().PlayerLeft(photonPlayer.CustomProperties["name"] + " : Has left.");
+                GameObject.FindGameObjectWithTag("ChatPanel").GetComponent<ChatPanel>().PlayerStatus(photonPlayer.CustomProperties["name"] + " : Has left.");
             }
         }
         if (GameObject.FindGameObjectWithTag("Lobby") != null) {
@@ -100,7 +100,15 @@ public class PhotonNetworking : MonoBehaviour {
     private void OnMasterClientSwitched() {
         if (PhotonNetwork.isMasterClient) {
             if (GameObject.FindGameObjectWithTag("GameManager") != null) {
-                GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameControl>().DetermineNPCTurn();
+                if (!GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameControl>().playerWon) {
+                    GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameControl>().DetermineNPCTurn();
+                } else {
+                    if (GameObject.FindGameObjectWithTag("VictoryPanel") != null) {
+                        if (GameObject.FindGameObjectWithTag("VictoryPanel").GetComponent<Victory>().playerStandings.Length == 0) {
+                            GameObject.FindGameObjectWithTag("VictoryPanel").GetComponent<Victory>().playerStandings = GameObject.FindGameObjectWithTag("VictoryPanel").GetComponent<Victory>().GetPlayerStandings();
+                        }
+                    }
+                }
             }
         }
     }

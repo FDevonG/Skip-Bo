@@ -36,7 +36,6 @@ public class Menu : MonoBehaviour
     {
         activatePanel = GetComponent<ActivatePanel>();
         StartCoroutine(DoesPlayerExist());
-        //activatePanel.SwitchPanel(startMenu);
     }
 
     //this is called when you fail to connect to photon
@@ -136,6 +135,10 @@ public class Menu : MonoBehaviour
                 GameObject.FindGameObjectWithTag("NetworkManager").GetComponent<PhotonNetworking>().ConnectToPhoton();
                 activatePanel.SwitchPanel(startMenu);
             }
+        }
+        if (!GameObject.FindGameObjectWithTag("Announcer").GetComponent<Announcer>().welcomePlayed) {
+            GameObject.FindGameObjectWithTag("Announcer").GetComponent<Announcer>().Welcome();
+            GameObject.FindGameObjectWithTag("Announcer").GetComponent<Announcer>().welcomePlayed = true;
         }
     }
 

@@ -72,5 +72,6 @@ public class SignUpPanel : MonoBehaviour
     public void ChangeSignUpErrorText(string message) {
         signUpErrorText.gameObject.SetActive(true);
         signUpErrorText.text = message;
+        GameObject.FindGameObjectWithTag("Announcer").GetComponent<Announcer>().AnnouncerAnError();
     }
 }

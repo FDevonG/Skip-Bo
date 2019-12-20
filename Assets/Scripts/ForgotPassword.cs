@@ -24,6 +24,7 @@ public class ForgotPassword : MonoBehaviour {
     public void SetInfoText(string message) {
         infoText.gameObject.SetActive(true);
         infoText.text = message;
+        GameObject.FindGameObjectWithTag("Announcer").GetComponent<Announcer>().AnnouncerAnError();
     }
 
     public void ForgotPasswordEmail() {

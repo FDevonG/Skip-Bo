@@ -7,6 +7,7 @@ public class PanelControl : MonoBehaviour
 
     public Text nameText;
     public Text cardsLeftText;
+    public Text playerNumberText;
 
     public GameObject avatarPanel;
     public Image cbody;//used to display the body

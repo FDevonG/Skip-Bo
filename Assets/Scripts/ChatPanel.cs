@@ -7,6 +7,7 @@ using UnityEngine.SceneManagement;
 public class ChatPanel : MonoBehaviour
 {
     public static ChatPanel Instance { get; private set; }
+    Sounds sounds;
     List<GameObject> messages = new List<GameObject>();
     int maxHistory = 25;
     [SerializeField] GameObject chatPanel;
@@ -37,6 +38,7 @@ public class ChatPanel : MonoBehaviour
         DontDestroyOnLoad(gameObject);
         SceneManager.sceneLoaded += OnSceneLoaded;
         chat = GameObject.FindGameObjectWithTag("Chat").GetComponent<Chat>();
+        sounds = GameObject.FindGameObjectWithTag("SoundManager").GetComponent<Sounds>();
     }
 
     void OnSceneLoaded(Scene scene, LoadSceneMode mode) {
@@ -95,9 +97,10 @@ public class ChatPanel : MonoBehaviour
             messages.Add(text);
             text.GetComponent<Text>().text = GetUserName(user) + " : " + message;
         }
+        sounds.NewMessage();
     }
 
-    public void PlayerLeft(string message) {
+    public void PlayerStatus(string message) {
         if (!chatOpen) {
             messageCounter++;
             numberText.text = messageCounter.ToString();
@@ -109,6 +112,7 @@ public class ChatPanel : MonoBehaviour
         }
         messages.Add(text);
         text.GetComponent<Text>().text = message;
+        sounds.NewMessage();
     }
 
     private string GetUserName(string user) {
@@ -125,10 +129,25 @@ public class ChatPanel : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (chatOpen) {
+            if (Input.GetKeyDown(KeyCode.Return)) {
+                SendMessage();
+            }
+            if (Input.GetKeyDown(KeyCode.Escape)) {
+                ChatPanelControl();
+            }
+        }
         if (chatOpening) {
             float timeSinceStarted = Time.time - timeStartedLerping;
             float percentageComplete = timeSinceStarted / timeTakenDuringLerp;
             chatPanel.transform.localScale = Vector3.Lerp(new Vector3(1, 0, 1), new Vector3(1, 1, 1), percentageComplete);
+            for (int i = 0; i < chatPanel.transform.childCount; i++) {
+                if (chatPanel.transform.GetChild(i).name != "Scroll View") {
+                    Color startColor = chatPanel.transform.GetChild(i).GetComponent<Image>().color;
+                    chatPanel.transform.GetChild(i).GetComponent<Image>().color = Color.Lerp(new Color(startColor.r, startColor.g, startColor.g, 0), new Color(startColor.r, startColor.g, startColor.g, 1), percentageComplete);
+                }
+            }
+            chatPanel.GetComponent<Image>().color = Color.Lerp(new Color(1, 1, 1, 0), new Color(1, 1, 1, 1), percentageComplete);
 
             if (percentageComplete >= timeTakenDuringLerp) {
                 chatOpening = false;
@@ -138,6 +157,13 @@ public class ChatPanel : MonoBehaviour
             float timeSinceStarted = Time.time - timeStartedLerping;
             float percentageComplete = timeSinceStarted / timeTakenDuringLerp;
             chatPanel.transform.localScale = Vector3.Lerp(new Vector3(1, 1, 1), new Vector3(1, 0, 1), percentageComplete);
+            for (int i = 0; i < chatPanel.transform.childCount; i++) {
+                if (chatPanel.transform.GetChild(i).name != "Scroll View") {
+                    Color startColor = chatPanel.transform.GetChild(i).GetComponent<Image>().color;
+                    chatPanel.transform.GetChild(i).GetComponent<Image>().color = Color.Lerp(new Color(startColor.r, startColor.g, startColor.g, 1), new Color(startColor.r, startColor.g, startColor.g, 0), percentageComplete);
+                }
+            }
+            chatPanel.GetComponent<Image>().color = Color.Lerp(new Color(1, 1, 1, 1), new Color(1, 1, 1, 0), percentageComplete);
 
             if (percentageComplete >= timeTakenDuringLerp) {
                 chatClosing = false;

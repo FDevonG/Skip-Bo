@@ -96,7 +96,6 @@ public class GameSetup : MonoBehaviour {
         localPlayerPanel.transform.localScale = new Vector3(1,1,1);
         localPlayerPanel.GetComponent<RectTransform>().offsetMax = new Vector2(0,0);
         localPlayerPanel.GetComponent<RectTransform>().offsetMin = new Vector2(0, 0);
-        SpawnPanelInfo(localPlayerPanel, PhotonNetwork.player);
 
         gameControl.playerPanels = new GameObject[PhotonNetwork.room.MaxPlayers];
 
@@ -117,9 +116,10 @@ public class GameSetup : MonoBehaviour {
                         playerPanel.GetComponent<PanelControl>().avatarPanel.AddComponent<OpenPlayerInfoPanel>();
                     }
                     gameControl.playerPanels[i] = playerPanel;
-                    SpawnPanelInfo(playerPanel, gameControl.connectedPlayers[i]);
+                    SpawnPanelInfo(playerPanel, gameControl.connectedPlayers[i], (i + 1).ToString());
                 } else {
                     gameControl.playerPanels[i] = gameControl.localPlayerPanel;
+                    SpawnPanelInfo(localPlayerPanel, PhotonNetwork.player, (i + 1).ToString());
                     playerPosition = i;
                 }
             }
@@ -148,9 +148,10 @@ public class GameSetup : MonoBehaviour {
                     playerPanel.GetComponent<PanelControl>().handSlots[0].transform.parent.GetComponent<CanvasGroup>().blocksRaycasts = false;
                     playerPanel.GetComponent<PanelControl>().sideBarSlots[0].transform.parent.GetComponent<CanvasGroup>().blocksRaycasts = false;
                     gameControl.playerPanels[i] = playerPanel;
-                    SpawnPanelInfo(playerPanel, gameControl.connectedPlayers[i]);
+                    SpawnPanelInfo(playerPanel, gameControl.connectedPlayers[i], (i + 1).ToString());
                 } else {
                     gameControl.playerPanels[i] = gameControl.localPlayerPanel;
+                    SpawnPanelInfo(localPlayerPanel, PhotonNetwork.player, (i + 1).ToString());
                 }
             }
         }
@@ -174,11 +175,12 @@ public class GameSetup : MonoBehaviour {
         }
     }
 
-    private void SpawnPanelInfo(GameObject playerPanel, PhotonPlayer photonPlayer) {
+    private void SpawnPanelInfo(GameObject playerPanel, PhotonPlayer photonPlayer, string playerNumber) {
         
         PanelControl panelControl = playerPanel.GetComponent<PanelControl>();
         panelControl.photonPlayer = photonPlayer;
 
+        panelControl.playerNumberText.text = playerNumber;
         panelControl.nameText.text = (string)panelControl.photonPlayer.CustomProperties["name"];
         panelControl.cbody.sprite = Resources.Load<Sprite>("Faces/Bodies/" + (string)panelControl.photonPlayer.CustomProperties["body"]) as Sprite;
         panelControl.cface.sprite = Resources.Load<Sprite>("Faces/Faces/" + (string)panelControl.photonPlayer.CustomProperties["face"]) as Sprite;

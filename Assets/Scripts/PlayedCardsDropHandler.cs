@@ -7,11 +7,13 @@ public class PlayedCardsDropHandler : MonoBehaviour, IDropHandler {
     PhotonView photonView;
     Sounds sounds;
     GameControl gameControl;
+    Announcer announcer;
 
     private void Start() {
         photonView = GetComponent<PhotonView>();
-        sounds = sounds = GameObject.FindGameObjectWithTag("SoundManager").GetComponent<Sounds>();
+        sounds = GameObject.FindGameObjectWithTag("SoundManager").GetComponent<Sounds>();
         gameControl = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameControl>();
+        announcer = GameObject.FindGameObjectWithTag("Announcer").GetComponent<Announcer>();
     }
 
     public void OnDrop(PointerEventData eventData) {
@@ -32,6 +34,7 @@ public class PlayedCardsDropHandler : MonoBehaviour, IDropHandler {
 
             if (CardDragHandler.playerDeck) {
                 gameControl.CardRemovedOffDeck(panelControl);
+                announcer.PayCompliment();
             }
 
             if (CardDragHandler.playerHand) {
@@ -68,6 +71,8 @@ public class PlayedCardsDropHandler : MonoBehaviour, IDropHandler {
                 photonView.RPC("PlayCardFromSideboard", PhotonTargets.AllViaServer, CardDragHandler.itemBeingDragged.GetComponent<PhotonView>().viewID, panelIndex, PhotonNetwork.player);
             }
 
+        } else {
+            announcer.Cant();
         }
 
     }

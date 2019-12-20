@@ -33,6 +33,7 @@ public class RoomSetup : MonoBehaviour {
             }
             GameObject.FindGameObjectWithTag("NetworkManager").GetComponent<PhotonRooms>().CreateOnlineGame(roomName, ((int)cardSlider.value * 5), players, privateToggle.isOn);
         } else {
+            GameObject.FindGameObjectWithTag("Announcer").GetComponent<Announcer>().AnnouncerAnError();
             placeholderText.text = "Enter Name";
             placeholderText.color = Color.red;
         }

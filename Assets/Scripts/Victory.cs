@@ -62,8 +62,12 @@ public class Victory : MonoBehaviour
         while (playerStandings.Length == 0) {
             yield return new WaitForSeconds(0.5f);
         }
+        Announcer announcer = GameObject.FindGameObjectWithTag("Announcer").GetComponent<Announcer>();
         if (gameControl.localPlayerPanel.GetComponent<PanelControl>().deck.transform.childCount == 0) {
             GameObject.FindGameObjectWithTag("StatsController").GetComponent<PlayerStatsController>().AddGameWon();
+            announcer.YouWon();
+        } else {
+            announcer.YouLost();
         }
         for (int i = 0; i < playerStandings.Length; i++) {
             GameObject standingPanel = Instantiate(Resources.Load<GameObject>("PlayerStandingPanel") as GameObject);

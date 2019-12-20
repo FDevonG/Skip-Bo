@@ -81,7 +81,9 @@ public class Chat : MonoBehaviour, IChatClientListener
     }
 
     public void OnSubscribed(string[] channels, bool[] results) {
-        Debug.Log("Connected to channel");
+        //foreach(string channel in channels) {
+        //    SendPublicMessage(channel, "Has joined.");
+        //}
     }
 
     public void UnsubscribeToChannel(string channelName) {

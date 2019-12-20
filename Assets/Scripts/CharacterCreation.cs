@@ -245,6 +245,7 @@ public class CharacterCreation : MonoBehaviour
     public void ErrorWithCharacterEdit(string message) {
         infoText.gameObject.SetActive(true);
         infoText.text = message;
+        GameObject.FindGameObjectWithTag("Announcer").GetComponent<Announcer>().AnnouncerAnError();
     }
 
     private void NameError() {

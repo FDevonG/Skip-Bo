@@ -46,6 +46,8 @@ public class SideBarDropHandler : MonoBehaviour, IDropHandler {
             }
             photonView.RPC("RequestSideBoadPlay", PhotonTargets.Others, CardDragHandler.itemBeingDragged.GetComponent<PhotonView>().viewID, panelIndex, gameControl.turnIndex);
             gameControl.ChangeTurn();
+        } else {
+            GameObject.FindGameObjectWithTag("Announcer").GetComponent<Announcer>().Cant();
         }
     }
 
