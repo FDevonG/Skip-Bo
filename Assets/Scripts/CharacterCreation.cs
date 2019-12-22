@@ -73,16 +73,12 @@ public class CharacterCreation : MonoBehaviour
 
         //set the body parts
         cbody.sprite = body[cbodyIndex];
-        //user.body = body[cbodyIndex].name;
 
         cface.sprite = face[cfaceIndex];
-        //user.face = face[cfaceIndex].name;
 
         chair.sprite = hair[chairIndex];
-        //user.hair = hair[chairIndex].name;
 
         ckit.sprite = kit[ckitIndex];
-        //user.kit = kit[ckitIndex].name;
 
         StartImagesLerp();
     }
@@ -113,7 +109,6 @@ public class CharacterCreation : MonoBehaviour
             chairIndex++;
         }
         chair.sprite = hair[chairIndex];
-        //user.hair = hair[chairIndex].name;
     }
 
     //changes the hair to the previous one
@@ -124,7 +119,6 @@ public class CharacterCreation : MonoBehaviour
             chairIndex--;
         }
         chair.sprite = hair[chairIndex];
-        //user.hair = hair[chairIndex].name;
     }
 
     //changes the face to the next one
@@ -135,7 +129,6 @@ public class CharacterCreation : MonoBehaviour
             cfaceIndex++;
         }
         cface.sprite = face[cfaceIndex];
-        //user.face = face[cfaceIndex].name;
     }
 
     //changes the face to the previous face
@@ -146,7 +139,6 @@ public class CharacterCreation : MonoBehaviour
             cfaceIndex--;
         }
         cface.sprite = face[cfaceIndex];
-        //user.face = face[cfaceIndex].name;
     }
 
     //change the clothes to the next clothes
@@ -157,7 +149,6 @@ public class CharacterCreation : MonoBehaviour
             ckitIndex++;
         }
         ckit.sprite = kit[ckitIndex];
-        //user.face = kit[ckitIndex].name;
     }
 
     //changes the clothes to the previous clothes
@@ -168,7 +159,6 @@ public class CharacterCreation : MonoBehaviour
             ckitIndex--;
         }
         ckit.sprite = kit[ckitIndex];
-        //user.kit = kit[ckitIndex].name;
     }
 
     //changes the body type to the next body
@@ -179,7 +169,6 @@ public class CharacterCreation : MonoBehaviour
             cbodyIndex++;
         }
         cbody.sprite = body[cbodyIndex];
-        //user.body = body[cbodyIndex].name;
     }
 
     //changes the body type to previous sprite
@@ -190,7 +179,6 @@ public class CharacterCreation : MonoBehaviour
             cbodyIndex--;
         }
         cbody.sprite = body[cbodyIndex];
-        //user.body = body[cbodyIndex].name;
     }
 
     public void SavePlayer() {

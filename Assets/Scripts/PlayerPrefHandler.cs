@@ -7,8 +7,7 @@ public class PlayerPrefsHandler {
     }
 
     public static int GetMusicSetting() {
-        int musicValue = PlayerPrefs.GetInt("music");
-        return musicValue;
+        return PlayerPrefs.GetInt("music");
     }
 
     public static void SetSoundEffectsSetting(int value) {
@@ -16,8 +15,27 @@ public class PlayerPrefsHandler {
     }
 
     public static int GetSoundEffectsSetting() {
-        int soundEffectsValue = PlayerPrefs.GetInt("soundEffects");
-        return soundEffectsValue;
+        return PlayerPrefs.GetInt("soundEffects");
+    }
+
+    public static void SetGameRated(int value) {
+        PlayerPrefs.SetInt("rated", value);
+    }
+
+    public static int GetRated() {
+        return PlayerPrefs.GetInt("rated");
+    }
+
+    public static void SetGamesPlayed() {
+        PlayerPrefs.SetInt("gamesPlayed", GetGamesPlayed() + 1);
+    }
+
+    public static void ResetGamesPlayed() {
+        PlayerPrefs.SetInt("gamesPlayed", 0);
+    }
+
+    public static int GetGamesPlayed() {
+        return PlayerPrefs.GetInt("gamesPlayed");
     }
 
 }

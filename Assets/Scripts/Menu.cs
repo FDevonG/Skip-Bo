@@ -21,10 +21,10 @@ public class Menu : MonoBehaviour
     public GameObject friendsSettingsPanel;
     public GameObject blockedPanel;
     public GameObject leaderboardPanel;
+    public GameObject loadingScreen;
+    public GameObject ratingPanel;
 
     private ActivatePanel activatePanel;
-
-    [SerializeField] Canvas canvas;
 
     private void Awake() {
         Screen.sleepTimeout = SleepTimeout.NeverSleep;//keep the screen from fading
@@ -120,20 +120,31 @@ public class Menu : MonoBehaviour
 
     private IEnumerator DoesPlayerExist() {
         if (!FireBaseScript.IsPlayerLoggedIn()) {
-            canvas.gameObject.SetActive(true);
+            //canvas.gameObject.SetActive(true);
             activatePanel.SwitchPanel(startGamePanel);
         } else {
-            yield return StartCoroutine(LocalUser.LoadUser());
+            if (LocalUser.locUser == null) {
+                activatePanel.SwitchPanel(loadingScreen);
+                yield return StartCoroutine(LocalUser.LoadUser());
+            }
             if (LocalUser.locUser.friends.Count > 0) {
                 StartCoroutine(Friends.GetStartFriends());
             }
-            canvas.gameObject.SetActive(true);
+            //canvas.gameObject.SetActive(true);
             if (string.IsNullOrEmpty(LocalUser.locUser.userName)) {
                 activatePanel.SwitchPanel(characterCreationPanel);
             } else {
                 PhotonPlayerSetup.BuildPhotonPlayer(PhotonNetwork.player, LocalUser.locUser);
                 GameObject.FindGameObjectWithTag("NetworkManager").GetComponent<PhotonNetworking>().ConnectToPhoton();
-                activatePanel.SwitchPanel(startMenu);
+                if (!Rating.CheckRated()) {
+                    if (Rating.CheckGamesPlayed()) {
+                        activatePanel.SwitchPanel(ratingPanel);
+                    } else {
+                        activatePanel.SwitchPanel(startMenu);
+                    }
+                } else {
+                    activatePanel.SwitchPanel(startMenu);
+                }
             }
         }
         if (!GameObject.FindGameObjectWithTag("Announcer").GetComponent<Announcer>().welcomePlayed) {
