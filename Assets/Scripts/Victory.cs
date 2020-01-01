@@ -11,8 +11,26 @@ public class Victory : MonoBehaviour
     public GameObject panelsParent;
     public GameObject[] children;
 
+    [SerializeField] GameObject victoryPanel;
+    [SerializeField] GameObject quitGamePanel;
+    GameObject activePanel;
+
     private void Start() {
         gameControl = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameControl>();
+        activePanel = victoryPanel;
+    }
+
+    public void ChangePanel() {
+        if (activePanel == victoryPanel) {
+            victoryPanel.SetActive(false);
+            quitGamePanel.SetActive(true);
+            activePanel = quitGamePanel;
+        }
+        if (activePanel == quitGamePanel) {
+            quitGamePanel.SetActive(false);
+            victoryPanel.SetActive(true);
+            activePanel = victoryPanel;
+        }
     }
 
     public int[] GetPlayerStandings() {
