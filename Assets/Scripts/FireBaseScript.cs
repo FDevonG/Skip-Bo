@@ -64,10 +64,12 @@ public class FireBaseScript : MonoBehaviour
     
     #region Database
 
-    public static void WriteNewUser(User user) {
+    public static Task<bool> WriteNewUser(User user) {
         string json = JsonUtility.ToJson(user);
         DatabaseReference databaseReference = FirebaseDatabase.DefaultInstance.RootReference;
-        databaseReference.Child("users").Child(AuthenitcationKey()).SetRawJsonValueAsync(json);
+        return databaseReference.Child("users").Child(AuthenitcationKey()).SetRawJsonValueAsync(json).ContinueWith((task) => {
+            return task.IsCompleted;
+        });
     }
 
     public static Task<bool> UpdateUser(string saveName, Object varToSave) {
@@ -76,19 +78,6 @@ public class FireBaseScript : MonoBehaviour
             return task.IsCompleted;
         });
     }
-
-    //public static Task<bool> UpdateUserStats(string saveName, int varToSave) {
-    //    DatabaseReference databaseReference = FirebaseDatabase.DefaultInstance.RootReference;
-    //    return databaseReference.Child("users").Child(AuthenitcationKey()).Child(saveName).SetValueAsync(varToSave).ContinueWith((task) => {
-    //        return task.IsCompleted;
-    //    });
-    //}
-    //public static Task<bool> UpdateUserFriends(List<string> friends) {
-    //    DatabaseReference databaseReference = FirebaseDatabase.DefaultInstance.RootReference;
-    //    return databaseReference.Child("users").Child(AuthenitcationKey()).Child("friends").SetValueAsync(friends).ContinueWith((task) => {
-    //        return task.IsCompleted;
-    //    });
-    //}
 
     public static void DeleteAccountData() {
         DatabaseReference databaseReference = FirebaseDatabase.DefaultInstance.RootReference.Child("users").Child(AuthenitcationKey());

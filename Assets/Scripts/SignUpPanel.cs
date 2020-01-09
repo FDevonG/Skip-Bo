@@ -31,11 +31,17 @@ public class SignUpPanel : MonoBehaviour
         var task = FireBaseScript.CreateNewAccount(signUpEmailInput.GetComponent<InputField>().text, signUpPasswordInput.GetComponent<InputField>().text);
         yield return new WaitUntil(() => task.IsCompleted);
         if (task.IsFaulted) {
-            GameObject.FindGameObjectWithTag("GameManager").GetComponent<Menu>().signUpPanel.GetComponent<SignUpPanel>().ChangeSignUpErrorText(FireBaseScript.GetErrorMessage(task.Exception));
+            ChangeSignUpErrorText(FireBaseScript.GetErrorMessage(task.Exception));
         } else {
             User newUser = new User(signUpEmailInput.GetComponent<InputField>().text, FireBaseScript.AuthenitcationKey());
-            FireBaseScript.WriteNewUser(newUser);
-            GameObject.FindGameObjectWithTag("GameManager").GetComponent<ActivatePanel>().SwitchPanel(GameObject.FindGameObjectWithTag("GameManager").GetComponent<Menu>().characterCreationPanel);
+            var newUserTask = FireBaseScript.WriteNewUser(newUser);
+            yield return new WaitUntil(() => newUserTask.IsCompleted);
+            if (newUserTask.IsFaulted) {
+                ChangeSignUpErrorText(FireBaseScript.GetErrorMessage(newUserTask.Exception));
+            } else {
+                LocalUser.locUser = newUser;
+                GameObject.FindGameObjectWithTag("GameManager").GetComponent<ActivatePanel>().SwitchPanel(GameObject.FindGameObjectWithTag("GameManager").GetComponent<Menu>().characterCreationPanel);
+            }
         }
     }
 

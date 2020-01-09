@@ -20,6 +20,10 @@ public class User {
     public List<string> friends = new List<string>();
     public List<string> blocked = new List<string>();
 
+    public int level;
+    public int experience;
+    public int experienceToNextLevel;
+
     public User(string userEmail, string id) {
         email = userEmail;
         userID = id;
