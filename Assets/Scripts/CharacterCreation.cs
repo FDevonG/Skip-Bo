@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using Firebase.Database;
@@ -17,8 +16,6 @@ public class CharacterCreation : MonoBehaviour
 
     public GameObject nameInput;
 
-    [SerializeField] Text infoText;
-
     public int cbodyIndex = 0;
     public int cfaceIndex = 0;
     public int chairIndex = 0;
@@ -33,33 +30,24 @@ public class CharacterCreation : MonoBehaviour
     private Color invisibleColor = new Color(1,1,1,0);
 
     private void OnEnable() {
-        StartCoroutine(BuildCharacter());
+        BuildCharacter();
     }
 
     private void OnDisable() {
         nameInput.GetComponent<InputField>().text = "";
         nameInput.GetComponent<Outline>().enabled = false;
-        infoText.gameObject.SetActive(false);
         chair.color = invisibleColor;
         cface.color = invisibleColor;
         ckit.color = invisibleColor;
         cbody.color = invisibleColor;
     }
 
-    private IEnumerator BuildCharacter() {
-        var task = FireBaseScript.GetCurrentUser();
-        yield return new WaitUntil(() => task.IsCompleted);
-        User user = new User();
-        if (task.IsFaulted) {
-            ErrorWithCharacterEdit("Failed to load profile");
-        } else {
-            user = JsonUtility.FromJson<User>(task.Result);
-        }
-        if (string.IsNullOrEmpty(user.userName)) {
+    private void BuildCharacter() {
+        if (string.IsNullOrEmpty(LocalUser.locUser.userName)) {
             RandomizeCharacter();
             startMenuCancelButton.gameObject.SetActive(false);
         } else {
-            BuildSavedCharacter(user);
+            BuildSavedCharacter(LocalUser.locUser);
             startMenuCancelButton.gameObject.SetActive(true);
         }
     }
@@ -73,18 +61,13 @@ public class CharacterCreation : MonoBehaviour
 
         //set the body parts
         cbody.sprite = body[cbodyIndex];
-
         cface.sprite = face[cfaceIndex];
-
         chair.sprite = hair[chairIndex];
-
         ckit.sprite = kit[ckitIndex];
-
         StartImagesLerp();
     }
 
     private void BuildSavedCharacter(User user) {
-        //User user = FireBaseScript.GetCurrentUser();
         nameInput.GetComponent<InputField>().text = user.userName;
         
         ////set the body parts
@@ -186,54 +169,56 @@ public class CharacterCreation : MonoBehaviour
         if (!string.IsNullOrEmpty(playerName) && !string.IsNullOrWhiteSpace(playerName)) {
             StartCoroutine(NameCheck(playerName));
         } else {
-            ErrorWithCharacterEdit("Please enter a username");
+            GetComponent<ErrorText>().SetError("Please enter a username");
             NameError();
         }
     }
 
     private IEnumerator NameCheck(string userName) {
-        var task = FireBaseScript.GetUsers();
+        var task = Database.GetUsers();
         yield return new WaitUntil(() => task.IsCompleted);
         if (task.IsFaulted) {
-            ErrorWithCharacterEdit("Failed to save character");
+            GetComponent<ErrorText>().SetError("Failed to save character");
         } else {
             bool nameBool = false;
             foreach (DataSnapshot snap in task.Result.Children) {
                 User tempUser = JsonUtility.FromJson<User>(snap.GetRawJsonValue());
                 if (tempUser.userName == userName) {
-                    if (tempUser.userID != FireBaseScript.AuthenitcationKey()) {
+                    if (tempUser.userID != FirebaseAuthentication.AuthenitcationKey()) {
                         nameBool = true;
                         break;
                     }
                 }
             }
             if (!nameBool) {
-                var userNameTask = FireBaseScript.UpdateUser("userName", userName);
-                var hairTask = FireBaseScript.UpdateUser("hair", hair[chairIndex].name);
-                var faceTask = FireBaseScript.UpdateUser("face", face[cfaceIndex].name);
-                var kitTask = FireBaseScript.UpdateUser("kit", kit[ckitIndex].name);
-                var bodyTask = FireBaseScript.UpdateUser("body", body[cbodyIndex].name);
-                yield return new WaitUntil(() => userNameTask.IsCompleted && hairTask.IsCompleted && faceTask.IsCompleted && kitTask.IsCompleted && bodyTask.IsCompleted);
-
-                if (userNameTask.IsFaulted || hairTask.IsFaulted || faceTask.IsFaulted || kitTask.IsFaulted || bodyTask.IsFaulted) {
-                    ErrorWithCharacterEdit("Failed to save character");
-                } else {
-                    yield return StartCoroutine(LocalUser.LoadUser());
-                    PhotonPlayerSetup.BuildPhotonPlayer(PhotonNetwork.player, LocalUser.locUser);
-                    GameObject.FindGameObjectWithTag("NetworkManager").GetComponent<PhotonNetworking>().ConnectToPhoton();
-                    GameObject.FindGameObjectWithTag("GameManager").GetComponent<ActivatePanel>().SwitchPanel(GameObject.FindGameObjectWithTag("GameManager").GetComponent<Menu>().startMenu);
-                }
+                StartCoroutine(SaveCharacter(userName));
             } else {
-                ErrorWithCharacterEdit("Username is taken");
+                GetComponent<ErrorText>().SetError("Username is taken");
                 NameError();
             }
         }
     }
 
-    public void ErrorWithCharacterEdit(string message) {
-        infoText.gameObject.SetActive(true);
-        infoText.text = message;
-        GameObject.FindGameObjectWithTag("Announcer").GetComponent<Announcer>().AnnouncerAnError();
+    private IEnumerator SaveCharacter(string userName) {
+        var userNameTask = Database.UpdateUser("userName", userName);
+        var hairTask = Database.UpdateUser("hair", hair[chairIndex].name);
+        var faceTask = Database.UpdateUser("face", face[cfaceIndex].name);
+        var kitTask = Database.UpdateUser("kit", kit[ckitIndex].name);
+        var bodyTask = Database.UpdateUser("body", body[cbodyIndex].name);
+        yield return new WaitUntil(() => userNameTask.IsCompleted && hairTask.IsCompleted && faceTask.IsCompleted && kitTask.IsCompleted && bodyTask.IsCompleted);
+
+        if (userNameTask.IsFaulted || hairTask.IsFaulted || faceTask.IsFaulted || kitTask.IsFaulted || bodyTask.IsFaulted) {
+            GetComponent<ErrorText>().SetError("Failed to save character");
+        } else {
+            LocalUser.locUser.userName = userName;
+            LocalUser.locUser.hair = hair[chairIndex].name;
+            LocalUser.locUser.face = face[cfaceIndex].name;
+            LocalUser.locUser.kit = kit[ckitIndex].name;
+            LocalUser.locUser.body = body[cbodyIndex].name;
+            PhotonPlayerSetup.BuildPhotonPlayer(PhotonNetwork.player, LocalUser.locUser);
+            GameObject.FindGameObjectWithTag("NetworkManager").GetComponent<PhotonNetworking>().ConnectToPhoton();
+            GameObject.FindGameObjectWithTag("GameManager").GetComponent<ActivatePanel>().SwitchPanel(GameObject.FindGameObjectWithTag("GameManager").GetComponent<Menu>().startMenu);
+        }
     }
 
     private void NameError() {

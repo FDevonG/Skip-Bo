@@ -65,7 +65,7 @@ public class Chat : MonoBehaviour, IChatClientListener
     }
 
     public void OnPrivateMessage(string sender, object message, string channelName) {
-        if (sender != FireBaseScript.AuthenitcationKey()) {
+        if (sender != FirebaseAuthentication.AuthenitcationKey()) {
             StartCoroutine(SpawnGameInvite((string)message));
         }
     }

@@ -5,52 +5,56 @@ using UnityEngine;
 
 public class LevelSystem : MonoBehaviour{
 
+    private int levelCap = 50;
+
     public IEnumerator AddExperience(int amount) {
-        LocalUser.locUser.experience += amount;
-        var task = FireBaseScript.UpdateUser("experience", LocalUser.locUser.experience);
-        yield return new WaitUntil(() => task.IsCompleted);
-        while (task.IsFaulted) {
-            task = FireBaseScript.UpdateUser("experience", LocalUser.locUser.experience);
+        if (LocalUser.locUser.level <= levelCap) {
+            LocalUser.locUser.experience += amount;
+            var task = Database.UpdateUser("experience", LocalUser.locUser.experience);
             yield return new WaitUntil(() => task.IsCompleted);
-        }
-        if (GetExperienceToNextLevel() == 0) {
-            LocalUser.locUser.experienceToNextLevel = 100;
-            var experienceNeededTask = FireBaseScript.UpdateUser("experienceToNextLevel", LocalUser.locUser.experienceToNextLevel);
-            yield return new WaitUntil(() => experienceNeededTask.IsCompleted);
-            while (experienceNeededTask.IsFaulted) {
-                experienceNeededTask = FireBaseScript.UpdateUser("experienceToNextLevel", LocalUser.locUser.experienceToNextLevel);
-                yield return new WaitUntil(() => experienceNeededTask.IsCompleted);
+            while (task.IsFaulted) {
+                task = Database.UpdateUser("experience", LocalUser.locUser.experience);
+                yield return new WaitUntil(() => task.IsCompleted);
             }
-        }
-        while (LocalUser.locUser.experience >= GetExperienceToNextLevel()) {
-            // Enough experience to level up
-            yield return StartCoroutine(AddLevel());
-            yield return StartCoroutine(ChangeExperienceToLevelNeeded());
+            if (GetExperienceToNextLevel() == 0) {
+                LocalUser.locUser.experienceToNextLevel = 100;
+                var experienceNeededTask = Database.UpdateUser("experienceToNextLevel", LocalUser.locUser.experienceToNextLevel);
+                yield return new WaitUntil(() => experienceNeededTask.IsCompleted);
+                while (experienceNeededTask.IsFaulted) {
+                    experienceNeededTask = Database.UpdateUser("experienceToNextLevel", LocalUser.locUser.experienceToNextLevel);
+                    yield return new WaitUntil(() => experienceNeededTask.IsCompleted);
+                }
+            }
+            while (LocalUser.locUser.experience >= GetExperienceToNextLevel()) {
+                // Enough experience to level up
+                yield return StartCoroutine(AddLevel());
+                yield return StartCoroutine(ChangeExperienceToLevelNeeded());
+            }
         }
     }
 
     private IEnumerator AddLevel() {
         LocalUser.locUser.experience -= GetExperienceToNextLevel();
         LocalUser.locUser.level++;
-        var levelTask = FireBaseScript.UpdateUser("level", LocalUser.locUser.level);
-        var experienceTask = FireBaseScript.UpdateUser("experience", LocalUser.locUser.experience);
+        var levelTask = Database.UpdateUser("level", LocalUser.locUser.level);
+        var experienceTask = Database.UpdateUser("experience", LocalUser.locUser.experience);
         yield return new WaitUntil(() => levelTask.IsCompleted && experienceTask.IsCompleted);
         while (levelTask.IsFaulted) {
-            levelTask = FireBaseScript.UpdateUser("level", LocalUser.locUser.level);
+            levelTask = Database.UpdateUser("level", LocalUser.locUser.level);
             yield return new WaitUntil(() => levelTask.IsCompleted);
         }
         while (experienceTask.IsFaulted) {
-            experienceTask = FireBaseScript.UpdateUser("experience", LocalUser.locUser.experience);
+            experienceTask = Database.UpdateUser("experience", LocalUser.locUser.experience);
             yield return new WaitUntil(() => experienceTask.IsCompleted);
         }
     }
 
     private IEnumerator ChangeExperienceToLevelNeeded() {
         LocalUser.locUser.experienceToNextLevel = (int)Mathf.Ceil(LocalUser.locUser.experienceToNextLevel * 1.5f);
-        var task = FireBaseScript.UpdateUser("experienceToNextLevel", LocalUser.locUser.experienceToNextLevel);
+        var task = Database.UpdateUser("experienceToNextLevel", LocalUser.locUser.experienceToNextLevel);
         yield return new WaitUntil(() => task.IsCompleted);
         while (task.IsFaulted) {
-            task = FireBaseScript.UpdateUser("experienceToNextLevel", LocalUser.locUser.experienceToNextLevel);
+            task = Database.UpdateUser("experienceToNextLevel", LocalUser.locUser.experienceToNextLevel);
             yield return new WaitUntil(() => task.IsCompleted);
         }
     }

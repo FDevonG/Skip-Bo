@@ -32,7 +32,7 @@ public class FindFriends : MonoBehaviour
     }
 
     private IEnumerator FindUser() {
-        var task = FireBaseScript.GetUsers();
+        var task = Database.GetUsers();
         yield return new WaitUntil(() => task.IsCompleted);
         if (task.IsFaulted) {
             SetErrorMessage("Search failed");
@@ -44,7 +44,7 @@ public class FindFriends : MonoBehaviour
                     if (tempUser.email.ToUpper() == emailInput.GetComponent<InputField>().text.ToUpper()) {
                         bool blocked = false;
                         foreach (string userID in tempUser.blocked) {
-                            if (userID == FireBaseScript.AuthenitcationKey()) {
+                            if (userID == FirebaseAuthentication.AuthenitcationKey()) {
                                 blocked = true;
                                 break;
                             }
