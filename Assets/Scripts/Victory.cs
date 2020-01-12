@@ -15,9 +15,12 @@ public class Victory : MonoBehaviour
     [SerializeField] GameObject quitGamePanel;
     GameObject activePanel;
 
+    LevelSystem levelSystem;
+
     private void Start() {
         gameControl = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameControl>();
         activePanel = victoryPanel;
+        levelSystem = GameObject.FindGameObjectWithTag("LevelManager").GetComponent<LevelSystem>();
     }
 
     public void ChangePanel() {
@@ -84,8 +87,18 @@ public class Victory : MonoBehaviour
         if (gameControl.localPlayerPanel.GetComponent<PanelControl>().deck.transform.childCount == 0) {
             GameObject.FindGameObjectWithTag("StatsController").GetComponent<PlayerStatsController>().AddGameWon();
             announcer.YouWon();
+            if (PhotonNetwork.offlineMode) {
+                StartCoroutine(levelSystem.AddExperience(25));
+            } else {
+                StartCoroutine(levelSystem.AddExperience(50));
+            }
         } else {
             announcer.YouLost();
+            if (PhotonNetwork.offlineMode) {
+                StartCoroutine(levelSystem.AddExperience(10));
+            } else {
+                StartCoroutine(levelSystem.AddExperience(15));
+            }
         }
         for (int i = 0; i < playerStandings.Length; i++) {
             GameObject standingPanel = Instantiate(Resources.Load<GameObject>("PlayerStandingPanel") as GameObject);

@@ -25,6 +25,7 @@ public class Menu : MonoBehaviour
     public GameObject loadingScreen;
     public GameObject ratingPanel;
     public GameObject playerPanel;
+    public GameObject achievementsPanel;
 
     public GameObject errorPanel;
 
@@ -96,6 +97,10 @@ public class Menu : MonoBehaviour
             activatePanel.SwitchPanel(playerPanel);
             return;
         }
+        if (activatePanel.activePanel == achievementsPanel) {
+            activatePanel.SwitchPanel(playerPanel);
+            return;
+        }
         if (activatePanel.activePanel == failedToLogInPanel) {
             activatePanel.SwitchPanel(startMenu);
             return;
@@ -142,12 +147,27 @@ public class Menu : MonoBehaviour
                     activatePanel.SwitchPanel(errorPanel);
                 } else {
                     LocalUser.locUser = JsonUtility.FromJson<User>(task.Result);
-                    Debug.Log(LocalUser.locUser.achievments.Count);
-                    if (LocalUser.locUser.achievments.Count <= 0) {
-                        Debug.Log("pulling my hair ut");
+                    if (LocalUser.locUser.achievments.Count == 0) {
                         LocalUser.locUser.achievments = Achievments.BuildAchievmentsList();
-                        Debug.Log(LocalUser.locUser.achievments.Count);
                         StartCoroutine(Achievments.SaveAchievments());
+                    }
+                    if (LevelSystem.GetExperienceToNextLevel() == 0) {
+                        LocalUser.locUser.experienceToNextLevel = 100;
+                        var experienceNeededTask = Database.UpdateUser("experienceToNextLevel", LocalUser.locUser.experienceToNextLevel);
+                        yield return new WaitUntil(() => experienceNeededTask.IsCompleted);
+                        while (experienceNeededTask.IsFaulted) {
+                            experienceNeededTask = Database.UpdateUser("experienceToNextLevel", LocalUser.locUser.experienceToNextLevel);
+                            yield return new WaitUntil(() => experienceNeededTask.IsCompleted);
+                        }
+                    }
+                    if (LevelSystem.GetLevelNumber() == 0) {
+                        LocalUser.locUser.level = 1;
+                        var levelTask = Database.UpdateUser("level", LocalUser.locUser.level);
+                        yield return new WaitUntil(() => levelTask.IsCompleted);
+                        while (levelTask.IsFaulted) {
+                            levelTask = Database.UpdateUser("level", LocalUser.locUser.level);
+                            yield return new WaitUntil(() => levelTask.IsCompleted);
+                        }
                     }
                 }
             }

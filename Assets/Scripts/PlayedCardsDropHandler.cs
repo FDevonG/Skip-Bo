@@ -8,12 +8,14 @@ public class PlayedCardsDropHandler : MonoBehaviour, IDropHandler {
     Sounds sounds;
     GameControl gameControl;
     Announcer announcer;
+    LevelSystem levelSystem;
 
     private void Start() {
         photonView = GetComponent<PhotonView>();
         sounds = GameObject.FindGameObjectWithTag("SoundManager").GetComponent<Sounds>();
         gameControl = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameControl>();
         announcer = GameObject.FindGameObjectWithTag("Announcer").GetComponent<Announcer>();
+        levelSystem = GameObject.FindGameObjectWithTag("LevelManager").GetComponent<LevelSystem>();
     }
 
     public void OnDrop(PointerEventData eventData) {
@@ -35,10 +37,12 @@ public class PlayedCardsDropHandler : MonoBehaviour, IDropHandler {
             if (CardDragHandler.playerDeck) {
                 gameControl.CardRemovedOffDeck(panelControl);
                 announcer.PayCompliment();
+                StartCoroutine(levelSystem.AddExperience(15));
             }
 
             if (CardDragHandler.playerHand) {
                 gameControl.CheckRedeal(panelControl);
+                StartCoroutine(levelSystem.AddExperience(5));
             }
             if (CardDragHandler.itemBeingDragged.GetComponent<Card>().cardNumber == gameControl.wildNumber) {
                 if (PhotonNetwork.isMasterClient) {

@@ -7,6 +7,18 @@ public class LevelSystem : MonoBehaviour{
 
     private int levelCap = 50;
 
+    public static LevelSystem Instance { get; private set; }
+
+    private void Awake() {
+
+        if (Instance != null && Instance != this) {
+            Destroy(this.gameObject);
+        } else {
+            Instance = this;
+        }
+        DontDestroyOnLoad(gameObject);
+    }
+
     public IEnumerator AddExperience(int amount) {
         if (LocalUser.locUser.level <= levelCap) {
             LocalUser.locUser.experience += amount;
@@ -15,15 +27,6 @@ public class LevelSystem : MonoBehaviour{
             while (task.IsFaulted) {
                 task = Database.UpdateUser("experience", LocalUser.locUser.experience);
                 yield return new WaitUntil(() => task.IsCompleted);
-            }
-            if (GetExperienceToNextLevel() == 0) {
-                LocalUser.locUser.experienceToNextLevel = 100;
-                var experienceNeededTask = Database.UpdateUser("experienceToNextLevel", LocalUser.locUser.experienceToNextLevel);
-                yield return new WaitUntil(() => experienceNeededTask.IsCompleted);
-                while (experienceNeededTask.IsFaulted) {
-                    experienceNeededTask = Database.UpdateUser("experienceToNextLevel", LocalUser.locUser.experienceToNextLevel);
-                    yield return new WaitUntil(() => experienceNeededTask.IsCompleted);
-                }
             }
             while (LocalUser.locUser.experience >= GetExperienceToNextLevel()) {
                 // Enough experience to level up
@@ -36,6 +39,14 @@ public class LevelSystem : MonoBehaviour{
     private IEnumerator AddLevel() {
         LocalUser.locUser.experience -= GetExperienceToNextLevel();
         LocalUser.locUser.level++;
+
+        while (GameObject.FindGameObjectWithTag("NotificationPanel") != null) {
+            yield return new WaitForSeconds(0.5f);
+        }
+
+        GameObject notificationPanel = Instantiate(Resources.Load<GameObject>("NotificationPanel"));
+        notificationPanel.GetComponent<NotificationPanel>().SetText("You have reached level " + LocalUser.locUser.level.ToString());
+
         var levelTask = Database.UpdateUser("level", LocalUser.locUser.level);
         var experienceTask = Database.UpdateUser("experience", LocalUser.locUser.experience);
         yield return new WaitUntil(() => levelTask.IsCompleted && experienceTask.IsCompleted);
@@ -59,15 +70,15 @@ public class LevelSystem : MonoBehaviour{
         }
     }
 
-    public int GetLevelNumber() {
+    public static int GetLevelNumber() {
         return LocalUser.locUser.level;
     }
 
-    public int GetExperience() {
+    public static int GetExperience() {
         return LocalUser.locUser.experience;
     }
 
-    public int GetExperienceToNextLevel() {
+    public static int GetExperienceToNextLevel() {
         return LocalUser.locUser.experienceToNextLevel;
     }
 

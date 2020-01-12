@@ -24,12 +24,14 @@ public class User {
     public int experience;
     public int experienceToNextLevel;
 
-    public List<string[]> achievments = new List<string[]>();
+    public List<Achievment> achievments = new List<Achievment>();
 
     public User(string userEmail, string id) {
         email = userEmail;
         userID = id;
         achievments = Achievments.BuildAchievmentsList();
+        level = 1;
+        experienceToNextLevel = 100;
     }
 
     public User(string name, string uHair, string uFace, string Ukit, string Ubody) {
@@ -39,6 +41,8 @@ public class User {
         kit = Ukit;
         body = Ubody;
         achievments = Achievments.BuildAchievmentsList();
+        level = 1;
+        experienceToNextLevel = 100;
     }
 
     public User () {

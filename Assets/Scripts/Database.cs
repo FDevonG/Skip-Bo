@@ -26,17 +26,6 @@ public class Database : MonoBehaviour
         });
     }
 
-    //public static Task<bool> UpdateAchievments() {
-    //    DatabaseReference databaseReference = FirebaseDatabase.DefaultInstance.RootReference;
-    //    string achievmentsJson = "";
-    //    foreach(Achievment achievment in LocalUser.locUser.achievments) {
-    //        achievmentsJson += JsonUtility.ToJson(achievment);
-    //    }
-    //    return databaseReference.Child("users").Child(FirebaseAuthentication.AuthenitcationKey()).Child("achievments").SetValueAsync(achievmentsJson).ContinueWith((task) => {
-    //        return task.IsCompleted;
-    //    });
-    //}
-
     public static void DeleteAccountData() {
         DatabaseReference databaseReference = FirebaseDatabase.DefaultInstance.RootReference.Child("users").Child(FirebaseAuthentication.AuthenitcationKey());
         databaseReference.RemoveValueAsync();
@@ -46,6 +35,24 @@ public class Database : MonoBehaviour
         return FirebaseDatabase.DefaultInstance.GetReference("users").Child(FirebaseAuthentication.AuthenitcationKey()).GetValueAsync().ContinueWith(task => {
             return task.Result.GetRawJsonValue();
         });
+    }
+
+    public static Task<bool> SaveUserAchievments() {
+        DatabaseReference databaseReference = FirebaseDatabase.DefaultInstance.RootReference;
+        string json = "[";
+        foreach (Achievment achievment in LocalUser.locUser.achievments) {
+            json += JsonUtility.ToJson(achievment);
+        }
+        json += "]";
+        return databaseReference.Child("users").Child(FirebaseAuthentication.AuthenitcationKey()).Child("achievments").SetRawJsonValueAsync(json).ContinueWith((task) => {
+            return task.IsCompleted;
+        });
+    }
+
+    public static Task<DataSnapshot> GetUserAchievments() {
+        return FirebaseDatabase.DefaultInstance.RootReference.Child("users").Child(FirebaseAuthentication.AuthenitcationKey()).Child("achievments").GetValueAsync().ContinueWith((task => {
+            return task.Result;
+        }));
     }
 
     public static Task<DataSnapshot> GetUsers() {
