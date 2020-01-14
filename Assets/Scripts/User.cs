@@ -26,10 +26,12 @@ public class User {
 
     public List<Achievment> achievments = new List<Achievment>();
 
-    public User(string userEmail, string id) {
+    public int gamesWonInARow;
+
+    public User(string userEmail, string id, List<Achievment> ach) {
         email = userEmail;
         userID = id;
-        achievments = Achievments.BuildAchievmentsList();
+        achievments = ach;
         level = 1;
         experienceToNextLevel = 100;
     }
@@ -40,9 +42,6 @@ public class User {
         face = uFace;
         kit = Ukit;
         body = Ubody;
-        achievments = Achievments.BuildAchievmentsList();
-        level = 1;
-        experienceToNextLevel = 100;
     }
 
     public User () {

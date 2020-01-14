@@ -148,8 +148,8 @@ public class Menu : MonoBehaviour
                 } else {
                     LocalUser.locUser = JsonUtility.FromJson<User>(task.Result);
                     if (LocalUser.locUser.achievments.Count == 0) {
-                        LocalUser.locUser.achievments = Achievments.BuildAchievmentsList();
-                        StartCoroutine(Achievments.SaveAchievments());
+                        LocalUser.locUser.achievments = GameObject.FindGameObjectWithTag("AchievementManager").GetComponent<Achievments>().BuildAchievmentsList();
+                        StartCoroutine(GameObject.FindGameObjectWithTag("AchievementManager").GetComponent<Achievments>().SaveAchievments());
                     }
                     if (LevelSystem.GetExperienceToNextLevel() == 0) {
                         LocalUser.locUser.experienceToNextLevel = 100;

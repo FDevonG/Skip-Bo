@@ -38,6 +38,7 @@ public static class Friends
                 string[] addedFriend = new string[1];
                 addedFriend[0] = UserID;
                 GameObject.FindGameObjectWithTag("Chat").GetComponent<Chat>().AddFriend(addedFriend);
+                GameObject.FindGameObjectWithTag("AchievementManager").GetComponent<Achievments>().FreindAdded();
                 yield return "Friend added";
             }
         } else {

@@ -37,5 +37,4 @@ public class PlayerPrefsHandler {
     public static int GetGamesPlayed() {
         return PlayerPrefs.GetInt("gamesPlayed");
     }
-
 }
