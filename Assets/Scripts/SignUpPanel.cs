@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,13 +9,11 @@ public class SignUpPanel : MonoBehaviour
     public GameObject signUpPasswordInput;
     public GameObject signUpPasswordConfirmInput;
     public Text passwordText;
-    public Text signUpErrorText;
     private bool passwordsMatch = false;
 
     private void OnDisable() {
         passwordsMatch = false;
         signUpNewButton.interactable = false;
-        signUpErrorText.gameObject.SetActive(false);
         signUpEmailInput.GetComponent<InputField>().text = "";
         signUpPasswordInput.GetComponent<InputField>().text = "";
         signUpPasswordConfirmInput.GetComponent<InputField>().text = "";
@@ -28,14 +25,20 @@ public class SignUpPanel : MonoBehaviour
     }
 
     private IEnumerator CreatingNewAccount() {
-        var task = FireBaseScript.CreateNewAccount(signUpEmailInput.GetComponent<InputField>().text, signUpPasswordInput.GetComponent<InputField>().text);
+        var task = FirebaseAuthentication.CreateNewAccount(signUpEmailInput.GetComponent<InputField>().text, signUpPasswordInput.GetComponent<InputField>().text);
         yield return new WaitUntil(() => task.IsCompleted);
         if (task.IsFaulted) {
-            GameObject.FindGameObjectWithTag("GameManager").GetComponent<Menu>().signUpPanel.GetComponent<SignUpPanel>().ChangeSignUpErrorText(FireBaseScript.GetErrorMessage(task.Exception));
+            GetComponent<ErrorText>().SetError(FirebaseError.GetErrorMessage(task.Exception));
         } else {
-            User newUser = new User(signUpEmailInput.GetComponent<InputField>().text, FireBaseScript.AuthenitcationKey());
-            FireBaseScript.WriteNewUser(newUser);
-            GameObject.FindGameObjectWithTag("GameManager").GetComponent<ActivatePanel>().SwitchPanel(GameObject.FindGameObjectWithTag("GameManager").GetComponent<Menu>().characterCreationPanel);
+            User newUser = new User(signUpEmailInput.GetComponent<InputField>().text, FirebaseAuthentication.AuthenitcationKey(), GameObject.FindGameObjectWithTag("AchievementManager").GetComponent<Achievments>().BuildAchievmentsList());
+            var newUserTask = Database.WriteNewUser(newUser);
+            yield return new WaitUntil(() => newUserTask.IsCompleted);
+            if (newUserTask.IsFaulted) {
+                GetComponent<ErrorText>().SetError(FirebaseError.GetErrorMessage(newUserTask.Exception));
+            } else {
+                LocalUser.locUser = newUser;
+                GameObject.FindGameObjectWithTag("GameManager").GetComponent<ActivatePanel>().SwitchPanel(GameObject.FindGameObjectWithTag("GameManager").GetComponent<Menu>().characterCreationPanel);
+            }
         }
     }
 
@@ -67,11 +70,5 @@ public class SignUpPanel : MonoBehaviour
             passwordText.gameObject.SetActive(true);
             passwordsMatch = false;
         }
-    }
-
-    public void ChangeSignUpErrorText(string message) {
-        signUpErrorText.gameObject.SetActive(true);
-        signUpErrorText.text = message;
-        GameObject.FindGameObjectWithTag("Announcer").GetComponent<Announcer>().AnnouncerAnError();
     }
 }

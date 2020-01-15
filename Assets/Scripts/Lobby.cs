@@ -17,7 +17,7 @@ public class Lobby : MonoBehaviour {
     private void OnEnable() {
         UpdateWaitingPanel();
         roomNameText.text = "Room Name: " + PhotonNetwork.room.Name;
-        if (FireBaseScript.IsPlayerAnonymous()) {
+        if (FirebaseAuthentication.IsPlayerAnonymous()) {
             inviteFriendsButton.interactable = false;
         } else {
             inviteFriendsButton.interactable = true;

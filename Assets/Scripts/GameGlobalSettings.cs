@@ -1,7 +1,7 @@
 ﻿public static  class GameGlobalSettings
 {
     public static string Version() {
-        return "1.12";
+        return "1.13";
     }
 
     public static string PhotonAppID() {

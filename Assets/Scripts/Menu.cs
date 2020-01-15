@@ -6,6 +6,7 @@ public class Menu : MonoBehaviour
     public GameObject logInPanel;
     public GameObject signUpPanel;
     public GameObject startMenu;
+    public GameObject playGamePanel;
     public GameObject characterCreationPanel;
     public GameObject howToPlayPanel;
     public GameObject settingsPanel;
@@ -23,6 +24,10 @@ public class Menu : MonoBehaviour
     public GameObject leaderboardPanel;
     public GameObject loadingScreen;
     public GameObject ratingPanel;
+    public GameObject playerPanel;
+    public GameObject achievementsPanel;
+
+    public GameObject errorPanel;
 
     private ActivatePanel activatePanel;
 
@@ -69,7 +74,7 @@ public class Menu : MonoBehaviour
             return;
         }
         if (activatePanel.activePanel == characterCreationPanel) {
-            DoesPlayerExist();
+            StartCoroutine(DoesPlayerExist());
             return;
         }
         if (activatePanel.activePanel == howToPlayPanel) {
@@ -81,7 +86,7 @@ public class Menu : MonoBehaviour
             return;
         }
         if (activatePanel.activePanel == gameSetupPanel) {
-            activatePanel.SwitchPanel(startMenu);
+            activatePanel.SwitchPanel(playGamePanel);
             return;
         }
         if (activatePanel.activePanel == failedToConnectPanel) {
@@ -89,7 +94,11 @@ public class Menu : MonoBehaviour
             return;
         }
         if (activatePanel.activePanel == statsPanel) {
-            activatePanel.SwitchPanel(startMenu);
+            activatePanel.SwitchPanel(playerPanel);
+            return;
+        }
+        if (activatePanel.activePanel == achievementsPanel) {
+            activatePanel.SwitchPanel(playerPanel);
             return;
         }
         if (activatePanel.activePanel == failedToLogInPanel) {
@@ -113,37 +122,73 @@ public class Menu : MonoBehaviour
             return;
         }
         if (activatePanel.activePanel == leaderboardPanel) {
-            activatePanel.SwitchPanel(statsPanel);
+            activatePanel.SwitchPanel(startMenu);
+            return;
+        }
+        if (activatePanel.activePanel == playGamePanel) {
+            activatePanel.SwitchPanel(startMenu);
+            return;
+        }
+        if (activatePanel.activePanel == playerPanel) {
+            activatePanel.SwitchPanel(startMenu);
             return;
         }
     }
 
-    private IEnumerator DoesPlayerExist() {
-        if (!FireBaseScript.IsPlayerLoggedIn()) {
-            //canvas.gameObject.SetActive(true);
+    public IEnumerator DoesPlayerExist() {
+        if (!FirebaseAuthentication.IsPlayerLoggedIn()) {
             activatePanel.SwitchPanel(startGamePanel);
         } else {
             if (LocalUser.locUser == null) {
                 activatePanel.SwitchPanel(loadingScreen);
-                yield return StartCoroutine(LocalUser.LoadUser());
+                var task = Database.GetCurrentUser();
+                yield return new WaitUntil(() => task.IsCompleted);
+                if (task.IsFaulted) {
+                    activatePanel.SwitchPanel(errorPanel);
+                } else {
+                    LocalUser.locUser = JsonUtility.FromJson<User>(task.Result);
+                    if (LocalUser.locUser.achievments.Count == 0) {
+                        LocalUser.locUser.achievments = GameObject.FindGameObjectWithTag("AchievementManager").GetComponent<Achievments>().BuildAchievmentsList();
+                        StartCoroutine(GameObject.FindGameObjectWithTag("AchievementManager").GetComponent<Achievments>().SaveAchievments());
+                    }
+                    if (LevelSystem.GetExperienceToNextLevel() == 0) {
+                        LocalUser.locUser.experienceToNextLevel = 100;
+                        var experienceNeededTask = Database.UpdateUser("experienceToNextLevel", LocalUser.locUser.experienceToNextLevel);
+                        yield return new WaitUntil(() => experienceNeededTask.IsCompleted);
+                        while (experienceNeededTask.IsFaulted) {
+                            experienceNeededTask = Database.UpdateUser("experienceToNextLevel", LocalUser.locUser.experienceToNextLevel);
+                            yield return new WaitUntil(() => experienceNeededTask.IsCompleted);
+                        }
+                    }
+                    if (LevelSystem.GetLevelNumber() == 0) {
+                        LocalUser.locUser.level = 1;
+                        var levelTask = Database.UpdateUser("level", LocalUser.locUser.level);
+                        yield return new WaitUntil(() => levelTask.IsCompleted);
+                        while (levelTask.IsFaulted) {
+                            levelTask = Database.UpdateUser("level", LocalUser.locUser.level);
+                            yield return new WaitUntil(() => levelTask.IsCompleted);
+                        }
+                    }
+                }
             }
-            if (LocalUser.locUser.friends.Count > 0) {
-                StartCoroutine(Friends.GetStartFriends());
-            }
-            //canvas.gameObject.SetActive(true);
-            if (string.IsNullOrEmpty(LocalUser.locUser.userName)) {
-                activatePanel.SwitchPanel(characterCreationPanel);
-            } else {
-                PhotonPlayerSetup.BuildPhotonPlayer(PhotonNetwork.player, LocalUser.locUser);
-                GameObject.FindGameObjectWithTag("NetworkManager").GetComponent<PhotonNetworking>().ConnectToPhoton();
-                if (!Rating.CheckRated()) {
-                    if (Rating.CheckGamesPlayed()) {
-                        activatePanel.SwitchPanel(ratingPanel);
+            if (LocalUser.locUser != null) {
+                if (LocalUser.locUser.friends.Count > 0) {
+                    StartCoroutine(Friends.GetStartFriends());
+                }
+                if (string.IsNullOrEmpty(LocalUser.locUser.userName) || string.IsNullOrWhiteSpace(LocalUser.locUser.userName)) {
+                    activatePanel.SwitchPanel(characterCreationPanel);
+                } else {
+                    PhotonPlayerSetup.BuildPhotonPlayer(PhotonNetwork.player, LocalUser.locUser);
+                    GameObject.FindGameObjectWithTag("NetworkManager").GetComponent<PhotonNetworking>().ConnectToPhoton();
+                    if (!Rating.CheckRated()) {
+                        if (Rating.CheckGamesPlayed()) {
+                            activatePanel.SwitchPanel(ratingPanel);
+                        } else {
+                            activatePanel.SwitchPanel(startMenu);
+                        }
                     } else {
                         activatePanel.SwitchPanel(startMenu);
                     }
-                } else {
-                    activatePanel.SwitchPanel(startMenu);
                 }
             }
         }

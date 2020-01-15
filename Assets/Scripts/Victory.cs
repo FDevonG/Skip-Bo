@@ -11,8 +11,31 @@ public class Victory : MonoBehaviour
     public GameObject panelsParent;
     public GameObject[] children;
 
+    [SerializeField] GameObject victoryPanel;
+    [SerializeField] GameObject quitGamePanel;
+    GameObject activePanel;
+
+    LevelSystem levelSystem;
+    Achievments achievments;
+
     private void Start() {
         gameControl = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameControl>();
+        activePanel = victoryPanel;
+        levelSystem = GameObject.FindGameObjectWithTag("LevelManager").GetComponent<LevelSystem>();
+        achievments = GameObject.FindGameObjectWithTag("AchievementManager").GetComponent<Achievments>();
+    }
+
+    public void ChangePanel() {
+        if (activePanel == victoryPanel) {
+            victoryPanel.SetActive(false);
+            quitGamePanel.SetActive(true);
+            activePanel = quitGamePanel;
+        }
+        if (activePanel == quitGamePanel) {
+            quitGamePanel.SetActive(false);
+            victoryPanel.SetActive(true);
+            activePanel = victoryPanel;
+        }
     }
 
     public int[] GetPlayerStandings() {
@@ -66,9 +89,25 @@ public class Victory : MonoBehaviour
         if (gameControl.localPlayerPanel.GetComponent<PanelControl>().deck.transform.childCount == 0) {
             GameObject.FindGameObjectWithTag("StatsController").GetComponent<PlayerStatsController>().AddGameWon();
             announcer.YouWon();
+            if (PhotonNetwork.offlineMode) {
+                StartCoroutine(levelSystem.AddExperience(25));
+                StartCoroutine(achievments.UnlockAchievement("Champion"));
+            } else {
+                StartCoroutine(levelSystem.AddExperience(50));
+                StartCoroutine(achievments.UnlockAchievement("Champion"));
+                StartCoroutine(achievments.UnlockAchievement("Online champion"));
+            }
+            LocalUser.locUser.gamesWonInARow++;
         } else {
             announcer.YouLost();
+            if (PhotonNetwork.offlineMode) {
+                StartCoroutine(levelSystem.AddExperience(10));
+            } else {
+                StartCoroutine(levelSystem.AddExperience(15));
+            }
+            LocalUser.locUser.gamesWonInARow = 0;
         }
+        StartCoroutine(achievments.GamesWon());
         for (int i = 0; i < playerStandings.Length; i++) {
             GameObject standingPanel = Instantiate(Resources.Load<GameObject>("PlayerStandingPanel") as GameObject);
             standingPanel.transform.SetParent(panelsParent.transform);
