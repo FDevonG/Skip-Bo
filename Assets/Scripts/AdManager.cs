@@ -6,7 +6,7 @@ public class AdManager : MonoBehaviour
 {
 
     private string gameId;
-    private bool testMode = true;
+    private bool testMode = false;
     private string regularPlacementString = "video";
     private string bannerPlacementString = "banner";
 

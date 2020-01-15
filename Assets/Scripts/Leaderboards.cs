@@ -11,6 +11,7 @@ public class Leaderboards : MonoBehaviour
     [SerializeField] Transform leadeboardInfoParent;
     List<GameObject> leaderboardPanels = new List<GameObject>();
     [SerializeField] Dropdown selection;
+    [SerializeField] GameObject failedText;
     [SerializeField] GameObject scrollHolder;
     Transform playersPanel;//this is used to store the users panel
 
@@ -20,6 +21,7 @@ public class Leaderboards : MonoBehaviour
 
     private void OnDisable() {
         DestroyPanels();
+        failedText.SetActive(false);
     }
 
     private void DestroyPanels() {
@@ -31,15 +33,15 @@ public class Leaderboards : MonoBehaviour
 
     public void BuildLeaderboards() {
         DestroyPanels();
-        GetComponent<ErrorText>().ClearError();
+        failedText.SetActive(false);
         StartCoroutine(BuildingLeaderboards());
     }
 
     private IEnumerator BuildingLeaderboards() {
-        var task = Database.GetUsers();
+        var task = FireBaseScript.GetUsers();
         yield return new WaitUntil(() => task.IsCompleted);
         if (task.IsFaulted) {
-            GetComponent<ErrorText>().SetError("Failed to load leaderboards");
+            failedText.SetActive(true);
             GameObject.FindGameObjectWithTag("Announcer").GetComponent<Announcer>().AnnouncerAnError();
         } else {
             SpawnLeaderPanels(GetArray(task.Result));

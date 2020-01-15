@@ -18,20 +18,20 @@ public class PlayerStatsController : MonoBehaviour
     public void AddGamePlayed() {
         if (PhotonNetwork.offlineMode) {
             LocalUser.locUser.offlineGamesPlayed++;
-            Database.UpdateUser("offlineGamesPlayed", LocalUser.locUser.offlineGamesPlayed);
+            FireBaseScript.UpdateUser("offlineGamesPlayed", LocalUser.locUser.offlineGamesPlayed);
         } else {
             LocalUser.locUser.onlineGamesPlayed++;
-            Database.UpdateUser("onlineGamesPlayed", LocalUser.locUser.onlineGamesPlayed);
+            FireBaseScript.UpdateUser("onlineGamesPlayed", LocalUser.locUser.onlineGamesPlayed);
         }
     }
 
     public void AddGameWon() {
         if (PhotonNetwork.offlineMode) {
             LocalUser.locUser.offlineGamesWon++;
-            Database.UpdateUser("offlineGamesWon", LocalUser.locUser.offlineGamesWon);
+            FireBaseScript.UpdateUser("offlineGamesWon", LocalUser.locUser.offlineGamesWon);
         } else {
             LocalUser.locUser.onlineGamesWon++;
-            Database.UpdateUser("onlineGamesWon", LocalUser.locUser.onlineGamesWon);
+            FireBaseScript.UpdateUser("onlineGamesWon", LocalUser.locUser.onlineGamesWon);
         }
     }
 }

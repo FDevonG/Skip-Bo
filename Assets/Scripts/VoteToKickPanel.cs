@@ -1,8 +1,10 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
-public class VoteToKickPanel : MonoBehaviour
+public class VoteToKickPanel : Photon.MonoBehaviour
 {
     [SerializeField] Text mainText;
     [SerializeField] Text timerText;

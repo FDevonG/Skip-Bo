@@ -19,8 +19,6 @@ TagManager:
   - ChatPanel
   - ChatButton
   - Announcer
-  - LevelManager
-  - AchievementManager
   layers:
   - Default
   - TransparentFX

@@ -4,6 +4,7 @@ using System.Collections;
 
 public class ForgotPassword : MonoBehaviour {
     public GameObject emailInput;
+    public Text infoText;
     public Button sendEmailButton;
 
     public void ForgotPass() {
@@ -11,13 +12,19 @@ public class ForgotPassword : MonoBehaviour {
     }
 
     private IEnumerator SendPasswordEmail() {
-        var task = FirebaseAuthentication.ForgotPassword(emailInput.GetComponent<InputField>().text);
+        var task = FireBaseScript.ForgotPassword(emailInput.GetComponent<InputField>().text);
         yield return new WaitUntil(() => task.IsCompleted);
         if (task.IsFaulted) {
-            GetComponent<ErrorText>().SetError(FirebaseError.GetErrorMessage(task.Exception));
+            GameObject.FindGameObjectWithTag("GameManager").GetComponent<Menu>().forgotPasswordPanel.GetComponent<ForgotPassword>().SetInfoText(FireBaseScript.GetErrorMessage(task.Exception));
         } else {
-            EmailSent();
+            GameObject.FindGameObjectWithTag("GameManager").GetComponent<Menu>().forgotPasswordPanel.GetComponent<ForgotPassword>().EmailSent();
         }
+    }
+
+    public void SetInfoText(string message) {
+        infoText.gameObject.SetActive(true);
+        infoText.text = message;
+        GameObject.FindGameObjectWithTag("Announcer").GetComponent<Announcer>().AnnouncerAnError();
     }
 
     public void ForgotPasswordEmail() {
@@ -37,10 +44,13 @@ public class ForgotPassword : MonoBehaviour {
     }
 
     public void EmailSent() {
-        GameObject.FindGameObjectWithTag("GameManager").GetComponent<ActivatePanel>().SwitchPanel(GameObject.FindGameObjectWithTag("GameManager").GetComponent<Menu>().logInPanel);
+        sendEmailButton.interactable = false;
+        SetInfoText("Email has been sent to " + emailInput.GetComponent<InputField>().text);
+        emailInput.GetComponent<InputField>().text = "";
     }
 
     private void OnDisable() {
+        infoText.gameObject.SetActive(false);
         emailInput.GetComponent<InputField>().text = "";
         sendEmailButton.interactable = false;
     }

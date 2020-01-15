@@ -8,7 +8,7 @@ public static class Friends
     public static List<User> friends = new List<User>();
 
     public static IEnumerator GetStartFriends() {
-        var usersTask = Database.GetUsers();
+        var usersTask = FireBaseScript.GetUsers();
         yield return new WaitUntil(() => usersTask.IsCompleted);
         foreach (DataSnapshot snap in usersTask.Result.Children) {//we are looping through the reseult passed back from the server to get the users
             User snapUser = JsonUtility.FromJson<User>(snap.GetRawJsonValue());//we convert each piece of data into a user to compare to the friends list
@@ -23,8 +23,8 @@ public static class Friends
     public static IEnumerator AddFriend(string UserID) {
         if (!string.IsNullOrEmpty(UserID) && !string.IsNullOrWhiteSpace(UserID)) {
             LocalUser.locUser.friends.Add(UserID);
-            var usersTask = Database.GetUsers();
-            var addFriendTask = Database.UpdateUser("friends", LocalUser.locUser.friends);
+            var usersTask = FireBaseScript.GetUsers();
+            var addFriendTask = FireBaseScript.UpdateUser("friends", LocalUser.locUser.friends);
             yield return new WaitUntil(() => addFriendTask.IsCompleted && usersTask.IsCompleted);
             if (addFriendTask.IsFaulted || usersTask.IsFaulted) {
                 yield return "Failed to add friend";
@@ -38,7 +38,6 @@ public static class Friends
                 string[] addedFriend = new string[1];
                 addedFriend[0] = UserID;
                 GameObject.FindGameObjectWithTag("Chat").GetComponent<Chat>().AddFriend(addedFriend);
-                GameObject.FindGameObjectWithTag("AchievementManager").GetComponent<Achievments>().FreindAdded();
                 yield return "Friend added";
             }
         } else {
@@ -64,13 +63,13 @@ public static class Friends
                 break;
             }
         }
-        Database.UpdateUser("friends", LocalUser.locUser.friends);
+        FireBaseScript.UpdateUser("friends", LocalUser.locUser.friends);
     }
 
     public static void BlockFriend(string userID) {
         if (!IsPlayerBlocked(userID)) {
             LocalUser.locUser.blocked.Add(userID);
-            Database.UpdateUser("blocked", LocalUser.locUser.blocked);
+            FireBaseScript.UpdateUser("blocked", LocalUser.locUser.blocked);
         }
     }
 
@@ -87,7 +86,7 @@ public static class Friends
 
     public static void UnblockPlayer(string userId) {
         LocalUser.locUser.blocked.Remove(userId);
-        Database.UpdateUser("blocked", LocalUser.locUser.blocked);
+        FireBaseScript.UpdateUser("blocked", LocalUser.locUser.blocked);
     }
 
     public static bool FriendAlreadyAdded(string userID) {

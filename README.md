@@ -34,7 +34,3 @@ Update 1.10
 Update 1.11
 -Login issue fixed
 -New music and sound effects
-
-Update 1.13
--Achievements added
--Level system added

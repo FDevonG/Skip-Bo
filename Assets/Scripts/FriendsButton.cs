@@ -6,7 +6,7 @@ public class FriendsButton : MonoBehaviour
     [SerializeField] GameObject friendButon;
 
     private void OnEnable() {
-        if (FirebaseAuthentication.IsPlayerAnonymous()) {
+        if (FireBaseScript.IsPlayerAnonymous()) {
             friendButon.GetComponent<Button>().interactable = false;
         } else {
             friendButon.GetComponent<Button>().interactable = true;

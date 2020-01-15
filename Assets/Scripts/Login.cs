@@ -4,11 +4,13 @@ using System.Collections;
 
 public class Login : MonoBehaviour {
 
+    public Text infoText;
     public GameObject emailInput;
     public GameObject passwordInput;
     public Button loginButton;
 
     private void OnDisable() {
+        infoText.gameObject.SetActive(false);
         emailInput.GetComponent<InputField>().text = "";
         passwordInput.GetComponent<InputField>().text = "";
         loginButton.interactable = false;
@@ -19,28 +21,34 @@ public class Login : MonoBehaviour {
     }
 
     private IEnumerator LogIn() {
-        var task = FirebaseAuthentication.LogIn(emailInput.GetComponent<InputField>().text, passwordInput.GetComponent<InputField>().text);
+        var task = FireBaseScript.LogIn(emailInput.GetComponent<InputField>().text, passwordInput.GetComponent<InputField>().text);
         yield return new WaitUntil(() => task.IsCompleted);
         if (task.IsFaulted) {
-            GetComponent<ErrorText>().SetError(FirebaseError.GetErrorMessage(task.Exception));
+            SetLoginInfoText(FireBaseScript.GetErrorMessage(task.Exception));
         } else {
-            var userTask = Database.GetCurrentUser();
+            var userTask = FireBaseScript.GetCurrentUser();
             yield return new WaitUntil(() => userTask.IsCompleted);
-            //User user = new User();
+            User user = new User();
             if (!userTask.IsFaulted) {
-                LocalUser.locUser = JsonUtility.FromJson<User>(userTask.Result);
-                if (string.IsNullOrEmpty(LocalUser.locUser.userName) || string.IsNullOrWhiteSpace(LocalUser.locUser.userName)) {
-                    GameObject.FindGameObjectWithTag("GameManager").GetComponent<ActivatePanel>().SwitchPanel(GameObject.FindGameObjectWithTag("GameManager").GetComponent<Menu>().characterCreationPanel);
-                } else {
-                    StartCoroutine(Friends.GetStartFriends());
-                    PhotonPlayerSetup.BuildPhotonPlayer(PhotonNetwork.player, LocalUser.locUser);
-                    GameObject.FindGameObjectWithTag("NetworkManager").GetComponent<PhotonNetworking>().ConnectToPhoton();
-                    GameObject.FindGameObjectWithTag("GameManager").GetComponent<ActivatePanel>().SwitchPanel(GameObject.FindGameObjectWithTag("GameManager").GetComponent<Menu>().startMenu);
-                }
+                user = JsonUtility.FromJson<User>(userTask.Result);
+            }
+            //StartCoroutine(GameObject.FindGameObjectWithTag("NetworkManager").GetComponent<PhotonNetworking>().ConnectToPhoton());
+            if (string.IsNullOrEmpty(user.userName) || string.IsNullOrWhiteSpace(user.userName)) {
+                GameObject.FindGameObjectWithTag("GameManager").GetComponent<ActivatePanel>().SwitchPanel(GameObject.FindGameObjectWithTag("GameManager").GetComponent<Menu>().characterCreationPanel);
             } else {
-                GetComponent<ErrorText>().SetError(FirebaseError.GetErrorMessage(userTask.Exception));
-            }            
+                yield return StartCoroutine(LocalUser.LoadUser());
+                StartCoroutine(Friends.GetStartFriends());
+                PhotonPlayerSetup.BuildPhotonPlayer(PhotonNetwork.player, LocalUser.locUser);
+                GameObject.FindGameObjectWithTag("NetworkManager").GetComponent<PhotonNetworking>().ConnectToPhoton();
+                GameObject.FindGameObjectWithTag("GameManager").GetComponent<ActivatePanel>().SwitchPanel(GameObject.FindGameObjectWithTag("GameManager").GetComponent<Menu>().startMenu);
+            }
         }
+    }
+
+    public void SetLoginInfoText(string message) {
+        infoText.gameObject.SetActive(true);
+        infoText.text = message;
+        GameObject.FindGameObjectWithTag("Announcer").GetComponent<Announcer>().AnnouncerAnError();
     }
 
     public void LoginButtonCheck() {

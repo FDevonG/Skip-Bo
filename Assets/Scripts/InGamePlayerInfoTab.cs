@@ -49,7 +49,7 @@ public class InGamePlayerInfoTab : MonoBehaviour {
         }
 
         //here we will check to see if we are logged in anonoum and set the buttons acordingly
-        if (FirebaseAuthentication.IsPlayerAnonymous()) {
+        if (FireBaseScript.IsPlayerAnonymous()) {
             blockButton.interactable = false;
             addFriendButton.interactable = false;
         } else {

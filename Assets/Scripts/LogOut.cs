@@ -3,12 +3,12 @@
 public class LogOut : MonoBehaviour
 {
     public void LogOutOfGame() {
-        if (FirebaseAuthentication.IsPlayerAnonymous()) {
-            Database.DeleteAccountData();
-            FirebaseAuthentication.DeleteAccount();
+        if (FireBaseScript.IsPlayerAnonymous()) {
+            FireBaseScript.DeleteAccountData();
+            FireBaseScript.DeleteAccount();
         }
         PhotonNetwork.Disconnect();
         GameObject.FindGameObjectWithTag("Chat").GetComponent<Chat>().Disconnect();
-        FirebaseAuthentication.SignOut();
+        FireBaseScript.SignOut();
     }
 }

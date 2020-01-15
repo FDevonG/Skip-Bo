@@ -8,20 +8,14 @@ public class GuestLogin : MonoBehaviour
     }
 
     private IEnumerator LoginInAnon() {
-        var task = FirebaseAuthentication.LogInAnonymous();
+        var task = FireBaseScript.LogInAnonymous();
         yield return new WaitUntil(() => task.IsCompleted);
         if (task.IsFaulted) {
-            GetComponent<ErrorText>().SetError(FirebaseError.GetErrorMessage(task.Exception));
+            GameObject.FindGameObjectWithTag("GameManager").GetComponent<Menu>().logInPanel.GetComponent<Login>().SetLoginInfoText(FireBaseScript.GetErrorMessage(task.Exception));
         } else {
-            User newUser = new User("", FirebaseAuthentication.AuthenitcationKey(), GameObject.FindGameObjectWithTag("AchievementManager").GetComponent<Achievments>().BuildAchievmentsList());
-            var newUserTask = Database.WriteNewUser(newUser);
-            yield return new WaitUntil(() => newUserTask.IsCompleted);
-            if (newUserTask.IsFaulted) {
-                GetComponent<ErrorText>().SetError(FirebaseError.GetErrorMessage(newUserTask.Exception));
-            } else {
-                LocalUser.locUser = newUser;
-                GameObject.FindGameObjectWithTag("GameManager").GetComponent<ActivatePanel>().SwitchPanel(GameObject.FindGameObjectWithTag("GameManager").GetComponent<Menu>().characterCreationPanel);
-            }
+            User newUser = new User("", FireBaseScript.AuthenitcationKey());
+            FireBaseScript.WriteNewUser(newUser);
+            GameObject.FindGameObjectWithTag("GameManager").GetComponent<ActivatePanel>().SwitchPanel(GameObject.FindGameObjectWithTag("GameManager").GetComponent<Menu>().characterCreationPanel);
         }
     }
 }

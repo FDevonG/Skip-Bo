@@ -20,7 +20,7 @@ public class BlockedPanel : MonoBehaviour
         if (LocalUser.locUser.blocked.Count <= 0) {
             yield return null;
         }
-        var userTask = Database.GetUsers();
+        var userTask = FireBaseScript.GetUsers();
         yield return new WaitUntil(() => userTask.IsCompleted);
         if (!userTask.IsFaulted) {
             foreach (string blocked in LocalUser.locUser.blocked) {
