@@ -169,7 +169,7 @@ PlayerSettings:
     Android: com.FogBankGames.SkipBo
     iPhone: com.FogBankGames.SkipBo
   buildNumber: {}
-  AndroidBundleVersionCode: 27
+  AndroidBundleVersionCode: 28
   AndroidMinSdkVersion: 16
   AndroidTargetSdkVersion: 0
   AndroidPreferredInstallLocation: 1
