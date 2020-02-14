@@ -53,7 +53,7 @@ public class Chat : MonoBehaviour, IChatClientListener
     }
 
     public void OnDisconnected() {
-        throw new System.NotImplementedException();
+        Debug.Log("Disconected from chat");
     }
 
     public void OnGetMessages(string channelName, string[] senders, object[] messages) {

@@ -12,6 +12,8 @@ public class Login : MonoBehaviour {
         emailInput.GetComponent<InputField>().text = "";
         passwordInput.GetComponent<InputField>().text = "";
         loginButton.interactable = false;
+        ShowLoginChildren();
+        GetComponent<ErrorText>().ClearError();
     }
 
     public void LogInButtonPressed() {
@@ -20,8 +22,12 @@ public class Login : MonoBehaviour {
 
     private IEnumerator LogIn() {
         var task = FirebaseAuthentication.LogIn(emailInput.GetComponent<InputField>().text, passwordInput.GetComponent<InputField>().text);
+        HideLoginChildren();
+        GameObject.FindGameObjectWithTag("GameManager").GetComponent<Menu>().loadingScreen.SetActive(true);
         yield return new WaitUntil(() => task.IsCompleted);
         if (task.IsFaulted) {
+            GameObject.FindGameObjectWithTag("GameManager").GetComponent<Menu>().loadingScreen.SetActive(false);
+            ShowLoginChildren();
             GetComponent<ErrorText>().SetError(FirebaseError.GetErrorMessage(task.Exception));
         } else {
             var userTask = Database.GetCurrentUser();
@@ -30,16 +36,36 @@ public class Login : MonoBehaviour {
             if (!userTask.IsFaulted) {
                 LocalUser.locUser = JsonUtility.FromJson<User>(userTask.Result);
                 if (string.IsNullOrEmpty(LocalUser.locUser.userName) || string.IsNullOrWhiteSpace(LocalUser.locUser.userName)) {
+                    GameObject.FindGameObjectWithTag("GameManager").GetComponent<Menu>().loadingScreen.SetActive(false);
                     GameObject.FindGameObjectWithTag("GameManager").GetComponent<ActivatePanel>().SwitchPanel(GameObject.FindGameObjectWithTag("GameManager").GetComponent<Menu>().characterCreationPanel);
                 } else {
                     StartCoroutine(Friends.GetStartFriends());
                     PhotonPlayerSetup.BuildPhotonPlayer(PhotonNetwork.player, LocalUser.locUser);
                     GameObject.FindGameObjectWithTag("NetworkManager").GetComponent<PhotonNetworking>().ConnectToPhoton();
+                    GameObject.FindGameObjectWithTag("GameManager").GetComponent<Menu>().loadingScreen.SetActive(false);
                     GameObject.FindGameObjectWithTag("GameManager").GetComponent<ActivatePanel>().SwitchPanel(GameObject.FindGameObjectWithTag("GameManager").GetComponent<Menu>().startMenu);
                 }
             } else {
                 GetComponent<ErrorText>().SetError(FirebaseError.GetErrorMessage(userTask.Exception));
+                GameObject.FindGameObjectWithTag("GameManager").GetComponent<Menu>().loadingScreen.SetActive(false);
+                ShowLoginChildren();
             }            
+        }
+    }
+
+    void HideLoginChildren()
+    {
+        for(int i = 0; i < transform.childCount; i++)
+        {
+            transform.GetChild(i).gameObject.SetActive(false);
+        }
+    }
+
+    void ShowLoginChildren()
+    {
+        for (int i = 0; i < transform.childCount; i++)
+        {
+            transform.GetChild(i).gameObject.SetActive(true);
         }
     }
 
