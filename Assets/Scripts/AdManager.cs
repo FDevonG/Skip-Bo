@@ -31,7 +31,7 @@ public class AdManager : MonoBehaviour
     }
 
     private void Start() {
-        StartCoroutine(ShowBannerAdd());
+        //StartCoroutine(ShowBannerAdd());
     }
 
     public IEnumerator ShowRegularAd() {

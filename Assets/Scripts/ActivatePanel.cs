@@ -11,4 +11,5 @@ public class ActivatePanel : MonoBehaviour
         panel.SetActive(true);
         activePanel = panel;
     }
+
 }

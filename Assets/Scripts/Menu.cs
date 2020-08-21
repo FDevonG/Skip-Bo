@@ -78,7 +78,7 @@ public class Menu : MonoBehaviour
             return;
         }
         if (activatePanel.activePanel == howToPlayPanel) {
-            activatePanel.SwitchPanel(startMenu);
+            activatePanel.SwitchPanel(settingsPanel);
             return;
         }
         if (activatePanel.activePanel == settingsPanel) {
