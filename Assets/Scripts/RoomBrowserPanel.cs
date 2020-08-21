@@ -10,9 +10,9 @@ public class RoomBrowserPanel : MonoBehaviour
     RoomInfo gameInfo;
 
     public void SetText(RoomInfo game) {
-        nameText.text = game.Name;
-        cardsText.text = game.CustomProperties[PhotonRooms.DeckSize()].ToString();
-        playersText.text = game.MaxPlayers.ToString();
+        nameText.text = "Name : " + game.Name;
+        cardsText.text = "Cards : " + game.CustomProperties[PhotonRooms.DeckSize()].ToString();
+        playersText.text = "Players : " + game.MaxPlayers.ToString();
         gameInfo = game;
     }
 

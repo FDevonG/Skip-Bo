@@ -49,8 +49,26 @@ public class RoomBrowser : MonoBehaviour
         roomButtons.Clear();
     }
 
+    public void AdjustFilter(int filterAmmount, bool toggleValue)
+    {
+        if (toggleValue)
+            SetFilter(filterAmmount);
+        else
+            RemoveFilter(filterAmmount);
+    }
+
     public void SetFilter(int filterAmmount) {
         filters.Add(filterAmmount);
+    }
+
+    public void RemoveFilter(int filterAmmount)
+    {
+        foreach (int filter in filters)
+            if (filter == filterAmmount)
+            {
+                filters.Remove(filter);
+                break;
+            }
     }
 
     public void DisableButton(Button button) {
