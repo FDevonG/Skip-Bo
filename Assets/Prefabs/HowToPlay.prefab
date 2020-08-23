@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 500440140941997109}
   - component: {fileID: 500440140941997115}
   - component: {fileID: 500440140941997114}
+  - component: {fileID: 2953597921607907440}
   m_Layer: 5
   m_Name: HowToPlay
   m_TagString: Untagged
@@ -120,6 +121,26 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &2953597921607907440
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 500440140941997111}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 306cc8c2b49d7114eaa3623786fc2126, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_IgnoreLayout: 0
+  m_MinWidth: -1
+  m_MinHeight: -1
+  m_PreferredWidth: 780
+  m_PreferredHeight: 1100
+  m_FlexibleWidth: -1
+  m_FlexibleHeight: -1
+  m_LayoutPriority: 1
 --- !u!1 &500440141879685786
 GameObject:
   m_ObjectHideFlags: 0
@@ -186,26 +207,27 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_FontData:
-    m_Font: {fileID: 12800000, guid: 921bb0cf734cd4126b89959413dba8d5, type: 3}
-    m_FontSize: 50
+    m_Font: {fileID: 12800000, guid: d9f6f95f5c3f94e46aa5e7db047454f2, type: 3}
+    m_FontSize: 32
     m_FontStyle: 0
     m_BestFit: 0
-    m_MinSize: 5
+    m_MinSize: 3
     m_MaxSize: 75
     m_Alignment: 0
     m_AlignByGeometry: 0
     m_RichText: 1
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
-    m_LineSpacing: 1
+    m_LineSpacing: 2
   m_Text: "Objective: Be the first player to play every card in your stock pile.\n\nGameplay:
     Each player is dealt out anywhere from 5-30 cards (choose less cards for a shorter
     game). These cards are the player\u2019s stock pile. \n\nPlayers begin each turn
-    with a hand of 5. Strategically play cards from this hand to build stacks in numerical
-    order from 1-12, being sure to use the cards from your stock pile along the way.
-    End each turn by placing one card from your hand into one of your four discard
-    piles. These cards can also be used to build the stacks of 12 during your turn.
-    \n\nWinning: The first player to play all of their stock pile cards wins the game."
+    with a hand of 5. Strategically play cards from this hand to build stacks in
+    numerical order from 1-12, being sure to use the cards from your stock pile along
+    the way. End each turn by placing one card from your hand into one of your four
+    discard piles. These cards can also be used to build the stacks of 12 during
+    your turn. \n\nWinning: The first player to play all of their stock pile cards
+    wins the game."
 --- !u!114 &500440141879685785
 MonoBehaviour:
   m_ObjectHideFlags: 0

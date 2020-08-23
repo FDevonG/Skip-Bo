@@ -6,6 +6,23 @@ using UnityEngine;
 
 public class FirebaseAuthentication : MonoBehaviour
 {
+
+    public static FirebaseAuthentication Instance { get; private set; }
+
+    private void Awake()
+    {
+
+        if (Instance != null && Instance != this)
+        {
+            Destroy(this.gameObject);
+        }
+        else
+        {
+            Instance = this;
+        }
+        DontDestroyOnLoad(gameObject);
+    }
+
     public static string AuthenitcationKey() {
         return FirebaseAuth.DefaultInstance.CurrentUser.UserId;
     }
