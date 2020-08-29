@@ -7,7 +7,7 @@ public class ErrorText : MonoBehaviour
 
     private void Start()
     {
-        FindErrorText(gameObject);
+        
     }
 
     private void OnDisable() {
@@ -31,12 +31,15 @@ public class ErrorText : MonoBehaviour
     }
 
     public void SetError(string message) {
+        if(errorText == null)
+            FindErrorText(gameObject);
         errorText.text = message;
         errorText.gameObject.SetActive(true);
         GameObject.FindGameObjectWithTag("Announcer").GetComponent<Announcer>().AnnouncerAnError();
     }
 
     public void ClearError() {
-        errorText.gameObject.SetActive(false);
+        if (errorText != null)
+            errorText.gameObject.SetActive(false);
     }
 }

@@ -57,6 +57,7 @@ public class Database : MonoBehaviour
 
     public static Task<DataSnapshot> GetUsers() {
         return FirebaseDatabase.DefaultInstance.GetReference("users").GetValueAsync().ContinueWith(task => {
+            Debug.Log(task.Result);
             return task.Result;
         });
     }

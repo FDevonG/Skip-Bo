@@ -15,9 +15,16 @@ public class InGamePlayerInfoTab : MonoBehaviour {
 
     PhotonPlayer photonPlayer;
 
+    Color backgroundColor;
+
+    private void Start()
+    {
+        backgroundColor = GetComponent<Image>().color;
+    }
+
     public void SetUpPanel(PhotonPlayer sentPhotonPlayer) {
         photonPlayer = sentPhotonPlayer;
-        gameObject.GetComponent<Image>().color = new Color(0.8313726f, 0.7137255f, 0.5411765f, 1);
+        gameObject.GetComponent<Image>().color = new Color(backgroundColor.r, backgroundColor.g, backgroundColor.b, 1);
         nameText.gameObject.SetActive(true);
         infoText.gameObject.SetActive(false);
         blockButton.gameObject.SetActive(true);
@@ -126,7 +133,7 @@ public class InGamePlayerInfoTab : MonoBehaviour {
         blockButton.gameObject.SetActive(false);
         addFriendButton.gameObject.SetActive(false);
         closeButton.gameObject.SetActive(false);
-        gameObject.GetComponent<Image>().color = new Color(0.8313726f, 0.7137255f, 0.5411765f, 0);
+        gameObject.GetComponent<Image>().color = new Color(backgroundColor.r, backgroundColor.g, backgroundColor.b, 0);
     }
 
     private void SetInfoText(string message) {

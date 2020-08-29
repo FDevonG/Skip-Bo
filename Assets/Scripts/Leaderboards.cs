@@ -42,6 +42,7 @@ public class Leaderboards : MonoBehaviour
             GetComponent<ErrorText>().SetError("Failed to load leaderboards");
             GameObject.FindGameObjectWithTag("Announcer").GetComponent<Announcer>().AnnouncerAnError();
         } else {
+            Debug.Log(task);
             SpawnLeaderPanels(GetArray(task.Result));
         }
     }

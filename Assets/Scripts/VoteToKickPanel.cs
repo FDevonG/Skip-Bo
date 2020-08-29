@@ -17,6 +17,13 @@ public class VoteToKickPanel : MonoBehaviour
 
     PhotonPlayer photonPlayer;
 
+    Color backgroundColor;
+
+    private void Start()
+    {
+        backgroundColor = GetComponent<Image>().color;
+    }
+
     public IEnumerator SetUpKickPanel(PhotonPlayer player) {
         if (player != PhotonNetwork.player) {
             while (CardDragHandler.itemBeingDragged != null) {
@@ -26,7 +33,7 @@ public class VoteToKickPanel : MonoBehaviour
             timerText.gameObject.SetActive(true);
             yesButton.gameObject.SetActive(true);
             noButton.gameObject.SetActive(true);
-            gameObject.GetComponent<Image>().color = new Color(0.8313726f, 0.7137255f, 0.5411765f, 1);
+            gameObject.GetComponent<Image>().color = new Color(backgroundColor.r, backgroundColor.g, backgroundColor.b, 1);
             mainText.text = "Kick " + (string)player.CustomProperties["name"] + "?";
             timeLeft = 10;
             timerText.text = timeLeft.ToString();
@@ -89,7 +96,7 @@ public class VoteToKickPanel : MonoBehaviour
         timerText.gameObject.SetActive(false);
         yesButton.gameObject.SetActive(false);
         noButton.gameObject.SetActive(false);
-        gameObject.GetComponent<Image>().color = new Color(0.8313726f, 0.7137255f, 0.5411765f, 0);
+        gameObject.GetComponent<Image>().color = new Color(backgroundColor.r, backgroundColor.g, backgroundColor.b, 0);
     }
 
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info) {
