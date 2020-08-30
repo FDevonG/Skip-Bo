@@ -48,7 +48,8 @@ public class GameSetup : MonoBehaviour {
         for (int t = 0; t < 18; t++) {
             tempDeck.Add(gameControl.wildNumber);
         }
-        tempDeck = ShuffleDeck(tempDeck);//shuffle the deck after building it
+        for(int i = 0; i < 3; i++)
+            tempDeck = ShuffleDeck(tempDeck);//shuffle the deck after building it
         return tempDeck;
     }
 
@@ -250,7 +251,7 @@ public class GameSetup : MonoBehaviour {
         if (panel.GetComponent<PanelControl>().deck.transform.childCount == (int)PhotonNetwork.room.CustomProperties[PhotonRooms.DeckSize()]) {
             card.GetComponent<Card>().SetUpCard(card.GetComponent<Card>().cardNumber);
         }
-        panel.GetComponent<PanelControl>().cardsLeftText.text = (int)PhotonNetwork.room.CustomProperties[PhotonRooms.DeckSize()] + " Cards Left!";
+        panel.GetComponent<PanelControl>().cardsLeftText.text = (int)PhotonNetwork.room.CustomProperties[PhotonRooms.DeckSize()] + " Cards Left";
     }
 
     [PunRPC]

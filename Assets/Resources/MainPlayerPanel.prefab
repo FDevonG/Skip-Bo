@@ -1038,7 +1038,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 30 Cards Left!
+  m_Text: 30 Cards Left
 --- !u!114 &1147126459117118824
 MonoBehaviour:
   m_ObjectHideFlags: 0

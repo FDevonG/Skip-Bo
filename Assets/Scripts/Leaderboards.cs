@@ -14,22 +14,51 @@ public class Leaderboards : MonoBehaviour
     [SerializeField] GameObject scrollHolder;
     Transform playersPanel;//this is used to store the users panel
 
+    [SerializeField] GameObject loadingPanel;
+
+    List<List<Leaderboard>> leaderboards = new List<List<Leaderboard>>();
+
+    [SerializeField] Button[] pageButtons;
+    [SerializeField] Button firstPageButton;
+    [SerializeField] Button lastPageButton;
+
+    int pageNumber = 0;
+
+    List<int> buttonNumbers = new List<int>();
+
     private void OnEnable() {
         BuildLeaderboards();
     }
 
     private void OnDisable() {
+        leaderboards.Clear();
         DestroyPanels();
+        loadingPanel.SetActive(false);
+        firstPageButton.interactable = false;
+        lastPageButton.interactable = false;
+        TurnOffPageButtons();
+    }
+
+    void TurnOffPageButtons()
+    {
+        foreach (Button button in pageButtons)
+        {
+            button.GetComponentInChildren<Text>().text = "";
+            button.gameObject.SetActive(false);
+        }
     }
 
     private void DestroyPanels() {
         foreach (GameObject child in leaderboardPanels) {
             Destroy(child);
         }
+        TurnOffPageButtons();
         leaderboardPanels.Clear();
+        loadingPanel.SetActive(true);
     }
 
     public void BuildLeaderboards() {
+        leaderboards.Clear();
         DestroyPanels();
         GetComponent<ErrorText>().ClearError();
         StartCoroutine(BuildingLeaderboards());
@@ -38,22 +67,137 @@ public class Leaderboards : MonoBehaviour
     private IEnumerator BuildingLeaderboards() {
         var task = Database.GetUsers();
         yield return new WaitUntil(() => task.IsCompleted);
+        loadingPanel.SetActive(false);
         if (task.IsFaulted) {
             GetComponent<ErrorText>().SetError("Failed to load leaderboards");
             GameObject.FindGameObjectWithTag("Announcer").GetComponent<Announcer>().AnnouncerAnError();
         } else {
-            Debug.Log(task);
-            SpawnLeaderPanels(GetArray(task.Result));
+            DivideArray(GetArray(task.Result));
         }
     }
 
+    void DivideArray(List<Leaderboard> leaders)
+    {
+        int arrayCount = (leaders.Count / 100) + 1;
+        int firstPageNumberToGoTo = 0;
+        for (int i = 0; i < arrayCount; i++)
+        {
+            List<Leaderboard> newLeaderBoards = new List<Leaderboard>();
+            for (int x = 0; x < 100; x++)
+            {
+                if (leaders.Count > 0)
+                {
+                    newLeaderBoards.Add(leaders[0]);
+                    if (leaders[0].id == LocalUser.locUser.userID)
+                        firstPageNumberToGoTo = i;
+
+                    leaders.RemoveAt(0);
+                }
+                else
+                {
+                    break;
+                }
+            }
+            if(newLeaderBoards.Count > 0)
+                leaderboards.Add(newLeaderBoards);
+        }
+            pageNumber = firstPageNumberToGoTo;
+            SpawnLeaderPanels(leaderboards[firstPageNumberToGoTo]);
+            SetUpPageButtons();
+    }
+
+    public void FirstPage()
+    {
+        DestroyPanels();
+        pageNumber = 0;
+        SpawnLeaderPanels(leaderboards[pageNumber]);
+        firstPageButton.interactable = false;
+        SetUpPageButtons();
+    }
+
+    public void LastPage()
+    {
+        DestroyPanels();
+        pageNumber = leaderboards.Count - 1;
+        SpawnLeaderPanels(leaderboards[pageNumber]);
+        lastPageButton.interactable = false;
+        SetUpPageButtons();
+    }
+
+    public void ChangePage(int buttonPressed)
+    {
+        DestroyPanels();
+        pageNumber = buttonNumbers[buttonPressed];
+        SpawnLeaderPanels(leaderboards[pageNumber]);
+        SetUpPageButtons();
+    }
+
+    void SetUpPageButtons()
+    {
+        buttonNumbers.Clear();
+        
+        if (pageNumber <= 2)
+        {
+            buttonNumbers.Add(0);
+            buttonNumbers.Add(1);
+            buttonNumbers.Add(2);
+            buttonNumbers.Add(3);
+            buttonNumbers.Add(4);
+        }
+        else if (pageNumber >= leaderboards.Count - 2)
+        {
+            buttonNumbers.Add(leaderboards.Count - 4);
+            buttonNumbers.Add(leaderboards.Count - 3);
+            buttonNumbers.Add(leaderboards.Count - 2);
+            buttonNumbers.Add(leaderboards.Count - 1);
+            buttonNumbers.Add(leaderboards.Count);
+        }
+        else
+        {
+            buttonNumbers.Add(pageNumber - 2);
+            buttonNumbers.Add(pageNumber - 1);
+            buttonNumbers.Add(pageNumber);
+            buttonNumbers.Add(pageNumber + 1);
+            buttonNumbers.Add(pageNumber + 2);
+        }
+        
+        for (int i = 0; i < pageButtons.Length; i++)
+        {
+            if (leaderboards.Count > buttonNumbers[i])
+                pageButtons[i].gameObject.SetActive(true);
+            pageButtons[i].GetComponentInChildren<Text>().text = (buttonNumbers[i] + 1).ToString();
+            if(buttonNumbers[i] == pageNumber)
+            {
+                pageButtons[i].interactable = false;
+            }
+            else
+            {
+                pageButtons[i].interactable = true;
+            }
+        }
+
+        if (pageNumber == 0)
+            firstPageButton.interactable = false;
+        else
+            firstPageButton.interactable = true;
+
+        if (pageNumber == leaderboards.Count)
+            lastPageButton.interactable = false;
+        else
+            lastPageButton.interactable = true;
+
+    }
+
     private void SpawnLeaderPanels(List<Leaderboard> leaders) {
+        loadingPanel.SetActive(false);
+        bool userInList = false;
         for (int i = 0; i < leaders.Count; i++) {
             GameObject leaderboardPanel = Instantiate(Resources.Load<GameObject>("LeaderboardInfoPanel"), leadeboardInfoParent);
             leaderboardPanel.transform.localScale = new Vector3(1,1,1);
             leaderboardPanels.Add(leaderboardPanel);
             LeaderboardInfoPanel leaderboardInfoPanel = leaderboardPanel.GetComponent<LeaderboardInfoPanel>();
-            leaderboardInfoPanel.standingText.text = (i + 1).ToString() + ".";
+            leaderboardInfoPanel.standingText.text = leaders[i].standing.ToString();
+
             leaderboardInfoPanel.nameText.text = leaders[i].name;
             if (selection.value == 0) {
                 leaderboardInfoPanel.infoText.text = leaders[i].onlineWins.ToString();
@@ -68,13 +212,23 @@ public class Leaderboards : MonoBehaviour
                 leaderboardInfoPanel.infoText.text = leaders[i].offlineWinPercentage.ToString() + "%";
             }
             if (leaders[i].id == LocalUser.locUser.userID) {
+                userInList = true;
                 playersPanel = leaderboardPanel.transform;
                 leaderboardInfoPanel.standingText.color = new Color(0.3179769f, 0.008944447f, 0.6320754f, 1);
                 leaderboardInfoPanel.nameText.color = new Color(0.3179769f, 0.008944447f, 0.6320754f, 1);
                 leaderboardInfoPanel.infoText.color = new Color(0.3179769f, 0.008944447f, 0.6320754f, 1);
             }
         }
-        ScrollToPlayerPanel();
+        if (userInList)
+            ScrollToPlayerPanel();
+        else
+            ScrollToTop();
+    }
+
+    private void ScrollToTop()
+    {
+        Canvas.ForceUpdateCanvases();
+        leadeboardInfoParent.GetComponentInParent<ScrollRect>().normalizedPosition = new Vector2(0, 1);
     }
 
     private void ScrollToPlayerPanel() {
@@ -118,6 +272,10 @@ public class Leaderboards : MonoBehaviour
             listToReturn = arrayOfStats.OrderBy(leaderboard => leaderboard.offlineWinPercentage).ToList();
         }
         listToReturn.Reverse();
+        for (int i = 0; i < listToReturn.Count; i++)
+        {
+            listToReturn[i].standing = i + 1;
+        }
         return listToReturn;
     }
 
@@ -128,6 +286,7 @@ public class Leaderboards : MonoBehaviour
         public int offlineWins;
         public float offlineWinPercentage;
         public string id;
+        public int standing;
 
         public Leaderboard(string n, int onw, float onwp, int offw, float offwp, string ID) {
             name = n;

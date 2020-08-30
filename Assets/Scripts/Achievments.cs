@@ -95,7 +95,7 @@ public class Achievments : MonoBehaviour
                         yield return new WaitForSeconds(0.5f);
                     }
                     GameObject notificationPanel = Instantiate(Resources.Load<GameObject>("NotificationPanel"));
-                    notificationPanel.GetComponent<NotificationPanel>().SetText("You have reached unlocked '" + achievment.name + "'");
+                    notificationPanel.GetComponent<NotificationPanel>().SetText("You have unlocked '" + achievment.name + "'");
                     break;
                 }
             }

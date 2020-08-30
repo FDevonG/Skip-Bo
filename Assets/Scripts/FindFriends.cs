@@ -17,6 +17,8 @@ public class FindFriends : MonoBehaviour
     [SerializeField] Image kit;
     [SerializeField] Image body;
 
+    [SerializeField] GameObject searchingPanel;
+
     string id;//thjis is used to store the id of the found user
 
     void OnDisable() {
@@ -25,15 +27,18 @@ public class FindFriends : MonoBehaviour
         infoText.gameObject.SetActive(false);
         freindPanel.SetActive(false);
         id = "";
+        searchingPanel.SetActive(false);
     }
 
     public void StartUserSearch() {
+        searchingPanel.SetActive(true);
         StartCoroutine(FindUser());
     }
 
     private IEnumerator FindUser() {
         var task = Database.GetUsers();
         yield return new WaitUntil(() => task.IsCompleted);
+        searchingPanel.SetActive(false);
         if (task.IsFaulted) {
             SetErrorMessage("Search failed");
         } else {
