@@ -251,7 +251,7 @@ public class GameSetup : MonoBehaviour {
         if (panel.GetComponent<PanelControl>().deck.transform.childCount == (int)PhotonNetwork.room.CustomProperties[PhotonRooms.DeckSize()]) {
             card.GetComponent<Card>().SetUpCard(card.GetComponent<Card>().cardNumber);
         }
-        panel.GetComponent<PanelControl>().cardsLeftText.text = (int)PhotonNetwork.room.CustomProperties[PhotonRooms.DeckSize()] + " Cards Left";
+        panel.GetComponent<PanelControl>().cardsLeftText.text = (int)PhotonNetwork.room.CustomProperties[PhotonRooms.DeckSize()] + " Cards";
     }
 
     [PunRPC]

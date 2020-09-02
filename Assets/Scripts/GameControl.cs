@@ -177,7 +177,7 @@ public class GameControl : MonoBehaviour
     }
 
     public void CardRemovedOffDeck(PanelControl panelControl) {
-        panelControl.cardsLeftText.text = panelControl.deck.transform.childCount + " CardsLeft";
+        panelControl.cardsLeftText.text = panelControl.deck.transform.childCount + " Cards";
         if (panelControl.deck.transform.childCount == 0) {
             if (PhotonNetwork.isMasterClient) {
                 playerWon = true;
