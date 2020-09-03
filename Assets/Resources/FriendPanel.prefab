@@ -195,12 +195,12 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_FontData:
-    m_Font: {fileID: 12800000, guid: d9f6f95f5c3f94e46aa5e7db047454f2, type: 3}
-    m_FontSize: 32
+    m_Font: {fileID: 12800000, guid: 921bb0cf734cd4126b89959413dba8d5, type: 3}
+    m_FontSize: 60
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 3
-    m_MaxSize: 75
+    m_MaxSize: 76
     m_Alignment: 4
     m_AlignByGeometry: 0
     m_RichText: 1
@@ -220,7 +220,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cfabb0440166ab443bba8876756fdfa9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_EffectColor: {r: 0.5921569, g: 0.105882354, b: 0.8745098, a: 1}
+  m_EffectColor: {r: 0.2, g: 0.08627451, b: 0.44313726, a: 1}
   m_EffectDistance: {x: 3, y: -3}
   m_UseGraphicAlpha: 1
 --- !u!1 &5010174640373259358
@@ -288,12 +288,12 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_FontData:
-    m_Font: {fileID: 12800000, guid: d9f6f95f5c3f94e46aa5e7db047454f2, type: 3}
-    m_FontSize: 32
+    m_Font: {fileID: 12800000, guid: 921bb0cf734cd4126b89959413dba8d5, type: 3}
+    m_FontSize: 60
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 3
-    m_MaxSize: 50
+    m_MaxSize: 69
     m_Alignment: 4
     m_AlignByGeometry: 0
     m_RichText: 1
@@ -313,7 +313,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cfabb0440166ab443bba8876756fdfa9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_EffectColor: {r: 0.5921569, g: 0.105882354, b: 0.8745098, a: 1}
+  m_EffectColor: {r: 0.2, g: 0.08627451, b: 0.44313726, a: 1}
   m_EffectDistance: {x: 3, y: -3}
   m_UseGraphicAlpha: 1
 --- !u!1 &5010174640771898391

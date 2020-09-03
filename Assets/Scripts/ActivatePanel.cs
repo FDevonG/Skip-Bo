@@ -11,4 +11,9 @@ public class ActivatePanel : MonoBehaviour
         panel.SetActive(true);
         activePanel = panel;
     }
+
+    //public static void LoadingScreen()
+    //{
+    //    Instantiate(Resources.Load<GameObject>("LoadingCanvas"));
+    //}
 }

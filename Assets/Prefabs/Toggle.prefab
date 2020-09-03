@@ -331,8 +331,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_FontData:
-    m_Font: {fileID: 12800000, guid: d9f6f95f5c3f94e46aa5e7db047454f2, type: 3}
-    m_FontSize: 32
+    m_Font: {fileID: 12800000, guid: 5fea0c5e667b743e79acfcfe4aa2516f, type: 3}
+    m_FontSize: 75
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 0
@@ -342,7 +342,7 @@ MonoBehaviour:
     m_RichText: 0
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
-    m_LineSpacing: 2
+    m_LineSpacing: 1
   m_Text: Music
 --- !u!114 &4336238273664620280
 MonoBehaviour:

@@ -207,8 +207,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_FontData:
-    m_Font: {fileID: 12800000, guid: d9f6f95f5c3f94e46aa5e7db047454f2, type: 3}
-    m_FontSize: 32
+    m_Font: {fileID: 12800000, guid: 921bb0cf734cd4126b89959413dba8d5, type: 3}
+    m_FontSize: 75
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 3
@@ -218,7 +218,7 @@ MonoBehaviour:
     m_RichText: 1
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
-    m_LineSpacing: 2
+    m_LineSpacing: 1
   m_Text: "Objective: Be the first player to play every card in your stock pile.\n\nGameplay:
     Each player is dealt out anywhere from 5-30 cards (choose less cards for a shorter
     game). These cards are the player\u2019s stock pile. \n\nPlayers begin each turn

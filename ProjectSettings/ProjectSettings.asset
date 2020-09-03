@@ -120,7 +120,7 @@ PlayerSettings:
     16:10: 1
     16:9: 1
     Others: 1
-  bundleVersion: 2.1
+  bundleVersion: 2.2
   preloadedAssets: []
   metroInputSource: 0
   wsaTransparentSwapchain: 0
@@ -167,7 +167,7 @@ PlayerSettings:
     Android: com.FogBankGames.SkipBo
     iPhone: com.FogBankGames.SkipBo
   buildNumber: {}
-  AndroidBundleVersionCode: 32
+  AndroidBundleVersionCode: 33
   AndroidMinSdkVersion: 19
   AndroidTargetSdkVersion: 0
   AndroidPreferredInstallLocation: 1
@@ -280,7 +280,7 @@ PlayerSettings:
   - m_BuildTarget: 
     m_Icons:
     - serializedVersion: 2
-      m_Icon: {fileID: 2800000, guid: a5a5a4686bf8d4a0386d86106eed7cbf, type: 3}
+      m_Icon: {fileID: 2800000, guid: cbed6d6ef59c3445fa54a81e2a94c8a7, type: 3}
       m_Width: 128
       m_Height: 128
       m_Kind: 0

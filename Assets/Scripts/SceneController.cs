@@ -3,7 +3,7 @@
 public static class SceneController {
 
     public static void LoadStartMenu() {
-        SceneManager.LoadScene(0);
+        PhotonNetwork.LoadLevel(0);
     }
 
     public static void LoadGameSetup() {

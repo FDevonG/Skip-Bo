@@ -71,7 +71,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: df300183f0be24bb39faefbad8c933bf, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 949ba0e3891504b40961028ee782abfe, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -370,14 +370,14 @@ RectTransform:
   m_GameObject: {fileID: 1604812507461836505}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.041486144, y: 0.041486144, z: 0.041486144}
+  m_LocalScale: {x: 0.050783187, y: 0.050783187, z: 0.050783187}
   m_Children: []
   m_Father: {fileID: 321503516535508828}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 6, y: -6}
+  m_AnchoredPosition: {x: 5.7675, y: -5.8838}
   m_SizeDelta: {x: 50, y: 25}
   m_Pivot: {x: 0, y: 1}
 --- !u!222 &1136618865037256930
@@ -407,7 +407,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_FontData:
-    m_Font: {fileID: 12800000, guid: d9f6f95f5c3f94e46aa5e7db047454f2, type: 3}
+    m_Font: {fileID: 12800000, guid: 5fea0c5e667b743e79acfcfe4aa2516f, type: 3}
     m_FontSize: 300
     m_FontStyle: 1
     m_BestFit: 0
@@ -576,7 +576,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: df300183f0be24bb39faefbad8c933bf, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 949ba0e3891504b40961028ee782abfe, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -619,7 +619,7 @@ RectTransform:
   m_GameObject: {fileID: 4157752509632780078}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.044989023, y: 0.044989023, z: 0.044989023}
+  m_LocalScale: {x: 0.070182875, y: 0.070182875, z: 0.070182875}
   m_Children: []
   m_Father: {fileID: 321503516535508828}
   m_RootOrder: 2
@@ -656,7 +656,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_FontData:
-    m_Font: {fileID: 12800000, guid: d9f6f95f5c3f94e46aa5e7db047454f2, type: 3}
+    m_Font: {fileID: 12800000, guid: c5347330981514c8aad5629dedf9f272, type: 3}
     m_FontSize: 300
     m_FontStyle: 1
     m_BestFit: 0
@@ -667,7 +667,7 @@ MonoBehaviour:
     m_RichText: 1
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 1
-    m_LineSpacing: 1.5
+    m_LineSpacing: 0.75
   m_Text: 'Skip
 
     Bo'
@@ -831,12 +831,12 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_FontData:
-    m_Font: {fileID: 12800000, guid: d9f6f95f5c3f94e46aa5e7db047454f2, type: 3}
-    m_FontSize: 200
+    m_Font: {fileID: 12800000, guid: 5fea0c5e667b743e79acfcfe4aa2516f, type: 3}
+    m_FontSize: 300
     m_FontStyle: 1
     m_BestFit: 0
     m_MinSize: 1
-    m_MaxSize: 200
+    m_MaxSize: 300
     m_Alignment: 4
     m_AlignByGeometry: 0
     m_RichText: 0
