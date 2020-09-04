@@ -51,7 +51,7 @@ public class AchievmentPanel : MonoBehaviour
             } else {
                 imagaePath = achievement.iconNameGreyscale;
             }
-            achievementpanel.GetComponent<AchievementInfoPanel>().BuildPanel(imagaePath, achievement.name, achievement.description);
+            achievementpanel.GetComponent<AchievementInfoPanel>().BuildPanel(imagaePath, achievement.name, achievement.description, achievement.unlocked);
         }
     }
 

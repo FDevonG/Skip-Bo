@@ -1,30 +1,42 @@
-﻿using UnityEngine.SceneManagement;
+﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 
-public static class SceneController {
+public class SceneController: MonoBehaviour {
 
     public static void LoadStartMenu() {
-        PhotonNetwork.LoadLevel(0);
+        LoadingScreen();
+        PhotonNetwork.LoadLevelAsync(0);
     }
 
     public static void LoadGameSetup() {
-        PhotonNetwork.LoadLevel(1);
+        LoadingScreen();
+        PhotonNetwork.LoadLevelAsync(1);
     }
 
     public static void LoadLobbyScene() {
-        if (PhotonNetwork.isMasterClient) {
-            PhotonNetwork.LoadLevel(2);
-        }
+        LoadingScreen();
+        if (PhotonNetwork.isMasterClient) 
+            PhotonNetwork.LoadLevelAsync(2);
     }
 
     public static void LoadGameScene() {
-        if (PhotonNetwork.isMasterClient) {
+        LoadingScreen();
+        if (PhotonNetwork.offlineMode)
             PhotonNetwork.LoadLevel(3);
-        }
+        else if (PhotonNetwork.isMasterClient)
+            PhotonNetwork.LoadLevelAsync(3);
     }
 
     public static void ReloadScene() {
+        LoadingScreen();
         Scene scene = SceneManager.GetActiveScene();
         PhotonNetwork.LoadLevel(scene.buildIndex);
+    }
+
+    public static void LoadingScreen()
+    {
+        Time.timeScale = 1;
+        Instantiate(Resources.Load<GameObject>("LoadingCanvas"));
     }
 
 }

@@ -36,17 +36,45 @@ public class AdManager : MonoBehaviour
 
     public IEnumerator ShowRegularAd() {
         if (Advertisement.isInitialized) {
-            yield return new WaitForSeconds(1.5f);
-            while (!Advertisement.IsReady(regularPlacementString)) {
-                yield return new WaitForSeconds(0.5f);
-            }
+            //yield return new WaitForSeconds(1.5f);
+            //while (!Advertisement.IsReady(regularPlacementString)) {
+            yield return new WaitUntil(() => Advertisement.IsReady(regularPlacementString));
             Advertisement.Show(regularPlacementString);
             yield return new WaitForSeconds(1.0f);
-            while (Advertisement.isShowing) {
-                yield return new WaitForSeconds(0.5f);
-            }
+            yield return new WaitUntil(() => !Advertisement.isShowing);
+            //while (Advertisement.isShowing) {
+            //    yield return new WaitForSeconds(0.5f);
+            //}
         }
+        
+    }
+
+    public IEnumerator Victory()
+    {
+        yield return StartCoroutine(ShowRegularAd());
         StartCoroutine(GameObject.FindGameObjectWithTag("VictoryPanel").GetComponent<Victory>().ShowStandings());
+    }
+
+    //public IEnumerator PlayAgainAd()
+    //{
+    //    yield return StartCoroutine(ShowRegularAd());
+
+    //    if (PhotonNetwork.offlineMode)
+    //    {
+    //        SceneController.ReloadScene();
+    //    }
+    //    else if (!PhotonNetwork.offlineMode)
+    //    {
+    //        SceneController.LoadGameSetup();
+    //    }
+    //}
+
+    public IEnumerator LeaveMatchAd()
+    {
+        SceneController.LoadingScreen();
+        yield return StartCoroutine(ShowRegularAd());
+
+        SceneController.LoadStartMenu();
     }
 
     public IEnumerator ShowBannerAdd() {

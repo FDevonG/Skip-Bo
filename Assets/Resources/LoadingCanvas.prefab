@@ -801,6 +801,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: LoadingCircle
       objectReference: {fileID: 0}
+    - target: {fileID: 4561280349341930053, guid: 570f9e70e699e499687eb04b2e4b79a5,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 570f9e70e699e499687eb04b2e4b79a5, type: 3}
 --- !u!224 &4921963514746484648 stripped
