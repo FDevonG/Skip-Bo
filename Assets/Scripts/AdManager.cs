@@ -36,17 +36,15 @@ public class AdManager : MonoBehaviour
 
     public IEnumerator ShowRegularAd() {
         if (Advertisement.isInitialized) {
-            //yield return new WaitForSeconds(1.5f);
-            //while (!Advertisement.IsReady(regularPlacementString)) {
             yield return new WaitUntil(() => Advertisement.IsReady(regularPlacementString));
             Advertisement.Show(regularPlacementString);
             yield return new WaitUntil(() => Advertisement.isShowing);
             yield return new WaitUntil(() => !Advertisement.isShowing);
-            //while (Advertisement.isShowing) {
-            //    yield return new WaitForSeconds(0.5f);
-            //}
         }
-        
+        else
+        {
+            yield return null;
+        }
     }
 
     public IEnumerator Victory()

@@ -82,9 +82,12 @@ public class Victory : MonoBehaviour
             child.SetActive(true);
         }
 
-        while (playerStandings.Length == 0) {
-            yield return new WaitForSeconds(0.5f);
-        }
+        yield return new WaitUntil(() => playerStandings.Length > 0);
+
+        //while (playerStandings.Length == 0) {
+        //    yield return new WaitForSeconds(0.5f);
+        //}
+
         Announcer announcer = GameObject.FindGameObjectWithTag("Announcer").GetComponent<Announcer>();
         if (gameControl.localPlayerPanel.GetComponent<PanelControl>().deck.transform.childCount == 0) {
             GameObject.FindGameObjectWithTag("StatsController").GetComponent<PlayerStatsController>().AddGameWon();
