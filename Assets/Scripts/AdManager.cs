@@ -40,7 +40,7 @@ public class AdManager : MonoBehaviour
             //while (!Advertisement.IsReady(regularPlacementString)) {
             yield return new WaitUntil(() => Advertisement.IsReady(regularPlacementString));
             Advertisement.Show(regularPlacementString);
-            yield return new WaitForSeconds(1.0f);
+            yield return new WaitUntil(() => Advertisement.isShowing);
             yield return new WaitUntil(() => !Advertisement.isShowing);
             //while (Advertisement.isShowing) {
             //    yield return new WaitForSeconds(0.5f);
@@ -73,7 +73,6 @@ public class AdManager : MonoBehaviour
     {
         SceneController.LoadingScreen();
         yield return StartCoroutine(ShowRegularAd());
-
         SceneController.LoadStartMenu();
     }
 
