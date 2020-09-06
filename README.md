@@ -38,3 +38,12 @@ Update 1.11
 Update 1.13
 -Achievements added
 -Level system added
+
+Update 2.0
+-UI Changed
+
+Update 2.1
+-Fonts changed
+
+Update2.3
+-UIChanged
