@@ -35,15 +35,22 @@ public class AdManager : MonoBehaviour
     }
 
     public IEnumerator ShowRegularAd() {
-        if (Advertisement.isInitialized) {
-            yield return new WaitUntil(() => Advertisement.IsReady(regularPlacementString));
-            Advertisement.Show(regularPlacementString);
-            yield return new WaitUntil(() => Advertisement.isShowing);
-            yield return new WaitUntil(() => !Advertisement.isShowing);
-        }
+        if (LocalUser.locUser.adsBlocked)
+            yield return null;
         else
         {
-            yield return null;
+            if (!Advertisement.isInitialized)
+            {
+                Advertisement.Initialize(gameId, testMode);
+                yield return new WaitUntil(() => Advertisement.isInitialized);
+            }
+            if (Advertisement.isInitialized)
+            {
+                yield return new WaitUntil(() => Advertisement.IsReady(regularPlacementString));
+                Advertisement.Show(regularPlacementString);
+                yield return new WaitUntil(() => Advertisement.isShowing);
+                yield return new WaitUntil(() => !Advertisement.isShowing);
+            }
         }
     }
 
@@ -75,10 +82,24 @@ public class AdManager : MonoBehaviour
     }
 
     public IEnumerator ShowBannerAdd() {
-        while (!Advertisement.IsReady(bannerPlacementString)) {
-            yield return new WaitForSeconds(0.5f);
+        yield return new WaitUntil(() => LocalUser.locUser != null);
+        if (!LocalUser.locUser.adsBlocked)
+        {
+            yield return new WaitUntil(() => Advertisement.IsReady(bannerPlacementString));
+            //while (!Advertisement.IsReady(bannerPlacementString)) {
+            //    yield return new WaitForSeconds(0.5f);
+            //}
+            Advertisement.Banner.SetPosition(BannerPosition.BOTTOM_CENTER);
+            Advertisement.Banner.Show(bannerPlacementString);
         }
-        Advertisement.Banner.SetPosition(BannerPosition.BOTTOM_CENTER);
-        Advertisement.Banner.Show(bannerPlacementString);
+        else
+        {
+            TurnOffBannerAd();
+        }
+    }
+
+    public void TurnOffBannerAd()
+    {
+        Advertisement.Banner.Hide();
     }
 }

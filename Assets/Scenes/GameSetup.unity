@@ -7502,6 +7502,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   activePanel: {fileID: 1879725090}
+  previousPanel: {fileID: 0}
 --- !u!4 &1311493707
 Transform:
   m_ObjectHideFlags: 0

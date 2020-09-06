@@ -28,6 +28,8 @@ public class User {
 
     public int gamesWonInARow;
 
+    public bool adsBlocked;
+
     public User(string userEmail, string id, List<Achievment> ach) {
         email = userEmail;
         userID = id;

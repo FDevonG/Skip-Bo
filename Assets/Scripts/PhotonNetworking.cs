@@ -19,7 +19,6 @@ public class PhotonNetworking : MonoBehaviour {
         SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
-    // called second
     void OnSceneLoaded(Scene scene, LoadSceneMode mode) {
         if (scene.buildIndex == 0) {
             ConnectToPhoton();
