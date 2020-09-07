@@ -7,7 +7,7 @@ public class ErrorText : MonoBehaviour
 
     private void Start()
     {
-        
+        FindErrorText(gameObject);
     }
 
     private void OnDisable() {

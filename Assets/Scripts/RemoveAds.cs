@@ -11,6 +11,7 @@ public class RemoveAds : MonoBehaviour
     [SerializeField] GameObject yesButton;
     [SerializeField] GameObject noButton;
     [SerializeField] Text text;
+    [SerializeField] Text price;
 
     public static RemoveAds instance { get; private set; }
 
@@ -31,6 +32,17 @@ public class RemoveAds : MonoBehaviour
     {
         SceneManager.sceneLoaded += OnSceneLoaded;
         StartCoroutine(AdsCheck());
+        adsButton.GetComponent<Button>().onClick.AddListener(() =>
+        {
+            GameObject.FindGameObjectWithTag("GameManager").GetComponent<ActivatePanel>().SwitchPanel(adsPanel);
+            adsButton.SetActive(false);
+        });
+        noButton.GetComponent<Button>().onClick.AddListener(() => adsButton.SetActive(true));
+        noButton.GetComponent<Button>().onClick.AddListener(() =>
+        {
+            GameObject.FindGameObjectWithTag("GameManager").GetComponent<ActivatePanel>().PreviousPanel();
+            GetComponent<ErrorText>().ClearError();
+        });
     }
 
     void OnSceneLoaded(Scene scene, LoadSceneMode mode)
@@ -51,23 +63,24 @@ public class RemoveAds : MonoBehaviour
         if (!LocalUser.locUser.adsBlocked)
         {
             adsButton.SetActive(true);
-            adsButton.GetComponent<Button>().onClick.AddListener(() =>
-            {
-                GameObject.FindGameObjectWithTag("GameManager").GetComponent<ActivatePanel>().SwitchPanel(adsPanel);
-                adsButton.SetActive(false);
-            });
-            noButton.GetComponent<Button>().onClick.AddListener(() => adsButton.SetActive(true));
-            noButton.GetComponent<Button>().onClick.AddListener(() => GameObject.FindGameObjectWithTag("GameManager").GetComponent<ActivatePanel>().PreviousPanel());
+        }
+        else
+        {
+            adsButton.SetActive(false);
         }
     }
 
     public void AdsRemoved()
     {
+        LocalUser.locUser.adsBlocked = true;
+        var task = Database.UpdateUser("adsBlocked", LocalUser.locUser.adsBlocked);
+        //yield return new WaitUntil(() => task.IsCompleted);
         text.text = "Ads have been removed";
+        price.gameObject.SetActive(false);
         noButton.GetComponent<Button>().onClick.AddListener(() => adsButton.SetActive(false));
         noButton.GetComponentInChildren<Text>().text = "Close";
         GameObject.FindGameObjectWithTag("AdManager").GetComponent<AdManager>().TurnOffBannerAd();
         yesButton.SetActive(false);
-        LocalUser.locUser.adsBlocked = true;
+        GetComponent<ErrorText>().ClearError();
     }
 }

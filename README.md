@@ -47,3 +47,6 @@ Update 2.1
 
 Update2.3
 -UIChanged
+
+Update2.4
+-Remove ads option added

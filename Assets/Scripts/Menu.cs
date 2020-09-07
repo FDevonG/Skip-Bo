@@ -202,6 +202,8 @@ public class Menu : MonoBehaviour
             GameObject.FindGameObjectWithTag("Announcer").GetComponent<Announcer>().Welcome();
             GameObject.FindGameObjectWithTag("Announcer").GetComponent<Announcer>().welcomePlayed = true;
         }
+
+
     }
 
     private void Update() {

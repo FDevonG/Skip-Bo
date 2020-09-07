@@ -9,7 +9,7 @@ public class InAppPurchasing : MonoBehaviour, IStoreListener
     private static IExtensionProvider m_StoreExtensionProvider;
 
     //Products
-    private static string removeAds = "remove_Ads";
+    private static string removeAds = "remove_ads";
 
     public static InAppPurchasing instance { get; private set; }
 
@@ -79,7 +79,8 @@ public class InAppPurchasing : MonoBehaviour, IStoreListener
             // Otherwise ...
             else
             {
-                // ... report the product look-up failure situation  
+                // ... report the product look-up failure situation
+                GameObject.FindGameObjectWithTag("RemoveAdsPanel").GetComponent<ErrorText>().SetError("Item is not available for purchase");
                 Debug.Log("BuyProductID: FAIL. Not purchasing product, either is not found or is not available for purchase");
             }
         }
@@ -88,6 +89,7 @@ public class InAppPurchasing : MonoBehaviour, IStoreListener
         {
             // ... report the fact Purchasing has not succeeded initializing yet. Consider waiting longer or 
             // retrying initiailization.
+            GameObject.FindGameObjectWithTag("RemoveAdsPanel").GetComponent<ErrorText>().SetError("Not connected to the store");
             Debug.Log("BuyProductID FAIL. Not initialized.");
         }
     }
@@ -96,7 +98,6 @@ public class InAppPurchasing : MonoBehaviour, IStoreListener
     {
         if (string.Equals(e.purchasedProduct.definition.id, removeAds, StringComparison.Ordinal))
         {
-            Debug.Log("Remove Ads");
             GameObject.FindGameObjectWithTag("RemoveAdsPanel").GetComponent<RemoveAds>().AdsRemoved();
         }
         return PurchaseProcessingResult.Complete;
@@ -107,6 +108,9 @@ public class InAppPurchasing : MonoBehaviour, IStoreListener
         Debug.Log("Initialized");
         m_StoreController = controller;
         m_StoreExtensionProvider = extensions;
+
+        Debug.Log(extensions);
+        Debug.Log(controller);
     }
 
     public void OnInitializeFailed(InitializationFailureReason error)
@@ -116,7 +120,7 @@ public class InAppPurchasing : MonoBehaviour, IStoreListener
 
     public void OnPurchaseFailed(Product i, PurchaseFailureReason p)
     {
-        throw new System.NotImplementedException();
+        GameObject.FindGameObjectWithTag("RemoveAdsPanel").GetComponent<ErrorText>().SetError(p.ToString());
     }
 
 

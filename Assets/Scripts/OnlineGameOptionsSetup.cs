@@ -27,7 +27,6 @@ public class OnlineGameOptionsSetup : MonoBehaviour
     }
 
     public void LoadStartMenu() {
-        PhotonNetwork.LeaveRoom();
         SceneController.LoadStartMenu();
     }
 

@@ -76,8 +76,10 @@ public class AdManager : MonoBehaviour
 
     public IEnumerator LeaveMatchAd()
     {
-        SceneController.LoadingScreen();
-        yield return StartCoroutine(ShowRegularAd());
+        if (!LocalUser.locUser.adsBlocked) {
+            SceneController.LoadingScreen();
+            yield return StartCoroutine(ShowRegularAd());
+        }
         SceneController.LoadStartMenu();
     }
 
