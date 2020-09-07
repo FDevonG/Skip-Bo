@@ -3,13 +3,21 @@ using System.Collections;
 
 public class GuestLogin : MonoBehaviour
 {
+
+    [SerializeField] GameObject loadingCircle;
+    [SerializeField] GameObject loadingText;
+
     public void LogInAnonymously() {
         StartCoroutine(LoginInAnon());
     }
 
     private IEnumerator LoginInAnon() {
+        loadingCircle.SetActive(true);
+        loadingText.SetActive(true);
         var task = FirebaseAuthentication.LogInAnonymous();
         yield return new WaitUntil(() => task.IsCompleted);
+        loadingCircle.SetActive(false);
+        loadingText.SetActive(false);
         if (task.IsFaulted) {
             GetComponent<ErrorText>().SetError(FirebaseError.GetErrorMessage(task.Exception));
         } else {

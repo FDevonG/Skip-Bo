@@ -10,6 +10,8 @@ public class PlayerPanel : MonoBehaviour
     [SerializeField] Text levelText;
     [SerializeField] Slider experienceSlider;
     [SerializeField] Text experienceText;
+    [SerializeField] Button achievementButton;
+    [SerializeField] Button playerStatsButton;
 
     private void OnEnable() {
         body.sprite = Resources.Load<Sprite>("Faces/Bodies/" + LocalUser.locUser.body) as Sprite;
@@ -20,5 +22,16 @@ public class PlayerPanel : MonoBehaviour
         experienceSlider.maxValue = LocalUser.locUser.experienceToNextLevel;
         experienceSlider.value = LocalUser.locUser.experience;
         experienceText.text = LocalUser.locUser.experience.ToString() + "/" + LocalUser.locUser.experienceToNextLevel.ToString() + "xp";
+
+        if (FirebaseAuthentication.IsPlayerAnonymous())
+        {
+            achievementButton.interactable = false;
+            playerStatsButton.interactable = false;
+        }
+        else
+        {
+            achievementButton.interactable = true;
+            playerStatsButton.interactable = true;
+        }
     }
 }

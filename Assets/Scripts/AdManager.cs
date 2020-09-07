@@ -6,7 +6,7 @@ public class AdManager : MonoBehaviour
 {
 
     private string gameId;
-    private bool testMode = true;
+    private bool testMode = false;
     private string regularPlacementString = "video";
     private string bannerPlacementString = "banner";
 
@@ -31,7 +31,8 @@ public class AdManager : MonoBehaviour
     }
 
     private void Start() {
-        StartCoroutine(ShowBannerAdd());
+        if(!FirebaseAuthentication.IsPlayerLoggedIn() || FirebaseAuthentication.IsPlayerAnonymous())
+            StartCoroutine(ShowBannerAdd());
     }
 
     public IEnumerator ShowRegularAd() {
@@ -84,20 +85,9 @@ public class AdManager : MonoBehaviour
     }
 
     public IEnumerator ShowBannerAdd() {
-        yield return new WaitUntil(() => LocalUser.locUser != null);
-        if (!LocalUser.locUser.adsBlocked)
-        {
-            yield return new WaitUntil(() => Advertisement.IsReady(bannerPlacementString));
-            //while (!Advertisement.IsReady(bannerPlacementString)) {
-            //    yield return new WaitForSeconds(0.5f);
-            //}
-            Advertisement.Banner.SetPosition(BannerPosition.BOTTOM_CENTER);
-            Advertisement.Banner.Show(bannerPlacementString);
-        }
-        else
-        {
-            TurnOffBannerAd();
-        }
+        yield return new WaitUntil(() => Advertisement.IsReady(bannerPlacementString));
+        Advertisement.Banner.SetPosition(BannerPosition.BOTTOM_CENTER);
+        Advertisement.Banner.Show(bannerPlacementString);
     }
 
     public void TurnOffBannerAd()

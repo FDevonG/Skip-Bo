@@ -167,7 +167,8 @@ public class CharacterCreation : MonoBehaviour
     public void SavePlayer() {
         string playerName = nameInput.GetComponent<InputField>().text;
         if (!string.IsNullOrEmpty(playerName) && !string.IsNullOrWhiteSpace(playerName)) {
-            StartCoroutine(NameCheck(playerName));
+            StartCoroutine(SaveCharacter(playerName));
+            //StartCoroutine(NameCheck(playerName));
         } else {
             GetComponent<ErrorText>().SetError("Please enter a username");
             NameError();
@@ -198,6 +199,8 @@ public class CharacterCreation : MonoBehaviour
             }
         }
     }
+
+
 
     private IEnumerator SaveCharacter(string userName) {
         var userNameTask = Database.UpdateUser("userName", userName);

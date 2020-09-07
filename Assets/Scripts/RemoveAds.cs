@@ -57,12 +57,20 @@ public class RemoveAds : MonoBehaviour
         }
     }
 
-    IEnumerator AdsCheck()
+    public void HideButton(){
+        adsButton.SetActive(false);
+    }
+
+    public IEnumerator AdsCheck()
     {
         yield return new WaitUntil(() => LocalUser.locUser != null);
-        if (!LocalUser.locUser.adsBlocked)
+        if (!LocalUser.locUser.adsBlocked && FirebaseAuthentication.IsPlayerLoggedIn())
         {
             adsButton.SetActive(true);
+            if (FirebaseAuthentication.IsPlayerAnonymous())
+                adsButton.GetComponent<Button>().interactable = false;
+            else
+                adsButton.GetComponent<Button>().interactable = true;
         }
         else
         {

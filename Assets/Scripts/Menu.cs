@@ -31,6 +31,7 @@ public class Menu : MonoBehaviour
     public GameObject errorPanel;
 
     private ActivatePanel activatePanel;
+    AdManager adManager;
 
     private void Awake() {
         Screen.sleepTimeout = SleepTimeout.NeverSleep;//keep the screen from fading
@@ -40,6 +41,7 @@ public class Menu : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        adManager = GameObject.FindGameObjectWithTag("AdManager").GetComponent<AdManager>();
         activatePanel = GetComponent<ActivatePanel>();
         StartCoroutine(DoesPlayerExist());
     }
@@ -144,6 +146,7 @@ public class Menu : MonoBehaviour
     public IEnumerator DoesPlayerExist() {
         if (!FirebaseAuthentication.IsPlayerLoggedIn()) {
             activatePanel.SwitchPanel(startGamePanel);
+            StartCoroutine(adManager.ShowBannerAdd());
         } else {
             if (LocalUser.locUser == null) {
                 activatePanel.SwitchPanel(loadingScreen);
@@ -153,6 +156,8 @@ public class Menu : MonoBehaviour
                     activatePanel.SwitchPanel(errorPanel);
                 } else {
                     LocalUser.locUser = JsonUtility.FromJson<User>(task.Result);
+                    if(!LocalUser.locUser.adsBlocked)
+                        StartCoroutine(adManager.ShowBannerAdd());
                     if (LocalUser.locUser.achievments.Count == 0) {
                         LocalUser.locUser.achievments = GameObject.FindGameObjectWithTag("AchievementManager").GetComponent<Achievments>().BuildAchievmentsList();
                         StartCoroutine(GameObject.FindGameObjectWithTag("AchievementManager").GetComponent<Achievments>().SaveAchievments());
@@ -178,6 +183,8 @@ public class Menu : MonoBehaviour
                 }
             }
             if (LocalUser.locUser != null) {
+                if (!LocalUser.locUser.adsBlocked)
+                    StartCoroutine(adManager.ShowBannerAdd());
                 if (LocalUser.locUser.friends.Count > 0) {
                     StartCoroutine(Friends.GetStartFriends());
                 }
@@ -202,8 +209,6 @@ public class Menu : MonoBehaviour
             GameObject.FindGameObjectWithTag("Announcer").GetComponent<Announcer>().Welcome();
             GameObject.FindGameObjectWithTag("Announcer").GetComponent<Announcer>().welcomePlayed = true;
         }
-
-
     }
 
     private void Update() {
