@@ -63,20 +63,28 @@ public class RemoveAds : MonoBehaviour
 
     public IEnumerator AdsCheck()
     {
+        
         if(LocalUser.locUser == null)
             yield return new WaitUntil(() => LocalUser.locUser != null);
 
-        if (!LocalUser.locUser.adsBlocked && FirebaseAuthentication.IsPlayerLoggedIn())
+        if (!LocalUser.locUser.adsBlocked)
         {
             adsButton.SetActive(true);
             if (FirebaseAuthentication.IsPlayerAnonymous())
+            {
                 adsButton.GetComponent<Button>().interactable = false;
+                StartCoroutine(GameObject.FindGameObjectWithTag("AdManager").GetComponent<AdManager>().ShowBannerAdd());
+            }
             else
+            {
+                StartCoroutine(GameObject.FindGameObjectWithTag("AdManager").GetComponent<AdManager>().ShowBannerAdd());
                 adsButton.GetComponent<Button>().interactable = true;
+            }
         }
         else
         {
             adsButton.SetActive(false);
+            GameObject.FindGameObjectWithTag("AdManager").GetComponent<AdManager>().TurnOffBannerAd();
         }
     }
 

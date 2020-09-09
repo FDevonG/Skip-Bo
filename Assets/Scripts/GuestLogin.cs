@@ -29,7 +29,6 @@ public class GuestLogin : MonoBehaviour
                 loadingText.SetActive(false);
                 GetComponent<ErrorText>().SetError(FirebaseError.GetErrorMessage(newUserTask.Exception));
             } else {
-                //LocalUser.locUser = newUser;
                 StartCoroutine(GameObject.FindGameObjectWithTag("RemoveAdsPanel").GetComponent<RemoveAds>().AdsCheck());
                 GameObject.FindGameObjectWithTag("GameManager").GetComponent<ActivatePanel>().SwitchPanel(GameObject.FindGameObjectWithTag("GameManager").GetComponent<Menu>().characterCreationPanel);
             }

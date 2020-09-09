@@ -57,8 +57,8 @@ public class AdManager : MonoBehaviour
 
     public IEnumerator Victory()
     {
-        yield return StartCoroutine(ShowRegularAd());
         StartCoroutine(GameObject.FindGameObjectWithTag("VictoryPanel").GetComponent<Victory>().ShowStandings());
+        yield return StartCoroutine(ShowRegularAd());
     }
 
     //public IEnumerator PlayAgainAd()

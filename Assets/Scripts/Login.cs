@@ -36,12 +36,6 @@ public class Login : MonoBehaviour {
             if (!userTask.IsFaulted) {
                 LocalUser.locUser = JsonUtility.FromJson<User>(userTask.Result);
                 StartCoroutine(GameObject.FindGameObjectWithTag("RemoveAdsPanel").GetComponent<RemoveAds>().AdsCheck());
-                if (!LocalUser.locUser.adsBlocked)
-                    StartCoroutine(GameObject.FindGameObjectWithTag("AdManager").GetComponent<AdManager>().ShowBannerAdd());
-                else
-                {
-                    GameObject.FindGameObjectWithTag("AdManager").GetComponent<AdManager>().TurnOffBannerAd();
-                }
                 if (string.IsNullOrEmpty(LocalUser.locUser.userName) || string.IsNullOrWhiteSpace(LocalUser.locUser.userName)) {
                     GameObject.FindGameObjectWithTag("GameManager").GetComponent<Menu>().loadingScreen.SetActive(false);
                     GameObject.FindGameObjectWithTag("GameManager").GetComponent<ActivatePanel>().SwitchPanel(GameObject.FindGameObjectWithTag("GameManager").GetComponent<Menu>().characterCreationPanel);

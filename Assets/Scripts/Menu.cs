@@ -156,8 +156,9 @@ public class Menu : MonoBehaviour
                     activatePanel.SwitchPanel(errorPanel);
                 } else {
                     LocalUser.locUser = JsonUtility.FromJson<User>(task.Result);
-                    if(!LocalUser.locUser.adsBlocked)
-                        StartCoroutine(adManager.ShowBannerAdd());
+
+                    StartCoroutine(GameObject.FindGameObjectWithTag("RemoveAdsPanel").GetComponent<RemoveAds>().AdsCheck());
+
                     if (LocalUser.locUser.achievments.Count == 0) {
                         LocalUser.locUser.achievments = GameObject.FindGameObjectWithTag("AchievementManager").GetComponent<Achievments>().BuildAchievmentsList();
                         StartCoroutine(GameObject.FindGameObjectWithTag("AchievementManager").GetComponent<Achievments>().SaveAchievments());
@@ -183,8 +184,7 @@ public class Menu : MonoBehaviour
                 }
             }
             if (LocalUser.locUser != null) {
-                if (!LocalUser.locUser.adsBlocked)
-                    StartCoroutine(adManager.ShowBannerAdd());
+                StartCoroutine(GameObject.FindGameObjectWithTag("RemoveAdsPanel").GetComponent<RemoveAds>().AdsCheck());
                 if (LocalUser.locUser.friends.Count > 0) {
                     StartCoroutine(Friends.GetStartFriends());
                 }
@@ -209,6 +209,8 @@ public class Menu : MonoBehaviour
             GameObject.FindGameObjectWithTag("Announcer").GetComponent<Announcer>().Welcome();
             GameObject.FindGameObjectWithTag("Announcer").GetComponent<Announcer>().welcomePlayed = true;
         }
+        //LocalUser.locUser.adsBlocked = false;
+        //var task1 = Database.UpdateUser("adsBlocked", LocalUser.locUser.adsBlocked);
     }
 
     private void Update() {
