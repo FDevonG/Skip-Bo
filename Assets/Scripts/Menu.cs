@@ -209,8 +209,6 @@ public class Menu : MonoBehaviour
             GameObject.FindGameObjectWithTag("Announcer").GetComponent<Announcer>().Welcome();
             GameObject.FindGameObjectWithTag("Announcer").GetComponent<Announcer>().welcomePlayed = true;
         }
-        //LocalUser.locUser.adsBlocked = false;
-        //var task1 = Database.UpdateUser("adsBlocked", LocalUser.locUser.adsBlocked);
     }
 
     private void Update() {

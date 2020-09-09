@@ -25,15 +25,21 @@ public class PanelControl : MonoBehaviour
         int numberOfChildren = panel.childCount;
         if (numberOfChildren > 3) {
             for (int i = 0; i < panel.childCount; i++) {
-                if (i > panel.childCount - 3) {
+                if (i > panel.childCount - 3)
+                {
                     int ammount = 0;
-                    if (panel.parent.parent.gameObject == GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameControl>().localPlayerPanel) {
+                    if (panel.parent.parent.parent.gameObject == GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameControl>().localPlayerPanel)
+                    {
                         ammount = 60;
-                    } else {
+                    }
+                    else
+                    {
                         ammount = 30;
                     }
                     panel.GetChild(i).GetComponent<CardLerp>().StartLerping(panel, new Vector3(0, panel.GetChild(i).localPosition.y + ammount, 0));
-                } else {
+                }
+                else
+                {
                     panel.GetChild(i).GetComponent<CardLerp>().StartLerping(panel, new Vector3(0, 0, 0));
                 }
             }
@@ -47,7 +53,7 @@ public class PanelControl : MonoBehaviour
             for (int i = 0; i < panel.childCount; i++) {
                 if (i > panel.childCount - 3) {
                     int ammount = 0;
-                    if (panel.parent.parent.gameObject == GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameControl>().localPlayerPanel) {
+                    if (panel.parent.parent.parent.gameObject == GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameControl>().localPlayerPanel) {
                         ammount = 60;
                     } else {
                         ammount = 30;
