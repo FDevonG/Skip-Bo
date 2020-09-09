@@ -16,20 +16,30 @@ public class GuestLogin : MonoBehaviour
         loadingText.SetActive(true);
         var task = FirebaseAuthentication.LogInAnonymous();
         yield return new WaitUntil(() => task.IsCompleted);
-        loadingCircle.SetActive(false);
-        loadingText.SetActive(false);
         if (task.IsFaulted) {
+            loadingCircle.SetActive(false);
+            loadingText.SetActive(false);
             GetComponent<ErrorText>().SetError(FirebaseError.GetErrorMessage(task.Exception));
         } else {
-            User newUser = new User("", FirebaseAuthentication.AuthenitcationKey(), GameObject.FindGameObjectWithTag("AchievementManager").GetComponent<Achievments>().BuildAchievmentsList());
-            var newUserTask = Database.WriteNewUser(newUser);
+            LocalUser.locUser = new User("", FirebaseAuthentication.AuthenitcationKey(), GameObject.FindGameObjectWithTag("AchievementManager").GetComponent<Achievments>().BuildAchievmentsList());
+            var newUserTask = Database.WriteNewUser(LocalUser.locUser);
             yield return new WaitUntil(() => newUserTask.IsCompleted);
             if (newUserTask.IsFaulted) {
+                loadingCircle.SetActive(false);
+                loadingText.SetActive(false);
                 GetComponent<ErrorText>().SetError(FirebaseError.GetErrorMessage(newUserTask.Exception));
             } else {
-                LocalUser.locUser = newUser;
+                //LocalUser.locUser = newUser;
+                StartCoroutine(GameObject.FindGameObjectWithTag("RemoveAdsPanel").GetComponent<RemoveAds>().AdsCheck());
                 GameObject.FindGameObjectWithTag("GameManager").GetComponent<ActivatePanel>().SwitchPanel(GameObject.FindGameObjectWithTag("GameManager").GetComponent<Menu>().characterCreationPanel);
             }
         }
+    }
+
+    private void OnDisable()
+    {
+        loadingCircle.SetActive(false);
+        loadingText.SetActive(false);
+        GetComponent<ErrorText>().ClearError();
     }
 }

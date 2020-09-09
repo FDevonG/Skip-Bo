@@ -63,7 +63,9 @@ public class RemoveAds : MonoBehaviour
 
     public IEnumerator AdsCheck()
     {
-        yield return new WaitUntil(() => LocalUser.locUser != null);
+        if(LocalUser.locUser == null)
+            yield return new WaitUntil(() => LocalUser.locUser != null);
+
         if (!LocalUser.locUser.adsBlocked && FirebaseAuthentication.IsPlayerLoggedIn())
         {
             adsButton.SetActive(true);

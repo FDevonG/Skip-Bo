@@ -6,7 +6,7 @@ public class AdManager : MonoBehaviour
 {
 
     private string gameId;
-    private bool testMode = false;
+    private bool testMode = true;
     private string regularPlacementString = "video";
     private string bannerPlacementString = "banner";
 
@@ -77,11 +77,11 @@ public class AdManager : MonoBehaviour
 
     public IEnumerator LeaveMatchAd()
     {
+        SceneController.LoadStartMenu();
         if (!LocalUser.locUser.adsBlocked) {
-            SceneController.LoadingScreen();
+            //SceneController.LoadingScreen();
             yield return StartCoroutine(ShowRegularAd());
         }
-        SceneController.LoadStartMenu();
     }
 
     public IEnumerator ShowBannerAdd() {
