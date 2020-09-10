@@ -59,7 +59,7 @@ public class Achievments : MonoBehaviour
     }
 
     public void CheckLevelAchievments(int level) {
-        switch(level) {
+        switch (level) {
             case 5:
                 StartCoroutine(UnlockAchievement("It's a start"));
                 break;
@@ -86,17 +86,24 @@ public class Achievments : MonoBehaviour
     }
 
     public IEnumerator UnlockAchievement(string name) {
-        foreach (Achievment achievment in LocalUser.locUser.achievments) {
-            if (achievment.name == name) {
-                if (!achievment.unlocked) {
-                    achievment.unlocked = true;
-                    StartCoroutine(SaveAchievments());
-                    while (GameObject.FindGameObjectWithTag("NotificationPanel") != null) {
-                        yield return new WaitForSeconds(0.5f);
+        if (!FirebaseAuthentication.IsPlayerAnonymous())
+        {
+            foreach (Achievment achievment in LocalUser.locUser.achievments)
+            {
+                if (achievment.name == name)
+                {
+                    if (!achievment.unlocked)
+                    {
+                        achievment.unlocked = true;
+                        StartCoroutine(SaveAchievments());
+                        while (GameObject.FindGameObjectWithTag("NotificationPanel") != null)
+                        {
+                            yield return new WaitForSeconds(0.5f);
+                        }
+                        GameObject notificationPanel = Instantiate(Resources.Load<GameObject>("NotificationPanel"));
+                        notificationPanel.GetComponent<NotificationPanel>().SetText("You have unlocked '" + achievment.name + "'");
+                        break;
                     }
-                    GameObject notificationPanel = Instantiate(Resources.Load<GameObject>("NotificationPanel"));
-                    notificationPanel.GetComponent<NotificationPanel>().SetText("You have unlocked '" + achievment.name + "'");
-                    break;
                 }
             }
         }
