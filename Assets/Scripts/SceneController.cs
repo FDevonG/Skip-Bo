@@ -36,7 +36,7 @@ public class SceneController: MonoBehaviour {
     public static void LoadingScreen()
     {
         Time.timeScale = 1;
-        Instantiate(Resources.Load<GameObject>("LoadingCanvas"));
+        GameObject.FindGameObjectWithTag("LoadingScreen").GetComponent<LoadingScreen>().TurnOnLoadingScreen();
     }
 
 }

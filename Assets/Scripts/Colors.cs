@@ -3,6 +3,7 @@ using UnityEngine;
 
 public static class Colors
 {
+    //the main purpel color
     public static Color GetBaseColor()
     {
         return new Color(0.3176471f, 0.007843138f, 0.6313726f, 1);

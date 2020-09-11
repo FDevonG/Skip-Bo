@@ -30,8 +30,7 @@ public class RemoveAds : MonoBehaviour
 
     private void Start()
     {
-        SceneManager.sceneLoaded += OnSceneLoaded;
-        //AdsCheck();
+        //SceneManager.sceneLoaded += OnSceneLoaded;
         adsButton.GetComponent<Button>().onClick.AddListener(() =>
         {
             GameObject.FindGameObjectWithTag("GameManager").GetComponent<ActivatePanel>().SwitchPanel(adsPanel);
@@ -45,17 +44,10 @@ public class RemoveAds : MonoBehaviour
         });
     }
 
-    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
-    {
-        if (scene.buildIndex != 3 && scene.buildIndex != 2)
-        {
-            AdsCheck();
-        }
-        else
-        {
-            adsButton.SetActive(false);
-        }
-    }
+    //void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    //{
+    //    AdsCheck();
+    //}
 
     public void HideButton(){
         adsButton.SetActive(false);
@@ -63,6 +55,9 @@ public class RemoveAds : MonoBehaviour
 
     public void AdsCheck()
     {
+        if (SceneManager.GetActiveScene().buildIndex == 3 || SceneManager.GetActiveScene().buildIndex == 2)
+            return;
+
         if (!LocalUser.locUser.adsBlocked)
         {
             adsButton.SetActive(true);
@@ -78,7 +73,7 @@ public class RemoveAds : MonoBehaviour
         }
         else
         {
-            adsButton.SetActive(false);
+            HideButton();
             GameObject.FindGameObjectWithTag("AdManager").GetComponent<AdManager>().TurnOffBannerAd();
         }
     }

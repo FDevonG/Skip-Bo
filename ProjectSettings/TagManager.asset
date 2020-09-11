@@ -23,6 +23,7 @@ TagManager:
   - AchievementManager
   - ErrorText
   - RemoveAdsPanel
+  - LoadingScreen
   layers:
   - Default
   - TransparentFX

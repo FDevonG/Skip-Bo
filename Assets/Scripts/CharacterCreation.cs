@@ -167,19 +167,20 @@ public class CharacterCreation : MonoBehaviour
     public void SavePlayer() {
         string playerName = nameInput.GetComponent<InputField>().text;
         if (!string.IsNullOrEmpty(playerName) && !string.IsNullOrWhiteSpace(playerName)) {
-            StartCoroutine(SaveCharacter(playerName));
-            //StartCoroutine(NameCheck(playerName));
+            //StartCoroutine(SaveCharacter(playerName));
+            StartCoroutine(NameCheck(playerName));
         } else {
             GetComponent<ErrorText>().SetError("Please enter a username");
-            NameError();
         }
     }
 
     private IEnumerator NameCheck(string userName) {
+        GameObject.FindGameObjectWithTag("LoadingScreen").GetComponent<LoadingScreen>().TurnOnLoadingScreen();
         var task = Database.GetUsers();
         yield return new WaitUntil(() => task.IsCompleted);
         if (task.IsFaulted) {
             GetComponent<ErrorText>().SetError("Failed to save character");
+            GameObject.FindGameObjectWithTag("LoadingScreen").GetComponent<LoadingScreen>().TurnOffLoadingScreen();
         } else {
             bool nameBool = false;
             foreach (DataSnapshot snap in task.Result.Children) {
@@ -195,7 +196,7 @@ public class CharacterCreation : MonoBehaviour
                 StartCoroutine(SaveCharacter(userName));
             } else {
                 GetComponent<ErrorText>().SetError("Username is taken");
-                NameError();
+                GameObject.FindGameObjectWithTag("LoadingScreen").GetComponent<LoadingScreen>().TurnOffLoadingScreen();
             }
         }
     }
@@ -222,10 +223,7 @@ public class CharacterCreation : MonoBehaviour
             GameObject.FindGameObjectWithTag("NetworkManager").GetComponent<PhotonNetworking>().ConnectToPhoton();
             GameObject.FindGameObjectWithTag("GameManager").GetComponent<ActivatePanel>().SwitchPanel(GameObject.FindGameObjectWithTag("GameManager").GetComponent<Menu>().startMenu);
         }
-    }
-
-    private void NameError() {
-        nameInput.GetComponent<Outline>().enabled = true;
+        GameObject.FindGameObjectWithTag("LoadingScreen").GetComponent<LoadingScreen>().TurnOffLoadingScreen();
     }
 
     private void Update() {

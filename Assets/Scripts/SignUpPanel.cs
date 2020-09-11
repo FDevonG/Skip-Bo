@@ -8,7 +8,6 @@ public class SignUpPanel : MonoBehaviour
     public GameObject signUpEmailInput;
     public GameObject signUpPasswordInput;
     public GameObject signUpPasswordConfirmInput;
-    public Text passwordText;
     private bool passwordsMatch = false;
 
     private void OnDisable() {
@@ -17,7 +16,8 @@ public class SignUpPanel : MonoBehaviour
         signUpEmailInput.GetComponent<InputField>().text = "";
         signUpPasswordInput.GetComponent<InputField>().text = "";
         signUpPasswordConfirmInput.GetComponent<InputField>().text = "";
-        passwordText.gameObject.SetActive(false);
+        signUpPasswordConfirmInput.GetComponentInChildren<Text>().color = Colors.GetBaseColor();
+        GetComponent<ErrorText>().ClearError();
     }
 
     public void CreateNewAccount() {
@@ -25,10 +25,12 @@ public class SignUpPanel : MonoBehaviour
     }
 
     private IEnumerator CreatingNewAccount() {
+        GameObject.FindGameObjectWithTag("LoadingScreen").GetComponent<LoadingScreen>().TurnOnLoadingScreen();
         var task = FirebaseAuthentication.CreateNewAccount(signUpEmailInput.GetComponent<InputField>().text, signUpPasswordInput.GetComponent<InputField>().text);
         yield return new WaitUntil(() => task.IsCompleted);
         if (task.IsFaulted) {
             GetComponent<ErrorText>().SetError(FirebaseError.GetErrorMessage(task.Exception));
+            GameObject.FindGameObjectWithTag("LoadingScreen").GetComponent<LoadingScreen>().TurnOffLoadingScreen();
         } else {
             User newUser = new User(signUpEmailInput.GetComponent<InputField>().text, FirebaseAuthentication.AuthenitcationKey(), GameObject.FindGameObjectWithTag("AchievementManager").GetComponent<Achievments>().BuildAchievmentsList());
             var newUserTask = Database.WriteNewUser(newUser);
@@ -39,6 +41,7 @@ public class SignUpPanel : MonoBehaviour
                 LocalUser.locUser = newUser;
                 GameObject.FindGameObjectWithTag("GameManager").GetComponent<ActivatePanel>().SwitchPanel(GameObject.FindGameObjectWithTag("GameManager").GetComponent<Menu>().characterCreationPanel);
             }
+            GameObject.FindGameObjectWithTag("LoadingScreen").GetComponent<LoadingScreen>().TurnOffLoadingScreen();
         }
     }
 
@@ -62,12 +65,12 @@ public class SignUpPanel : MonoBehaviour
 
     public void DoPasswordsMatch() {
         if (signUpPasswordInput.GetComponent<InputField>().text == signUpPasswordConfirmInput.GetComponent<InputField>().text) {
-            signUpPasswordConfirmInput.GetComponent<Outline>().enabled = false;
-            passwordText.gameObject.SetActive(false);
+            signUpPasswordConfirmInput.GetComponentInChildren<Text>().color = Colors.GetBaseColor();
+            GetComponent<ErrorText>().ClearError();
             passwordsMatch = true;
         } else {
-            signUpPasswordConfirmInput.GetComponent<Outline>().enabled = true;
-            passwordText.gameObject.SetActive(true);
+            signUpPasswordConfirmInput.GetComponentInChildren<Text>().color = Color.red;
+            GetComponent<ErrorText>().SetError("Passwords do not match");
             passwordsMatch = false;
         }
     }

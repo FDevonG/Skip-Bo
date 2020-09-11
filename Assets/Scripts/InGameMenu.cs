@@ -50,7 +50,7 @@ public class InGameMenu : MonoBehaviour
 
     public void LeaveMatch() {
         if(!gameControl.playerWon)
-            StartCoroutine(adManager.LeaveMatchAd());
+            adManager.LeaveMatchAd();
         if (!PhotonNetwork.offlineMode) {
             GameObject.FindGameObjectWithTag("Chat").GetComponent<Chat>().UnsubscribeToChannel(PhotonNetwork.room.Name);
         }

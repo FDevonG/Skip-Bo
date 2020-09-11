@@ -6,7 +6,7 @@ public class AdManager : MonoBehaviour
 {
 
     private string gameId;
-    private bool testMode = true;
+    private bool testMode = false;
     private string regularPlacementString = "video";
     private string bannerPlacementString = "banner";
 
@@ -54,6 +54,7 @@ public class AdManager : MonoBehaviour
     {
         yield return new WaitForSeconds(1.5f);
         StartCoroutine(ShowRegularAd());
+        yield return new WaitForSeconds(0.5f);
         StartCoroutine(GameObject.FindGameObjectWithTag("VictoryPanel").GetComponent<Victory>().ShowStandings());
     }
 
@@ -71,18 +72,20 @@ public class AdManager : MonoBehaviour
     //    }
     //}
 
-    public IEnumerator LeaveMatchAd()
+    public void LeaveMatchAd()
     {
         SceneController.LoadStartMenu();
         if (!LocalUser.locUser.adsBlocked) {
             //SceneController.LoadingScreen();
-            yield return StartCoroutine(ShowRegularAd());
-        }
+            StartCoroutine(ShowRegularAd());
+        }        
     }
 
     public IEnumerator ShowBannerAdd() {
         if (Advertisement.Banner.isLoaded)
+        {
             yield return null;
+        }
         yield return new WaitUntil(() => Advertisement.IsReady(bannerPlacementString));
         Advertisement.Banner.SetPosition(BannerPosition.BOTTOM_CENTER);
         Advertisement.Banner.Show(bannerPlacementString);

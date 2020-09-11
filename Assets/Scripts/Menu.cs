@@ -22,7 +22,6 @@ public class Menu : MonoBehaviour
     public GameObject friendsSettingsPanel;
     public GameObject blockedPanel;
     public GameObject leaderboardPanel;
-    public GameObject loadingScreen;
     public GameObject ratingPanel;
     public GameObject playerPanel;
     public GameObject achievementsPanel;
@@ -149,11 +148,12 @@ public class Menu : MonoBehaviour
             activatePanel.SwitchPanel(startGamePanel);
         } else {
             if (LocalUser.locUser == null) {
-                activatePanel.SwitchPanel(loadingScreen);
+                GameObject.FindGameObjectWithTag("LoadingScreen").GetComponent<LoadingScreen>().TurnOnLoadingScreen();
                 var task = Database.GetCurrentUser();
                 yield return new WaitUntil(() => task.IsCompleted);
                 if (task.IsFaulted) {
                     activatePanel.SwitchPanel(errorPanel);
+                    GameObject.FindGameObjectWithTag("LoadingScreen").GetComponent<LoadingScreen>().TurnOffLoadingScreen();
                 } else {
                     LocalUser.locUser = JsonUtility.FromJson<User>(task.Result);
 
@@ -205,6 +205,7 @@ public class Menu : MonoBehaviour
                 }
             }
         }
+        GameObject.FindGameObjectWithTag("LoadingScreen").GetComponent<LoadingScreen>().TurnOffLoadingScreen();
         if (!GameObject.FindGameObjectWithTag("Announcer").GetComponent<Announcer>().welcomePlayed) {
             GameObject.FindGameObjectWithTag("Announcer").GetComponent<Announcer>().Welcome();
             GameObject.FindGameObjectWithTag("Announcer").GetComponent<Announcer>().welcomePlayed = true;
