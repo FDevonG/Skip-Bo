@@ -30,11 +30,6 @@ public class AdManager : MonoBehaviour
         Advertisement.Initialize(gameId, testMode);
     }
 
-    private void Start() {
-        if(!FirebaseAuthentication.IsPlayerLoggedIn() || FirebaseAuthentication.IsPlayerAnonymous())
-            StartCoroutine(ShowBannerAdd());
-    }
-
     public IEnumerator ShowRegularAd() {
         if (LocalUser.locUser.adsBlocked)
             yield return null;
@@ -57,8 +52,9 @@ public class AdManager : MonoBehaviour
 
     public IEnumerator Victory()
     {
+        yield return new WaitForSeconds(1.5f);
+        StartCoroutine(ShowRegularAd());
         StartCoroutine(GameObject.FindGameObjectWithTag("VictoryPanel").GetComponent<Victory>().ShowStandings());
-        yield return StartCoroutine(ShowRegularAd());
     }
 
     //public IEnumerator PlayAgainAd()
@@ -85,6 +81,8 @@ public class AdManager : MonoBehaviour
     }
 
     public IEnumerator ShowBannerAdd() {
+        if (Advertisement.Banner.isLoaded)
+            yield return null;
         yield return new WaitUntil(() => Advertisement.IsReady(bannerPlacementString));
         Advertisement.Banner.SetPosition(BannerPosition.BOTTOM_CENTER);
         Advertisement.Banner.Show(bannerPlacementString);

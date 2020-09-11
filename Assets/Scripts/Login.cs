@@ -35,7 +35,7 @@ public class Login : MonoBehaviour {
             //User user = new User();
             if (!userTask.IsFaulted) {
                 LocalUser.locUser = JsonUtility.FromJson<User>(userTask.Result);
-                StartCoroutine(GameObject.FindGameObjectWithTag("RemoveAdsPanel").GetComponent<RemoveAds>().AdsCheck());
+                GameObject.FindGameObjectWithTag("RemoveAdsPanel").GetComponent<RemoveAds>().AdsCheck();
                 if (string.IsNullOrEmpty(LocalUser.locUser.userName) || string.IsNullOrWhiteSpace(LocalUser.locUser.userName)) {
                     GameObject.FindGameObjectWithTag("GameManager").GetComponent<Menu>().loadingScreen.SetActive(false);
                     GameObject.FindGameObjectWithTag("GameManager").GetComponent<ActivatePanel>().SwitchPanel(GameObject.FindGameObjectWithTag("GameManager").GetComponent<Menu>().characterCreationPanel);

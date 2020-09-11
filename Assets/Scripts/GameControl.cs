@@ -193,8 +193,7 @@ public class GameControl : MonoBehaviour
     public void PlayerWonGame() {
         localPlayerPanel.GetComponent<CanvasGroup>().blocksRaycasts = false;
         playerWon = true;
-        AdManager adManager = GameObject.FindGameObjectWithTag("AdManager").GetComponent<AdManager>();
-        StartCoroutine(adManager.Victory());
+        StartCoroutine(GameObject.FindGameObjectWithTag("AdManager").GetComponent<AdManager>().Victory());
         if (PhotonNetwork.isMasterClient) {
             GameObject.FindGameObjectWithTag("VictoryPanel").GetComponent<Victory>().playerStandings = GameObject.FindGameObjectWithTag("VictoryPanel").GetComponent<Victory>().GetPlayerStandings();
         }

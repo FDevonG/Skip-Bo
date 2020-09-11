@@ -31,7 +31,7 @@ public class RemoveAds : MonoBehaviour
     private void Start()
     {
         SceneManager.sceneLoaded += OnSceneLoaded;
-        StartCoroutine(AdsCheck());
+        //AdsCheck();
         adsButton.GetComponent<Button>().onClick.AddListener(() =>
         {
             GameObject.FindGameObjectWithTag("GameManager").GetComponent<ActivatePanel>().SwitchPanel(adsPanel);
@@ -49,7 +49,7 @@ public class RemoveAds : MonoBehaviour
     {
         if (scene.buildIndex != 3 && scene.buildIndex != 2)
         {
-            StartCoroutine(AdsCheck());
+            AdsCheck();
         }
         else
         {
@@ -61,25 +61,20 @@ public class RemoveAds : MonoBehaviour
         adsButton.SetActive(false);
     }
 
-    public IEnumerator AdsCheck()
+    public void AdsCheck()
     {
-        
-        if(LocalUser.locUser == null)
-            yield return new WaitUntil(() => LocalUser.locUser != null);
-
         if (!LocalUser.locUser.adsBlocked)
         {
             adsButton.SetActive(true);
             if (FirebaseAuthentication.IsPlayerAnonymous())
             {
                 adsButton.GetComponent<Button>().interactable = false;
-                StartCoroutine(GameObject.FindGameObjectWithTag("AdManager").GetComponent<AdManager>().ShowBannerAdd());
             }
             else
             {
-                StartCoroutine(GameObject.FindGameObjectWithTag("AdManager").GetComponent<AdManager>().ShowBannerAdd());
                 adsButton.GetComponent<Button>().interactable = true;
             }
+            StartCoroutine(GameObject.FindGameObjectWithTag("AdManager").GetComponent<AdManager>().ShowBannerAdd());
         }
         else
         {

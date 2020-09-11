@@ -145,8 +145,8 @@ public class Menu : MonoBehaviour
 
     public IEnumerator DoesPlayerExist() {
         if (!FirebaseAuthentication.IsPlayerLoggedIn()) {
-            activatePanel.SwitchPanel(startGamePanel);
             StartCoroutine(adManager.ShowBannerAdd());
+            activatePanel.SwitchPanel(startGamePanel);
         } else {
             if (LocalUser.locUser == null) {
                 activatePanel.SwitchPanel(loadingScreen);
@@ -157,7 +157,7 @@ public class Menu : MonoBehaviour
                 } else {
                     LocalUser.locUser = JsonUtility.FromJson<User>(task.Result);
 
-                    StartCoroutine(GameObject.FindGameObjectWithTag("RemoveAdsPanel").GetComponent<RemoveAds>().AdsCheck());
+                    GameObject.FindGameObjectWithTag("RemoveAdsPanel").GetComponent<RemoveAds>().AdsCheck();
 
                     if (LocalUser.locUser.achievments.Count == 0) {
                         LocalUser.locUser.achievments = GameObject.FindGameObjectWithTag("AchievementManager").GetComponent<Achievments>().BuildAchievmentsList();
@@ -184,7 +184,7 @@ public class Menu : MonoBehaviour
                 }
             }
             if (LocalUser.locUser != null) {
-                StartCoroutine(GameObject.FindGameObjectWithTag("RemoveAdsPanel").GetComponent<RemoveAds>().AdsCheck());
+                GameObject.FindGameObjectWithTag("RemoveAdsPanel").GetComponent<RemoveAds>().AdsCheck();
                 if (LocalUser.locUser.friends.Count > 0) {
                     StartCoroutine(Friends.GetStartFriends());
                 }
