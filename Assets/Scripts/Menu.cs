@@ -205,7 +205,9 @@ public class Menu : MonoBehaviour
                 }
             }
         }
+
         GameObject.FindGameObjectWithTag("LoadingScreen").GetComponent<LoadingScreen>().TurnOffLoadingScreen();
+
         if (!GameObject.FindGameObjectWithTag("Announcer").GetComponent<Announcer>().welcomePlayed) {
             GameObject.FindGameObjectWithTag("Announcer").GetComponent<Announcer>().Welcome();
             GameObject.FindGameObjectWithTag("Announcer").GetComponent<Announcer>().welcomePlayed = true;

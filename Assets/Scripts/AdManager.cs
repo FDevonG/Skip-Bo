@@ -6,7 +6,7 @@ public class AdManager : MonoBehaviour
 {
 
     private string gameId;
-    private bool testMode = false;
+    private bool testMode = true;
     private string regularPlacementString = "video";
     private string bannerPlacementString = "banner";
 
@@ -82,10 +82,6 @@ public class AdManager : MonoBehaviour
     }
 
     public IEnumerator ShowBannerAdd() {
-        if (Advertisement.Banner.isLoaded)
-        {
-            yield return null;
-        }
         yield return new WaitUntil(() => Advertisement.IsReady(bannerPlacementString));
         Advertisement.Banner.SetPosition(BannerPosition.BOTTOM_CENTER);
         Advertisement.Banner.Show(bannerPlacementString);

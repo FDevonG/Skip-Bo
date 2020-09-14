@@ -13,29 +13,26 @@ public class Victory : MonoBehaviour
 
     [SerializeField] GameObject victoryPanel;
     [SerializeField] GameObject quitGamePanel;
-    GameObject activePanel;
 
     LevelSystem levelSystem;
     Achievments achievments;
 
     private void Start() {
         gameControl = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameControl>();
-        activePanel = victoryPanel;
         levelSystem = GameObject.FindGameObjectWithTag("LevelManager").GetComponent<LevelSystem>();
         achievments = GameObject.FindGameObjectWithTag("AchievementManager").GetComponent<Achievments>();
     }
 
-    public void ChangePanel() {
-        if (activePanel == victoryPanel) {
-            victoryPanel.SetActive(false);
-            quitGamePanel.SetActive(true);
-            activePanel = quitGamePanel;
-        }
-        if (activePanel == quitGamePanel) {
-            quitGamePanel.SetActive(false);
-            victoryPanel.SetActive(true);
-            activePanel = victoryPanel;
-        }
+    public void CloseQuitPanel()
+    {
+        quitGamePanel.SetActive(false);
+        victoryPanel.SetActive(true);
+    }
+
+    public void QuitGamePanel()
+    {
+        victoryPanel.SetActive(false);
+        quitGamePanel.SetActive(true);
     }
 
     public int[] GetPlayerStandings() {
@@ -82,7 +79,7 @@ public class Victory : MonoBehaviour
             child.SetActive(true);
         }
 
-        yield return new WaitUntil(() => playerStandings.Length > 0);
+        yield return new WaitUntil(() => playerStandings.Length == gameControl.playerPanels.Length);
 
         //while (playerStandings.Length == 0) {
         //    yield return new WaitForSeconds(0.5f);

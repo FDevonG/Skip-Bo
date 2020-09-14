@@ -39,7 +39,7 @@ public class NPCTurn : MonoBehaviour {
                     if (deckCardNumber == gameControl.playedCardPanels[i].GetComponent<PlayedCardStack>().currentCardValue + 1) {//if the values line up
                         if (PhotonNetwork.isMasterClient) {
                             photonView.RPC(npcNetworkDeck, PhotonTargets.All, i);
-                        } 
+                        }
                         cardPlayed = true;//set the card played to true
                         break;
                     }
@@ -121,7 +121,7 @@ public class NPCTurn : MonoBehaviour {
         }
         if (PhotonNetwork.isMasterClient) {
             npcTurnDelegate checkPlayerDeck = CheckPLayerDeck;
-            StartCoroutine(Wait(checkPlayerDeck, 0.5f));
+            StartCoroutine(Wait(checkPlayerDeck, 1f));
         }
     }
 
