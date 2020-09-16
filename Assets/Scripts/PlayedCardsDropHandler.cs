@@ -65,8 +65,8 @@ public class PlayedCardsDropHandler : MonoBehaviour, IDropHandler {
                 }
             }
             if (CardDragHandler.playerDeck) {
-                gameControl.PlayedDeckCardCount();
                 photonView.RPC("PlayCardFromDeck", PhotonTargets.AllViaServer, CardDragHandler.itemBeingDragged.GetComponent<PhotonView>().viewID, panelIndex, PhotonNetwork.player);
+                gameControl.PlayedDeckCardCount();
             }
             if (CardDragHandler.playerHand) {
                 photonView.RPC("PlayCardFromHand", PhotonTargets.AllViaServer, CardDragHandler.itemBeingDragged.GetComponent<PhotonView>().viewID, panelIndex, PhotonNetwork.player);

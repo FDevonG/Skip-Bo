@@ -39,9 +39,6 @@ public class GameControl : MonoBehaviour
 
     public void PlayedDeckCardCount()
     {
-        if (!PhotonNetwork.offlineMode)
-            return;
-
         deckCardsPlayed++;
         if (deckCardsPlayed == 10 && !playerWon)
         {
