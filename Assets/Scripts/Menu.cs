@@ -143,21 +143,20 @@ public class Menu : MonoBehaviour
     }
 
     public IEnumerator DoesPlayerExist() {
+        GameObject.FindGameObjectWithTag("LoadingScreen").GetComponent<LoadingScreen>().TurnOnLoadingScreen();
         if (!FirebaseAuthentication.IsPlayerLoggedIn()) {
             StartCoroutine(adManager.ShowBannerAdd());
             activatePanel.SwitchPanel(startGamePanel);
         } else {
             if (LocalUser.locUser == null) {
-                GameObject.FindGameObjectWithTag("LoadingScreen").GetComponent<LoadingScreen>().TurnOnLoadingScreen();
                 var task = Database.GetCurrentUser();
                 yield return new WaitUntil(() => task.IsCompleted);
                 if (task.IsFaulted) {
+                    StartCoroutine(adManager.ShowBannerAdd());
                     activatePanel.SwitchPanel(errorPanel);
                     GameObject.FindGameObjectWithTag("LoadingScreen").GetComponent<LoadingScreen>().TurnOffLoadingScreen();
                 } else {
                     LocalUser.locUser = JsonUtility.FromJson<User>(task.Result);
-
-                    GameObject.FindGameObjectWithTag("RemoveAdsPanel").GetComponent<RemoveAds>().AdsCheck();
 
                     if (LocalUser.locUser.achievments.Count == 0) {
                         LocalUser.locUser.achievments = GameObject.FindGameObjectWithTag("AchievementManager").GetComponent<Achievments>().BuildAchievmentsList();
@@ -184,7 +183,6 @@ public class Menu : MonoBehaviour
                 }
             }
             if (LocalUser.locUser != null) {
-                GameObject.FindGameObjectWithTag("RemoveAdsPanel").GetComponent<RemoveAds>().AdsCheck();
                 if (LocalUser.locUser.friends.Count > 0) {
                     StartCoroutine(Friends.GetStartFriends());
                 }
@@ -207,6 +205,7 @@ public class Menu : MonoBehaviour
         }
 
         GameObject.FindGameObjectWithTag("LoadingScreen").GetComponent<LoadingScreen>().TurnOffLoadingScreen();
+        GameObject.FindGameObjectWithTag("RemoveAdsPanel").GetComponent<RemoveAds>().AdsCheck();
 
         if (!GameObject.FindGameObjectWithTag("Announcer").GetComponent<Announcer>().welcomePlayed) {
             GameObject.FindGameObjectWithTag("Announcer").GetComponent<Announcer>().Welcome();

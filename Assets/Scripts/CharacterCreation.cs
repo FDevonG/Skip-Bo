@@ -35,7 +35,6 @@ public class CharacterCreation : MonoBehaviour
 
     private void OnDisable() {
         nameInput.GetComponent<InputField>().text = "";
-        nameInput.GetComponent<Outline>().enabled = false;
         chair.color = invisibleColor;
         cface.color = invisibleColor;
         ckit.color = invisibleColor;

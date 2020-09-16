@@ -82,9 +82,16 @@ public class AdManager : MonoBehaviour
     }
 
     public IEnumerator ShowBannerAdd() {
-        yield return new WaitUntil(() => Advertisement.IsReady(bannerPlacementString));
-        Advertisement.Banner.SetPosition(BannerPosition.BOTTOM_CENTER);
-        Advertisement.Banner.Show(bannerPlacementString);
+        if (Advertisement.Banner.isLoaded)
+        {
+            yield return null;
+        }
+        else
+        {
+            yield return new WaitUntil(() => Advertisement.IsReady(bannerPlacementString));
+            Advertisement.Banner.SetPosition(BannerPosition.BOTTOM_CENTER);
+            Advertisement.Banner.Show(bannerPlacementString);
+        }
     }
 
     public void TurnOffBannerAd()

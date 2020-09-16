@@ -9,9 +9,10 @@ public class ChatPanel : MonoBehaviour
     public static ChatPanel Instance { get; private set; }
     Sounds sounds;
     List<GameObject> messages = new List<GameObject>();
-    int maxHistory = 25;
+    int maxHistory = 35;
     [SerializeField] GameObject chatPanel;
-    [SerializeField] Transform contentParent;
+    //[SerializeField] Transform contentParent;
+    [SerializeField] Transform messageParent;
     [SerializeField] InputField messageInput;
     [SerializeField] Text numberText;
     Chat chat;
@@ -89,13 +90,14 @@ public class ChatPanel : MonoBehaviour
                 messageCounter++;
                 numberText.text = messageCounter.ToString();
             }
-            GameObject text = Instantiate(Resources.Load<GameObject>("MessageText"), contentParent);
+            GameObject text = Instantiate(Resources.Load<GameObject>("MessagePanel"), messageParent);
             if (messages.Count >= maxHistory) {
                 Destroy(messages[0]);
                 messages.Remove(messages[0]);
             }
             messages.Add(text);
-            text.GetComponent<Text>().text = GetUserName(user) + " : " + message;
+            text.GetComponent<ChatMessageSetUp>().SetUpMessage(GetUserName(user) + " : ", message);
+            //text.GetComponent<Text>().text = GetUserName(user) + " : " + message;
         }
         sounds.NewMessage();
     }
@@ -105,7 +107,7 @@ public class ChatPanel : MonoBehaviour
             messageCounter++;
             numberText.text = messageCounter.ToString();
         }
-        GameObject text = Instantiate(Resources.Load<GameObject>("MessageText"), contentParent);
+        GameObject text = Instantiate(Resources.Load<GameObject>("MessageText"), messageParent);
         if (messages.Count >= maxHistory) {
             Destroy(messages[0]);
             messages.Remove(messages[0]);
