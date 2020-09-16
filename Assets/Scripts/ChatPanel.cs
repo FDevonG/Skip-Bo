@@ -96,7 +96,7 @@ public class ChatPanel : MonoBehaviour
                 messages.Remove(messages[0]);
             }
             messages.Add(text);
-            text.GetComponent<ChatMessageSetUp>().SetUpMessage(GetUserName(user) + " : ", message);
+            text.GetComponent<ChatMessageSetUp>().SetUpMessage(GetUserName(user) + ": ", message);
             //text.GetComponent<Text>().text = GetUserName(user) + " : " + message;
         }
         sounds.NewMessage();
@@ -149,7 +149,7 @@ public class ChatPanel : MonoBehaviour
                     chatPanel.transform.GetChild(i).GetComponent<Image>().color = Color.Lerp(new Color(startColor.r, startColor.g, startColor.g, 0), new Color(startColor.r, startColor.g, startColor.g, 1), percentageComplete);
                 }
             }
-            chatPanel.GetComponent<Image>().color = Color.Lerp(new Color(1, 1, 1, 0), new Color(1, 1, 1, 1), percentageComplete);
+            //chatPanel.GetComponent<Image>().color = Color.Lerp(new Color(chatColor.r, chatColor.g, chatColor.b, 0), new Color(chatColor.r, chatColor.g, chatColor.b, 1), percentageComplete);
 
             if (percentageComplete >= timeTakenDuringLerp) {
                 chatOpening = false;
@@ -165,7 +165,7 @@ public class ChatPanel : MonoBehaviour
                     chatPanel.transform.GetChild(i).GetComponent<Image>().color = Color.Lerp(new Color(startColor.r, startColor.g, startColor.g, 1), new Color(startColor.r, startColor.g, startColor.g, 0), percentageComplete);
                 }
             }
-            chatPanel.GetComponent<Image>().color = Color.Lerp(new Color(1, 1, 1, 1), new Color(1, 1, 1, 0), percentageComplete);
+            //chatPanel.GetComponent<Image>().color = Color.Lerp(new Color(1, 1, 1, 1), new Color(1, 1, 1, 0), percentageComplete);
 
             if (percentageComplete >= timeTakenDuringLerp) {
                 chatClosing = false;

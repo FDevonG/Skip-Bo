@@ -143,11 +143,11 @@ public class Menu : MonoBehaviour
     }
 
     public IEnumerator DoesPlayerExist() {
-        GameObject.FindGameObjectWithTag("LoadingScreen").GetComponent<LoadingScreen>().TurnOnLoadingScreen();
         if (!FirebaseAuthentication.IsPlayerLoggedIn()) {
             StartCoroutine(adManager.ShowBannerAdd());
             activatePanel.SwitchPanel(startGamePanel);
         } else {
+            GameObject.FindGameObjectWithTag("LoadingScreen").GetComponent<LoadingScreen>().TurnOnLoadingScreen();
             if (LocalUser.locUser == null) {
                 var task = Database.GetCurrentUser();
                 yield return new WaitUntil(() => task.IsCompleted);

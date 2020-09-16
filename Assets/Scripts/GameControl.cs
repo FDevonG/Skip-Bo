@@ -6,6 +6,8 @@ public class GameControl : MonoBehaviour
 {
     PhotonView photonView;
 
+    AdManager adManager;
+
     [SerializeField] GameSetup gameSetup;
     NPCTurn npcTurn;
     Announcer announcer;
@@ -26,10 +28,26 @@ public class GameControl : MonoBehaviour
 
     public Vector3 cardSpawnLocation = new Vector3(-600, 0, 0);
 
+    public int deckCardsPlayed = 0;
+
     private void Start() {
         npcTurn = GetComponent<NPCTurn>();
         announcer = GameObject.FindGameObjectWithTag("Announcer").GetComponent<Announcer>();
         photonView = GetComponent<PhotonView>();
+        adManager = GameObject.FindGameObjectWithTag("AdManager").GetComponent<AdManager>();
+    }
+
+    public void PlayedDeckCardCount()
+    {
+        if (!PhotonNetwork.offlineMode)
+            return;
+
+        deckCardsPlayed++;
+        if (deckCardsPlayed == 10 && !playerWon)
+        {
+            StartCoroutine(adManager.ShowRegularAd());
+            deckCardsPlayed = 0;
+        }
     }
 
     [PunRPC]

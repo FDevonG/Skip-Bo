@@ -57,7 +57,6 @@ public class PlayedCardsDropHandler : MonoBehaviour, IDropHandler {
                 panelControl.ShowLowerSideBarCards(CardDragHandler.startParent);
             }
 
-            //List<Transform> panels = transform.parent.transform.Cast<Transform>().ToList();
             int panelIndex = 0;
             for (int i = 0; i < gameControl.playedCardPanels.Count; i++) {
                 if (gameControl.playedCardPanels[i].transform == transform) {
@@ -66,6 +65,7 @@ public class PlayedCardsDropHandler : MonoBehaviour, IDropHandler {
                 }
             }
             if (CardDragHandler.playerDeck) {
+                gameControl.PlayedDeckCardCount();
                 photonView.RPC("PlayCardFromDeck", PhotonTargets.AllViaServer, CardDragHandler.itemBeingDragged.GetComponent<PhotonView>().viewID, panelIndex, PhotonNetwork.player);
             }
             if (CardDragHandler.playerHand) {
