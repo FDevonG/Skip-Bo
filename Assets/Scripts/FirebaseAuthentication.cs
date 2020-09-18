@@ -1,27 +1,10 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Firebase.Auth;
 using UnityEngine;
+using Facebook.Unity;
 
 public class FirebaseAuthentication : MonoBehaviour
 {
-
-    public static FirebaseAuthentication Instance { get; private set; }
-
-    private void Awake()
-    {
-
-        if (Instance != null && Instance != this)
-        {
-            Destroy(this.gameObject);
-        }
-        else
-        {
-            Instance = this;
-        }
-        DontDestroyOnLoad(gameObject);
-    }
 
     public static string AuthenitcationKey() {
         return FirebaseAuth.DefaultInstance.CurrentUser.UserId;
@@ -29,6 +12,14 @@ public class FirebaseAuthentication : MonoBehaviour
 
     public static Task<FirebaseUser> LogIn(string email, string password) {
         return FirebaseAuth.DefaultInstance.SignInWithEmailAndPasswordAsync(email, password).ContinueWith(task => {
+            return task.Result;
+        });
+    }
+
+    public static Task<FirebaseUser>LoginWithFacebook(AccessToken accessToken)
+    {
+        Credential credential = FacebookAuthProvider.GetCredential(accessToken.TokenString);
+        return FirebaseAuth.DefaultInstance.SignInWithCredentialAsync(credential).ContinueWith(task => {
             return task.Result;
         });
     }
@@ -53,6 +44,8 @@ public class FirebaseAuthentication : MonoBehaviour
 
     public static void SignOut() {
         FirebaseAuth.DefaultInstance.SignOut();
+        if (FB.IsLoggedIn)
+            FB.LogOut();
     }
 
     public static void DeleteAccount() {

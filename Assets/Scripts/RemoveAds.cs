@@ -57,6 +57,8 @@ public class RemoveAds : MonoBehaviour
     {
         if (SceneManager.GetActiveScene().buildIndex == 3 || SceneManager.GetActiveScene().buildIndex == 2)
             return;
+        if (LocalUser.locUser == null)
+            return;
 
         if (!LocalUser.locUser.adsBlocked)
         {
