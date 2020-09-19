@@ -52,6 +52,7 @@ public class FacebookLogin : MonoBehaviour
     {
         if (result.Error == null)
         {
+
             //Debug.Log(result.ResultDictionary["id"].ToString());
             //Debug.Log(result.ResultDictionary["name"].ToString());
             //Debug.Log(result.ResultDictionary["email"].ToString());

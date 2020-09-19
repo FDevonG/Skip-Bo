@@ -21,7 +21,13 @@ public class FacebookScript : MonoBehaviour
         DontDestroyOnLoad(gameObject);
         if (!FB.IsInitialized)
         {
-            FB.Init();
+            FB.Init(() =>
+            {
+                if (FB.IsInitialized)
+                    FB.ActivateApp();
+                else
+                    Debug.LogError("Couldn't initialize");
+            });
         }
         else
         {
@@ -44,7 +50,21 @@ public class FacebookScript : MonoBehaviour
 
     public void InviteFacebookFriendToGame()
     {
+        GameObject.FindGameObjectWithTag("LoadingScreen").GetComponent<LoadingScreen>().TurnOnLoadingScreen();
         FB.AppRequest("Come play some SkipBo!", title:"SkipBo");
+        GameObject.FindGameObjectWithTag("LoadingScreen").GetComponent<LoadingScreen>().TurnOffLoadingScreen();
+    }
+
+    public Dictionary<string, object> GetFriendsPlayingThisGame()
+    {
+        //"/me/friends"
+        var friendsList = new Dictionary<string, object>();
+        FB.API("/me/friends", HttpMethod.GET, result =>
+        {
+            friendsList = (Dictionary<string, object>)Facebook.MiniJSON.Json.Deserialize(result.RawResult);
+            //friendsList = (List<object>)dictionary["data"];
+        });
+        return friendsList;
     }
 
 }

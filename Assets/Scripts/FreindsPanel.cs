@@ -1,14 +1,16 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Firebase.Database;
+using UnityEngine.UI;
 
 public class FreindsPanel : MonoBehaviour
 {
 
     [SerializeField] GameObject friendsPanelParent;
+    [SerializeField] GameObject headerText;
     List<GameObject> friendPanels = new List<GameObject>();
-
+    GameObject skipboFriendsText;
+    GameObject facebookFriendsText;
     private void OnEnable() {
         StartCoroutine(BuildFriends());
     }
@@ -24,6 +26,8 @@ public class FreindsPanel : MonoBehaviour
             }
         }
         if (PhotonNetwork.Friends != null) {
+            skipboFriendsText = Instantiate(headerText, friendsPanelParent.transform);
+            skipboFriendsText.GetComponent<Text>().text = "Skip-Bo Friends";
             for (int i = 0; i < PhotonNetwork.Friends.Count; i++) {
                 User friend = new User();
                 for (int x =0; x < Friends.friends.Count; x++) {
@@ -40,6 +44,17 @@ public class FreindsPanel : MonoBehaviour
                     }
                 }
             }
+        }
+        
+        if (FacebookScript.Instance.IsFacebookLoggedIn())
+        {
+            Dictionary<string, object> facebookFriends = FacebookScript.Instance.GetFriendsPlayingThisGame();
+            if (facebookFriends.Count > 0)
+            {
+                facebookFriendsText = Instantiate(headerText, friendsPanelParent.transform);
+                facebookFriendsText.GetComponent<Text>().text = "Facebook Friends";
+            }
+            Debug.Log(facebookFriends);
         }
     }
 

@@ -1,10 +1,11 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-public class FriendsButton : MonoBehaviour
+public class ButtonOnOffControl : MonoBehaviour
 {
     [SerializeField] GameObject friendButon;
     [SerializeField] GameObject leaderBoadButtun;
+    [SerializeField] GameObject inviteFacebookFriendsButton;
 
     private void OnEnable() {
         if (FirebaseAuthentication.IsPlayerAnonymous()) {
@@ -13,6 +14,14 @@ public class FriendsButton : MonoBehaviour
         } else {
             friendButon.GetComponent<Button>().interactable = true;
             leaderBoadButtun.GetComponent<Button>().interactable = true;
+        }
+        if (FacebookScript.Instance.IsFacebookLoggedIn())
+        {
+            inviteFacebookFriendsButton.GetComponent<Button>().interactable = true;
+        }
+        else
+        {
+            inviteFacebookFriendsButton.GetComponent<Button>().interactable = false;
         }
     }
 
