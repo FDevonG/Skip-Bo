@@ -58,20 +58,6 @@ public class AdManager : MonoBehaviour
         StartCoroutine(GameObject.FindGameObjectWithTag("VictoryPanel").GetComponent<Victory>().ShowStandings());
     }
 
-    //public IEnumerator PlayAgainAd()
-    //{
-    //    yield return StartCoroutine(ShowRegularAd());
-
-    //    if (PhotonNetwork.offlineMode)
-    //    {
-    //        SceneController.ReloadScene();
-    //    }
-    //    else if (!PhotonNetwork.offlineMode)
-    //    {
-    //        SceneController.LoadGameSetup();
-    //    }
-    //}
-
     public void LeaveMatchAd()
     {
         SceneController.LoadStartMenu();
@@ -87,6 +73,14 @@ public class AdManager : MonoBehaviour
 
         Advertisement.Banner.SetPosition(BannerPosition.BOTTOM_CENTER);
         Advertisement.Banner.Show(bannerPlacementString);
+    }
+
+    public void TurnOnBannerAd()
+    {
+        if (LocalUser.locUser.adsBlocked)
+            return;
+
+        Advertisement.Banner.Show();
     }
 
     public void TurnOffBannerAd()

@@ -11,6 +11,8 @@ public class Victory : MonoBehaviour
     public GameObject panelsParent;
     public GameObject[] children;
 
+    [SerializeField] GameObject shareButton;
+
     [SerializeField] GameObject victoryPanel;
     [SerializeField] GameObject quitGamePanel;
 
@@ -27,11 +29,13 @@ public class Victory : MonoBehaviour
     {
         quitGamePanel.SetActive(false);
         victoryPanel.SetActive(true);
+        shareButton.SetActive(true);
     }
 
     public void QuitGamePanel()
     {
         victoryPanel.SetActive(false);
+        shareButton.SetActive(false);
         quitGamePanel.SetActive(true);
     }
 

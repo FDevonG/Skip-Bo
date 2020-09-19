@@ -50,3 +50,7 @@ Update2.3
 
 Update2.4
 -Remove ads option added
+
+Update 2.4
+-Facebook login added
+-Share screen shot button added to victory screen
