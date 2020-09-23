@@ -17,4 +17,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Skip-Bo.unity
     guid: ecf7c071b2fd6467388ca4ae083e8dec
+  - enabled: 1
+    path: Assets/Scenes/Store.unity
+    guid: c975a6d0b86df4905825fa9d19f369e0
   m_configObjects: {}

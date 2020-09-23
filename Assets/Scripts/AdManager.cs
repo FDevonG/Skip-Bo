@@ -62,7 +62,6 @@ public class AdManager : MonoBehaviour
     {
         SceneController.LoadStartMenu();
         if (!LocalUser.locUser.adsBlocked) {
-            //SceneController.LoadingScreen();
             StartCoroutine(ShowRegularAd());
         }        
     }
