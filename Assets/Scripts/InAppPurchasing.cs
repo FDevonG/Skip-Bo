@@ -10,6 +10,8 @@ public class InAppPurchasing : MonoBehaviour, IStoreListener
 
     //Products
     private static string removeAds = "remove_ads";
+    private static string twoHundredGems = "two_hundred_gems";
+    private static string oneThousandGems = "one_thousand_gems";
 
     public static InAppPurchasing instance { get; private set; }
 
@@ -44,6 +46,8 @@ public class InAppPurchasing : MonoBehaviour, IStoreListener
         var builder = ConfigurationBuilder.Instance(StandardPurchasingModule.Instance());
 
         builder.AddProduct(removeAds, ProductType.NonConsumable);
+        builder.AddProduct(twoHundredGems, ProductType.Consumable);
+        builder.AddProduct(oneThousandGems, ProductType.Consumable);
 
         UnityPurchasing.Initialize(this, builder);
     }
@@ -57,6 +61,16 @@ public class InAppPurchasing : MonoBehaviour, IStoreListener
     public void BuyRemoveAds()
     {
         BuyProductID(removeAds);
+    }
+
+    public void BuyTwoHundredGems()
+    {
+        BuyProductID(twoHundredGems);
+    }
+
+    public void BuyOneThousandGems()
+    {
+        BuyProductID(oneThousandGems);
     }
 
     void BuyProductID(string productId)
@@ -89,7 +103,9 @@ public class InAppPurchasing : MonoBehaviour, IStoreListener
         {
             // ... report the fact Purchasing has not succeeded initializing yet. Consider waiting longer or 
             // retrying initiailization.
-            GameObject.FindGameObjectWithTag("RemoveAdsPanel").GetComponent<ErrorText>().SetError("Not connected to the store");
+            if(productId == removeAds)
+                GameObject.FindGameObjectWithTag("RemoveAdsPanel").GetComponent<ErrorText>().SetError("Not connected to the store");
+
             Debug.Log("BuyProductID FAIL. Not initialized.");
         }
     }
@@ -99,6 +115,14 @@ public class InAppPurchasing : MonoBehaviour, IStoreListener
         if (string.Equals(e.purchasedProduct.definition.id, removeAds, StringComparison.Ordinal))
         {
             GameObject.FindGameObjectWithTag("RemoveAdsPanel").GetComponent<RemoveAds>().AdsRemoved();
+        }
+        if (string.Equals(e.purchasedProduct.definition.id, twoHundredGems, StringComparison.Ordinal))
+        {
+            GameObject.FindGameObjectWithTag("GameManager").GetComponent<Menu>().storePanel.GetComponent<StorePanel>().TwoHundredGemsPurchased();
+        }
+        if (string.Equals(e.purchasedProduct.definition.id, oneThousandGems, StringComparison.Ordinal))
+        {
+            GameObject.FindGameObjectWithTag("GameManager").GetComponent<Menu>().storePanel.GetComponent<StorePanel>().OneThousandGemsPurchased();
         }
         return PurchaseProcessingResult.Complete;
     }

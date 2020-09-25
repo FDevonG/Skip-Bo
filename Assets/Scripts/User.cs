@@ -30,6 +30,8 @@ public class User {
 
     public bool adsBlocked;
 
+    public int gems;
+
     public User(string userEmail, string id, List<Achievment> ach) {
         email = userEmail;
         userID = id;

@@ -26,6 +26,7 @@ public class Menu : MonoBehaviour
     public GameObject playerPanel;
     public GameObject achievementsPanel;
     public GameObject removeAdsPanel;
+    public GameObject storePanel;
 
     public GameObject errorPanel;
 
@@ -133,6 +134,11 @@ public class Menu : MonoBehaviour
         }
         if (activatePanel.activePanel == playerPanel) {
             activatePanel.SwitchPanel(startMenu);
+            return;
+        }
+        if (activatePanel.activePanel == playerPanel)
+        {
+            activatePanel.SwitchPanel(storePanel);
             return;
         }
         if (activatePanel.activePanel == removeAdsPanel)

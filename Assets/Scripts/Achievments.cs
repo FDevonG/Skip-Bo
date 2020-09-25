@@ -48,7 +48,7 @@ public class Achievments : MonoBehaviour
 
     public IEnumerator GamesWon() {
         if (LocalUser.locUser.gamesWonInARow >= 5) {
-            StartCoroutine(UnlockAchievement("Hot streak"));
+            UnlockAchievement("Hot streak");
         }
         var task = Database.UpdateUser("gamesWonInARow", LocalUser.locUser.gamesWonInARow);
         yield return new WaitUntil(() => task.IsCompleted);
@@ -61,31 +61,31 @@ public class Achievments : MonoBehaviour
     public void CheckLevelAchievments(int level) {
         switch (level) {
             case 5:
-                StartCoroutine(UnlockAchievement("It's a start"));
+                UnlockAchievement("It's a start");
                 break;
             case 10:
-                StartCoroutine(UnlockAchievement("One step at a time"));
+                UnlockAchievement("One step at a time");
                 break;
             case 25:
-                StartCoroutine(UnlockAchievement("New heights achieved"));
+                UnlockAchievement("New heights achieved");
                 break;
             case 50:
-                StartCoroutine(UnlockAchievement("Half way"));
+                UnlockAchievement("Half way");
                 break;
             case 75:
-                StartCoroutine(UnlockAchievement("Devoted"));
+                UnlockAchievement("Devoted");
                 break;
             case 100:
-                StartCoroutine(UnlockAchievement("Got what it takes"));
+                UnlockAchievement("Got what it takes");
                 break;
         }
     }
 
     public void FreindAdded() {
-        StartCoroutine(UnlockAchievement("Friends in high places"));
+        UnlockAchievement("Friends in high places");
     }
 
-    public IEnumerator UnlockAchievement(string name) {
+    public void UnlockAchievement(string name) {
         if (!FirebaseAuthentication.IsPlayerAnonymous())
         {
             foreach (Achievment achievment in LocalUser.locUser.achievments)
@@ -96,12 +96,7 @@ public class Achievments : MonoBehaviour
                     {
                         achievment.unlocked = true;
                         StartCoroutine(SaveAchievments());
-                        while (GameObject.FindGameObjectWithTag("NotificationPanel") != null)
-                        {
-                            yield return new WaitForSeconds(0.5f);
-                        }
-                        GameObject notificationPanel = Instantiate(Resources.Load<GameObject>("NotificationPanel"));
-                        notificationPanel.GetComponent<NotificationPanel>().SetText("You have unlocked '" + achievment.name + "'");
+                        StartCoroutine(Notifications.Instance.SpawnNotification("You have unlocked '" + achievment.name + "'"));
                         break;
                     }
                 }

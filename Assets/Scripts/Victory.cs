@@ -95,11 +95,11 @@ public class Victory : MonoBehaviour
             announcer.YouWon();
             if (PhotonNetwork.offlineMode) {
                 StartCoroutine(levelSystem.AddExperience(25));
-                StartCoroutine(achievments.UnlockAchievement("Champion"));
+                achievments.UnlockAchievement("Champion");
             } else {
                 StartCoroutine(levelSystem.AddExperience(50));
-                StartCoroutine(achievments.UnlockAchievement("Champion"));
-                StartCoroutine(achievments.UnlockAchievement("Online champion"));
+                achievments.UnlockAchievement("Champion");
+                achievments.UnlockAchievement("Online champion");
             }
             LocalUser.locUser.gamesWonInARow++;
         } else {

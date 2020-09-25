@@ -71,7 +71,7 @@ public class Chat : MonoBehaviour, IChatClientListener
     }
 
     public void OnStatusUpdate(string user, int status, bool gotMessage, object message) {
-        StartCoroutine(SpawnStatusNotification(user, status));
+        SpawnStatusNotification(user, status);
         UpdateOnlineFriends(user, status);
     }
 
@@ -150,10 +150,7 @@ public class Chat : MonoBehaviour, IChatClientListener
         invitePanel.GetComponent<InvitedToGamePanel>().SetUpAcceptButton(message);
     }
 
-    private IEnumerator SpawnStatusNotification(string user, int status) {
-        while (GameObject.FindGameObjectWithTag("NotificationPanel") != null && CardDragHandler.itemBeingDragged != null) {
-            yield return new WaitForSeconds(1);
-        }
+    private void SpawnStatusNotification(string user, int status) {
         string userName = "";
         User friend = new User();
         foreach (User frie in Friends.friends) {
@@ -164,13 +161,12 @@ public class Chat : MonoBehaviour, IChatClientListener
             }
         }
         if (!Friends.AmIBlocked(friend)) {
-            GameObject notificationPanel = Instantiate(Resources.Load<GameObject>("NotificationPanel"));
-            notificationPanel.transform.localScale = new Vector3(1, 1, 1);
+            
             if (status == 2) {
-                notificationPanel.GetComponent<NotificationPanel>().SetText(userName + " has logged on");
+                StartCoroutine(Notifications.Instance.SpawnNotification(userName + " has logged on"));
             }
             if (status == 0) {
-                notificationPanel.GetComponent<NotificationPanel>().SetText(userName + " has logged off");
+                StartCoroutine(Notifications.Instance.SpawnNotification(userName + " has logged off"));
             }
         }
     }

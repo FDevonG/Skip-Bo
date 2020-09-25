@@ -27,12 +27,6 @@ public class SceneController: MonoBehaviour {
             PhotonNetwork.LoadLevelAsync(3);
     }
 
-    public static void LoadStore()
-    {
-        LoadingScreen();
-        PhotonNetwork.LoadLevelAsync(4);
-    }
-
     public static void ReloadScene() {
         LoadingScreen();
         Scene scene = SceneManager.GetActiveScene();
