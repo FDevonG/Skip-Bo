@@ -20,6 +20,14 @@ public class Notifications : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
+    private void Start()
+    {
+        if (DeviceType.IsDeviceAndroid())
+        {
+
+        }
+    }
+
     public IEnumerator SpawnNotification(string message)
     {
         while (GameObject.FindGameObjectWithTag("NotificationPanel") != null && CardDragHandler.itemBeingDragged != null)
