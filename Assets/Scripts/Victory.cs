@@ -90,6 +90,7 @@ public class Victory : MonoBehaviour
         //}
 
         Announcer announcer = GameObject.FindGameObjectWithTag("Announcer").GetComponent<Announcer>();
+        bool playerWon = false;
         if (gameControl.localPlayerPanel.GetComponent<PanelControl>().deck.transform.childCount == 0) {
             GameObject.FindGameObjectWithTag("StatsController").GetComponent<PlayerStatsController>().AddGameWon();
             announcer.YouWon();
@@ -101,6 +102,7 @@ public class Victory : MonoBehaviour
                 achievments.UnlockAchievement("Champion");
                 achievments.UnlockAchievement("Online champion");
             }
+            playerWon = true;
             LocalUser.locUser.gamesWonInARow++;
         } else {
             announcer.YouLost();
@@ -111,7 +113,9 @@ public class Victory : MonoBehaviour
             }
             LocalUser.locUser.gamesWonInARow = 0;
         }
-        StartCoroutine(achievments.GamesWon());
+        Database.UpdateUser("gamesWonInARow", LocalUser.locUser.gamesWonInARow);
+        achievments.GamesWon();
+        GemControl.Instance.GameGemPayOut((int)PhotonNetwork.room.CustomProperties[PhotonRooms.DeckSize()], PhotonNetwork.offlineMode, playerWon);
         for (int i = 0; i < playerStandings.Length; i++) {
             GameObject standingPanel = Instantiate(Resources.Load<GameObject>("PlayerStandingPanel") as GameObject);
             standingPanel.transform.SetParent(panelsParent.transform);

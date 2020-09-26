@@ -211,7 +211,6 @@ public class Menu : MonoBehaviour
         }
 
         GameObject.FindGameObjectWithTag("LoadingScreen").GetComponent<LoadingScreen>().TurnOffLoadingScreen();
-        //GameObject.FindGameObjectWithTag("RemoveAdsPanel").GetComponent<RemoveAds>().AdsCheck();
 
         if (!GameObject.FindGameObjectWithTag("Announcer").GetComponent<Announcer>().welcomePlayed) {
             GameObject.FindGameObjectWithTag("Announcer").GetComponent<Announcer>().Welcome();

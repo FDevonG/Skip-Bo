@@ -30,7 +30,11 @@ public class User {
 
     public bool adsBlocked;
 
-    public int gems;
+    public int gems = 0;
+
+    public List<string> unlockedHair = new List<string>();
+    public List<string> unlockedFace = new List<string>();
+    public List<string> unlockedClothes = new List<string>();
 
     public User(string userEmail, string id, List<Achievment> ach) {
         email = userEmail;

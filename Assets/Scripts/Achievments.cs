@@ -46,15 +46,9 @@ public class Achievments : MonoBehaviour
         }
     }
 
-    public IEnumerator GamesWon() {
+    public void GamesWon() {
         if (LocalUser.locUser.gamesWonInARow >= 5) {
             UnlockAchievement("Hot streak");
-        }
-        var task = Database.UpdateUser("gamesWonInARow", LocalUser.locUser.gamesWonInARow);
-        yield return new WaitUntil(() => task.IsCompleted);
-        while (task.IsFaulted) {
-            task = Database.UpdateUser("gamesWonInARow", LocalUser.locUser.gamesWonInARow);
-            yield return new WaitUntil(() => task.IsCompleted);
         }
     }
 

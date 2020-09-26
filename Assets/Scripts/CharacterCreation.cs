@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using Firebase.Database;
@@ -10,9 +11,9 @@ public class CharacterCreation : MonoBehaviour
     public Image chair;//used to display the hair
     public Image ckit;//used to display the clothes
     public Sprite[] body;//stores the body types
-    public Sprite[] face;//used to display the face types
-    public Sprite[] hair;//used to display the hair types
-    public Sprite[] kit;//used to display the clothes types
+    public List<Sprite> face = new List<Sprite>();//used to display the face types
+    public List<Sprite> hair = new List<Sprite>();//used to display the hair types
+    public List<Sprite> kit = new List<Sprite>();//used to display the clothes types
 
     public GameObject nameInput;
 
@@ -42,6 +43,7 @@ public class CharacterCreation : MonoBehaviour
     }
 
     private void BuildCharacter() {
+        AddUnlockedAssets();
         if (string.IsNullOrEmpty(LocalUser.locUser.userName)) {
             RandomizeCharacter();
             startMenuCancelButton.gameObject.SetActive(false);
@@ -51,12 +53,69 @@ public class CharacterCreation : MonoBehaviour
         }
     }
 
+    void AddUnlockedAssets()
+    {
+        //Add the hairs
+        foreach (string itemName in LocalUser.locUser.unlockedHair)
+        {
+            bool itemAdded = false;
+            foreach (Sprite sprite in hair)
+            {
+                if (string.Equals(itemName, sprite.name))
+                {
+                    itemAdded = true;
+                    break;
+                }
+            }
+            if (!itemAdded)
+            {
+                hair.Add(Resources.Load<Sprite>(("Faces/Hairs/" + itemName)) as Sprite);
+            }
+        }
+
+        //Add the Faces
+        foreach (string itemName in LocalUser.locUser.unlockedFace)
+        {
+            bool itemAdded = false;
+            foreach (Sprite sprite in face)
+            {
+                if (string.Equals(itemName, sprite.name))
+                {
+                    itemAdded = true;
+                    break;
+                }
+            }
+            if (!itemAdded)
+            {
+                hair.Add(Resources.Load<Sprite>(("Faces/Faces/" + itemName)) as Sprite);
+            }
+        }
+
+        //add the kits
+        foreach (string itemName in LocalUser.locUser.unlockedClothes)
+        {
+            bool itemAdded = false;
+            foreach (Sprite sprite in kit)
+            {
+                if (string.Equals(itemName, sprite.name))
+                {
+                    itemAdded = true;
+                    break;
+                }
+            }
+            if (!itemAdded)
+            {
+                hair.Add(Resources.Load<Sprite>(("Faces/Kits/" + itemName)) as Sprite);
+            }
+        }
+    }
+
     public void RandomizeCharacter() {
         //get random index of all the body parts and store them
         cbodyIndex = Random.Range(0, body.Length);
-        cfaceIndex = Random.Range(0, face.Length);
-        chairIndex = Random.Range(0, hair.Length);
-        ckitIndex = Random.Range(0, kit.Length);
+        cfaceIndex = Random.Range(0, face.Count);
+        chairIndex = Random.Range(0, hair.Count);
+        ckitIndex = Random.Range(0, kit.Count);
 
         //set the body parts
         cbody.sprite = body[cbodyIndex];
@@ -85,7 +144,7 @@ public class CharacterCreation : MonoBehaviour
 
     //changes the hair to the next one
     public void NextHair() {
-        if (chairIndex == hair.Length - 1) {
+        if (chairIndex == hair.Count - 1) {
             chairIndex = 0;
         } else {
             chairIndex++;
@@ -96,7 +155,7 @@ public class CharacterCreation : MonoBehaviour
     //changes the hair to the previous one
     public void PreviousHair() {
         if (chairIndex == 0) {
-            chairIndex = hair.Length - 1;
+            chairIndex = hair.Count - 1;
         } else {
             chairIndex--;
         }
@@ -105,7 +164,7 @@ public class CharacterCreation : MonoBehaviour
 
     //changes the face to the next one
     public void NextFace() {
-        if (cfaceIndex == face.Length - 1) {
+        if (cfaceIndex == face.Count - 1) {
             cfaceIndex = 0;
         } else {
             cfaceIndex++;
@@ -116,7 +175,7 @@ public class CharacterCreation : MonoBehaviour
     //changes the face to the previous face
     public void PreviousFace() {
         if (cfaceIndex == 0) {
-            cfaceIndex = face.Length - 1;
+            cfaceIndex = face.Count - 1;
         } else {
             cfaceIndex--;
         }
@@ -125,7 +184,7 @@ public class CharacterCreation : MonoBehaviour
 
     //change the clothes to the next clothes
     public void NextClothes() {
-        if (ckitIndex == kit.Length - 1) {
+        if (ckitIndex == kit.Count - 1) {
             ckitIndex = 0;
         } else {
             ckitIndex++;
@@ -136,7 +195,7 @@ public class CharacterCreation : MonoBehaviour
     //changes the clothes to the previous clothes
     public void PreviousClothes() {
         if (ckitIndex == 0) {
-            ckitIndex = kit.Length - 1;
+            ckitIndex = kit.Count - 1;
         } else {
             ckitIndex--;
         }

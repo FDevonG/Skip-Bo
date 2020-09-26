@@ -1,6 +1,5 @@
 ﻿using System;
 using UnityEngine;
-using System.Collections;
 using UnityEngine.Purchasing;
 
 public class InAppPurchasing : MonoBehaviour, IStoreListener
@@ -94,7 +93,13 @@ public class InAppPurchasing : MonoBehaviour, IStoreListener
             else
             {
                 // ... report the product look-up failure situation
-                GameObject.FindGameObjectWithTag("RemoveAdsPanel").GetComponent<ErrorText>().SetError("Item is not available for purchase");
+
+                if (string.Equals(productId, removeAds))
+                    GameObject.FindGameObjectWithTag("RemoveAdsPanel").GetComponent<ErrorText>().SetError("Item is not available for purchase");
+                GameObject storePanel = GameObject.FindGameObjectWithTag("GameManagr").GetComponent<Menu>().storePanel;
+                if (string.Equals(productId, twoHundredGems) || string.Equals(productId, oneThousandGems))
+                    storePanel.GetComponent<ErrorText>().SetError("Item is not availible for purchase");
+                
                 Debug.Log("BuyProductID: FAIL. Not purchasing product, either is not found or is not available for purchase");
             }
         }
@@ -103,8 +108,11 @@ public class InAppPurchasing : MonoBehaviour, IStoreListener
         {
             // ... report the fact Purchasing has not succeeded initializing yet. Consider waiting longer or 
             // retrying initiailization.
-            if(productId == removeAds)
+            if(string.Equals(productId, removeAds))
                 GameObject.FindGameObjectWithTag("RemoveAdsPanel").GetComponent<ErrorText>().SetError("Not connected to the store");
+            GameObject storePanel = GameObject.FindGameObjectWithTag("GameManagr").GetComponent<Menu>().storePanel;
+            if (string.Equals(productId, twoHundredGems) || string.Equals(productId, oneThousandGems))
+                storePanel.GetComponent<ErrorText>().SetError("Not Connected to the store");
 
             Debug.Log("BuyProductID FAIL. Not initialized.");
         }
@@ -144,7 +152,10 @@ public class InAppPurchasing : MonoBehaviour, IStoreListener
 
     public void OnPurchaseFailed(Product i, PurchaseFailureReason p)
     {
-        GameObject.FindGameObjectWithTag("RemoveAdsPanel").GetComponent<ErrorText>().SetError(p.ToString());
+        if (GameObject.FindGameObjectWithTag("RemoveAdsPanel").GetActive())
+            GameObject.FindGameObjectWithTag("RemoveAdsPanel").GetComponent<ErrorText>().SetError(p.ToString());
+        else if(GameObject.FindGameObjectWithTag("GameManagr").GetComponent<Menu>().storePanel.GetActive())
+            GameObject.FindGameObjectWithTag("GameManagr").GetComponent<Menu>().storePanel.GetComponent<ErrorText>().SetError(p.ToString());
     }
 
 

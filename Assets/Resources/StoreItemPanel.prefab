@@ -190,6 +190,7 @@ MonoBehaviour:
   face: {fileID: 6580253307918719394}
   kit: {fileID: 6580253308503422496}
   body: {fileID: 6580253309126870971}
+  button: {fileID: 1406628282975856768}
 --- !u!1 &6580253307706994501
 GameObject:
   m_ObjectHideFlags: 0
@@ -817,6 +818,18 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 6580253307620522743}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1406628282975856768 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5247988230175085175, guid: 2d80c77b21de041babe6ac38894d9be5,
+    type: 3}
+  m_PrefabInstance: {fileID: 6580253307620522743}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &6580253308759021200
 PrefabInstance:
   m_ObjectHideFlags: 0

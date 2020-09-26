@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -27,11 +28,15 @@ public class StorePanel : MonoBehaviour
 
     public void BuildStoreItems()
     {
+        DestroyPanelItems();
         switch (dropdown.value)
         {
             //All
             case 0:
-
+                BuildGemOptions();
+                BuildHairOptions();
+                BuildFaceOptions();
+                BuildClothesOptions();
                 break;
 
             //Gems
@@ -41,17 +46,19 @@ public class StorePanel : MonoBehaviour
 
             //Hair
             case 2:
+                BuildHairOptions();
                 break;
 
             //Faces
             case 3:
+                BuildFaceOptions();
                 break;
 
             //Clothes
             case 4:
+                BuildClothesOptions();
                 break;
         }
-        //JsonConvert.DeserializeObject<List<Item>>(Resources.Load<TextAsset>("JSON/Items").ToString());
     }
 
     void DestroyPanelItems()
@@ -68,13 +75,115 @@ public class StorePanel : MonoBehaviour
         playerGemsText.text = "X " + LocalUser.locUser.gems.ToString();
     }
 
-    void BuildGemOptions()
+    void SetHeaderText(string message)
     {
         Text headerText = Instantiate(Resources.Load<Text>("StoreHeaderText"), panelParent.transform);
-        headerText.text = "Gems";
+        headerText.text = message;
+        storeItemPanels.Add(headerText.gameObject);
+    }
+
+    void BuildGemOptions()
+    {
+        SetHeaderText("Gems");
 
         GameObject gridLayout = Instantiate(Resources.Load<GameObject>("StoreGridLayoutPanel"), panelParent.transform);
+        storeItemPanels.Add(gridLayout);
 
+        GameObject twoHundred = Instantiate(Resources.Load<GameObject>("StoreGemPanel"), gridLayout.transform);
+        twoHundred.GetComponent<StoreGemPanel>().ammountText.text = "X 200";
+        twoHundred.GetComponent<StoreGemPanel>().costText.text = "$1 CAD";
+        twoHundred.GetComponent<StoreGemPanel>().button.onClick.AddListener(BuyTwoHundredGems);
+
+        GameObject oneThousand = Instantiate(Resources.Load<GameObject>("StoreGemPanel"), gridLayout.transform);
+        oneThousand.GetComponent<StoreGemPanel>().ammountText.text = "X 1000";
+        oneThousand.GetComponent<StoreGemPanel>().costText.text = "$5 CAD";
+        oneThousand.GetComponent<StoreGemPanel>().button.onClick.AddListener(BuyOneThousandGems);
+    }
+
+    void BuildHairOptions()
+    {
+        SetHeaderText("Hair");
+
+        GameObject gridLayout = Instantiate(Resources.Load<GameObject>("StoreGridLayoutPanel"), panelParent.transform);
+        storeItemPanels.Add(gridLayout);
+
+        List<StoreItem> items = JsonConvert.DeserializeObject<List<StoreItem>>(Resources.Load<TextAsset>("JSON/HairStoreItems").ToString());
+
+        foreach (StoreItem item in items)
+        {
+            Debug.Log(item.itemName);
+            GameObject storeItemPanel = Instantiate(Resources.Load<GameObject>("StoreItemPanel"), gridLayout.transform);
+            storeItemPanel.GetComponent<StoreItemPanel>().SetUpPanel(item, this);
+            storeItemPanels.Add(storeItemPanel);
+        }
+    }
+
+    void BuildFaceOptions()
+    {
+        SetHeaderText("Faces");
+
+        GameObject gridLayout = Instantiate(Resources.Load<GameObject>("StoreGridLayoutPanel"), panelParent.transform);
+        storeItemPanels.Add(gridLayout);
+
+        List<StoreItem> items = JsonConvert.DeserializeObject<List<StoreItem>>(Resources.Load<TextAsset>("JSON/FaceStoreItems").ToString());
+
+        foreach (StoreItem item in items)
+        {
+            Debug.Log(item.itemName);
+            GameObject storeItemPanel = Instantiate(Resources.Load<GameObject>("StoreItemPanel"), gridLayout.transform);
+            storeItemPanel.GetComponent<StoreItemPanel>().SetUpPanel(item, this);
+            storeItemPanels.Add(storeItemPanel);
+        }
+    }
+
+    void BuildClothesOptions()
+    {
+        SetHeaderText("Clothes");
+
+        GameObject gridLayout = Instantiate(Resources.Load<GameObject>("StoreGridLayoutPanel"), panelParent.transform);
+        storeItemPanels.Add(gridLayout);
+
+        List<StoreItem> items = JsonConvert.DeserializeObject<List<StoreItem>>(Resources.Load<TextAsset>("JSON/ClothStoreItems").ToString());
+
+        foreach (StoreItem item in items)
+        {
+            Debug.Log(item.itemName);
+            GameObject storeItemPanel = Instantiate(Resources.Load<GameObject>("StoreItemPanel"), gridLayout.transform);
+            storeItemPanel.GetComponent<StoreItemPanel>().SetUpPanel(item, this);
+            storeItemPanels.Add(storeItemPanel);
+        }
+    }
+
+    public void BuyItem(StoreItem itemToPurchase, StoreItemPanel sp)
+    {
+        if (LocalUser.locUser.gems >= itemToPurchase.price)
+        {
+            switch (itemToPurchase.type)
+            {
+                case "hair":
+                    LocalUser.locUser.unlockedHair.Add(itemToPurchase.itemName);
+                    Database.UpdateUser("unlockedHair", LocalUser.locUser.unlockedHair);
+                    break;
+
+                case "face":
+                    LocalUser.locUser.unlockedFace.Add(itemToPurchase.itemName);
+                    Database.UpdateUser("unlockedFace", LocalUser.locUser.unlockedFace);
+                    break;
+
+                case "cloth":
+                    LocalUser.locUser.unlockedClothes.Add(itemToPurchase.itemName);
+                    Database.UpdateUser("unlockedClothes", LocalUser.locUser.unlockedClothes);
+                    break;
+            }
+            GemControl.Instance.SubtractGems(itemToPurchase.price);
+            SetGemText();
+            StartCoroutine(Notifications.Instance.SpawnNotification("New item availible in charcter editor"));
+            sp.TurnOffButton();
+        }
+        else
+        {
+            GetComponent<ErrorText>().SetError("Not enough gems");
+        }
     }
 
     public void BuyTwoHundredGems()
@@ -84,8 +193,7 @@ public class StorePanel : MonoBehaviour
 
     public void TwoHundredGemsPurchased()
     {
-        LocalUser.locUser.gems += 200;
-        Database.UpdateUser("gems", LocalUser.locUser.gems);
+        GemControl.Instance.AddGems(200);
         SetGemText();
     }
 
@@ -97,8 +205,7 @@ public class StorePanel : MonoBehaviour
 
     public void OneThousandGemsPurchased()
     {
-        LocalUser.locUser.gems += 1000;
-        Database.UpdateUser("gems", LocalUser.locUser.gems);
+        GemControl.Instance.AddGems(1000);
         SetGemText();
     }
 }

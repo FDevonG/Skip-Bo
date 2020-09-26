@@ -96,5 +96,5 @@ MonoBehaviour:
   m_StartAxis: 0
   m_CellSize: {x: 320, y: 500}
   m_Spacing: {x: 50, y: 0}
-  m_Constraint: 0
+  m_Constraint: 1
   m_ConstraintCount: 2
