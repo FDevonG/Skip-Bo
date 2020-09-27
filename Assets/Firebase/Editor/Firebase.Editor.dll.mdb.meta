@@ -1,10 +1,11 @@
 fileFormatVersion: 2
-guid: 07043de76e9584dfe8b998554b0def92
+guid: 7f7b9cecf58b463599316e650bec7cb6
 labels:
 - gvh
 - gvh_rename_to_disable
 - gvh_targets-editor
-- gvh_version-6.6.0
+- gvh_version-6.15.2
+- gvhp_exportpath-Firebase/Editor/Firebase.Editor.dll.mdb
 DefaultImporter:
   externalObjects: {}
   userData: 
