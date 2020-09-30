@@ -44,11 +44,6 @@ public class RemoveAds : MonoBehaviour
         });
     }
 
-    //void OnSceneLoaded(Scene scene, LoadSceneMode mode)
-    //{
-    //    AdsCheck();
-    //}
-
     public void HideButton(){
         adsButton.SetActive(false);
     }
@@ -71,12 +66,12 @@ public class RemoveAds : MonoBehaviour
             {
                 adsButton.GetComponent<Button>().interactable = true;
             }
-            StartCoroutine(GameObject.FindGameObjectWithTag("AdManager").GetComponent<AdManager>().ShowBannerAdd());
+            StartCoroutine(AdManager.Instance.ShowBannerAdd());
         }
         else
         {
             HideButton();
-            GameObject.FindGameObjectWithTag("AdManager").GetComponent<AdManager>().TurnOffBannerAd();
+            AdManager.Instance.TurnOffBannerAd();
         }
     }
 
@@ -89,7 +84,7 @@ public class RemoveAds : MonoBehaviour
         price.gameObject.SetActive(false);
         noButton.GetComponent<Button>().onClick.AddListener(() => adsButton.SetActive(false));
         noButton.GetComponentInChildren<Text>().text = "Close";
-        GameObject.FindGameObjectWithTag("AdManager").GetComponent<AdManager>().TurnOffBannerAd();
+        AdManager.Instance.TurnOffBannerAd();
         yesButton.SetActive(false);
         GetComponent<ErrorText>().ClearError();
     }

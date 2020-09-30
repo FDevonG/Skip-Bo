@@ -16,7 +16,7 @@ public class ShareScreenShot : MonoBehaviour
 	private IEnumerator TakeScreenshotAndShare()
 	{
 		yield return new WaitForEndOfFrame();
-        GameObject.FindGameObjectWithTag("AdManager").GetComponent<AdManager>().TurnOffBannerAd();
+        AdManager.Instance.TurnOffBannerAd();
 		Texture2D ss = new Texture2D(Screen.width, Screen.height, TextureFormat.RGB24, false);
 		ss.ReadPixels(new Rect(0, 0, Screen.width, Screen.height), 0, 0);
 		ss.Apply();
@@ -29,7 +29,7 @@ public class ShareScreenShot : MonoBehaviour
 
 		GetComponent<Image>().color = new Color(GetComponent<Image>().color.r, GetComponent<Image>().color.g, GetComponent<Image>().color.b, 1);
 		GetComponentInChildren<Text>().text = "Share";
-		GameObject.FindGameObjectWithTag("AdManager").GetComponent<AdManager>().TurnOnBannerAd();
+		AdManager.Instance.TurnOnBannerAd();
 
 		new NativeShare().AddFile(filePath)
 			.SetSubject("Skip-Bo Standings").SetText("https://play.google.com/store/apps/details?id=com.FogBankGames.SkipBo")

@@ -5,19 +5,17 @@ using UnityEngine.EventSystems;
 public class SideBarDropHandler : MonoBehaviour, IDropHandler {
 
     PhotonView photonView;
-    Sounds sounds;
     GameControl gameControl;
 
     private void Start() {
         photonView = GetComponent<PhotonView>();
-        sounds = GameObject.FindGameObjectWithTag("SoundManager").GetComponent<Sounds>();
         gameControl = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameControl>();
     }
 
     public void OnDrop(PointerEventData eventData) {
         if (!CardDragHandler.playerDeck && !CardDragHandler.playerSideBar)//check to make sure the card is not from the player deck or sidebar
         {
-            sounds.PlayCardFlip(CardDragHandler.itemBeingDragged.GetComponent<AudioSource>());
+            Sounds.Instance.PlayCardFlip(CardDragHandler.itemBeingDragged.GetComponent<AudioSource>());
             CardDragHandler.itemBeingDragged.transform.SetParent(transform);//set the new transform
 
             PanelControl panelControl = gameControl.localPlayerPanel.GetComponent<PanelControl>();

@@ -55,8 +55,8 @@ public class Lobby : MonoBehaviour {
         yield return new WaitForSeconds(1);
         gameObject.GetComponent<ActivatePanel>().SwitchPanel(lobbyPanel);
         GameObject.FindGameObjectWithTag("ChatButton").SetActive(false);
-        if (GameObject.FindGameObjectWithTag("ChatPanel").GetComponent<ChatPanel>().chatOpen) {
-            GameObject.FindGameObjectWithTag("ChatPanel").GetComponent<ChatPanel>().ChatPanelControl();
+        if (ChatPanel.Instance.chatOpen) {
+            ChatPanel.Instance.ChatPanelControl();
         }
         int countDown = 3;
         infoText.text = "Game Starting In";
@@ -80,7 +80,7 @@ public class Lobby : MonoBehaviour {
     }
 
     public void LeaveRoom() {
-        GameObject.FindGameObjectWithTag("Chat").GetComponent<Chat>().UnsubscribeToChannel(PhotonNetwork.room.Name);
+        Chat.Instance.UnsubscribeToChannel(PhotonNetwork.room.Name);
         PhotonNetwork.LeaveRoom();
         SceneController.LoadStartMenu();
     }

@@ -6,22 +6,17 @@ using UnityEngine;
 public class LevelSystem : MonoBehaviour{
 
     private int levelCap = 100;
-    Achievments achievments;
 
     public static LevelSystem Instance { get; private set; }
 
     private void Awake() {
 
         if (Instance != null && Instance != this) {
-            Destroy(this.gameObject);
+            Destroy(gameObject);
         } else {
             Instance = this;
         }
         DontDestroyOnLoad(gameObject);
-    }
-
-    private void Start() {
-        achievments = GameObject.FindGameObjectWithTag("AchievementManager").GetComponent<Achievments>();
     }
 
     public IEnumerator AddExperience(int amount) {
@@ -59,7 +54,7 @@ public class LevelSystem : MonoBehaviour{
         GameObject notificationPanel = Instantiate(Resources.Load<GameObject>("NotificationPanel"));
         notificationPanel.GetComponent<NotificationPanel>().SetText("You have reached level " + LocalUser.locUser.level.ToString());
 
-        achievments.CheckLevelAchievments(LocalUser.locUser.level);
+        Achievments.Instance.CheckLevelAchievments(LocalUser.locUser.level);
 
         var levelTask = Database.UpdateUser("level", LocalUser.locUser.level);
         var experienceTask = Database.UpdateUser("experience", LocalUser.locUser.experience);

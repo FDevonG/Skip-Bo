@@ -8,7 +8,7 @@ public class FacebookLogin : MonoBehaviour
 
     public void FacebookLoginPressed()
     {
-        GameObject.FindGameObjectWithTag("LoadingScreen").GetComponent<LoadingScreen>().TurnOnLoadingScreen();
+        LoadingScreen.Instance.TurnOnLoadingScreen();
         var perms = new List<string>() { "public_profile", "email", "user_friends" };
         FB.LogInWithReadPermissions(perms, OnFacebookLoginResult);
     }
@@ -22,7 +22,7 @@ public class FacebookLogin : MonoBehaviour
         else
         {
             GetComponent<ErrorText>().SetError("Failed to sign in");
-            GameObject.FindGameObjectWithTag("LoadingScreen").GetComponent<LoadingScreen>().TurnOffLoadingScreen();
+            LoadingScreen.Instance.TurnOffLoadingScreen();
         }
     }
 
@@ -33,13 +33,13 @@ public class FacebookLogin : MonoBehaviour
         if (task.IsCanceled)
         {
             GetComponent<ErrorText>().SetError("Login was canceled");
-            GameObject.FindGameObjectWithTag("LoadingScreen").GetComponent<LoadingScreen>().TurnOffLoadingScreen();
+            LoadingScreen.Instance.TurnOffLoadingScreen();
             yield return null;
         }
         if (task.IsFaulted)
         {
             GetComponent<ErrorText>().SetError(FirebaseError.GetErrorMessage(task.Exception));
-            GameObject.FindGameObjectWithTag("LoadingScreen").GetComponent<LoadingScreen>().TurnOffLoadingScreen();
+            LoadingScreen.Instance.TurnOffLoadingScreen();
             yield return null;
         }
 
@@ -61,7 +61,7 @@ public class FacebookLogin : MonoBehaviour
         else
         {
             GetComponent<ErrorText>().SetError(result.Error);
-            GameObject.FindGameObjectWithTag("LoadingScreen").GetComponent<LoadingScreen>().TurnOffLoadingScreen();
+            LoadingScreen.Instance.TurnOffLoadingScreen();
         }
     }
 
@@ -72,7 +72,7 @@ public class FacebookLogin : MonoBehaviour
         if (task.IsFaulted)
         {
             GetComponent<ErrorText>().SetError(FirebaseError.GetErrorMessage(task.Exception));
-            GameObject.FindGameObjectWithTag("LoadingScreen").GetComponent<LoadingScreen>().TurnOffLoadingScreen();
+            LoadingScreen.Instance.TurnOffLoadingScreen();
             yield return null;
         }
         if (task.Result == null)
@@ -91,16 +91,16 @@ public class FacebookLogin : MonoBehaviour
             {
                 StartCoroutine(Friends.GetStartFriends());
                 PhotonPlayerSetup.BuildPhotonPlayer(PhotonNetwork.player, LocalUser.locUser);
-                GameObject.FindGameObjectWithTag("NetworkManager").GetComponent<PhotonNetworking>().ConnectToPhoton();
+                PhotonNetworking.Instance.ConnectToPhoton();
                 GameObject.FindGameObjectWithTag("GameManager").GetComponent<ActivatePanel>().SwitchPanel(GameObject.FindGameObjectWithTag("GameManager").GetComponent<Menu>().startMenu);
             }
-            GameObject.FindGameObjectWithTag("LoadingScreen").GetComponent<LoadingScreen>().TurnOffLoadingScreen();
+            LoadingScreen.Instance.TurnOffLoadingScreen();
         }
     }
 
     IEnumerator SaveNewPlayer(IResult result)
     {
-        User newUser = new User(result.ResultDictionary["email"].ToString(), FirebaseAuthentication.AuthenitcationKey(), GameObject.FindGameObjectWithTag("AchievementManager").GetComponent<Achievments>().BuildAchievmentsList());
+        User newUser = new User(result.ResultDictionary["email"].ToString(), FirebaseAuthentication.AuthenitcationKey(), Achievments.Instance.BuildAchievmentsList());
         var newUserTask = Database.WriteNewUser(newUser);
         yield return new WaitUntil(() => newUserTask.IsCompleted);
         if (newUserTask.IsFaulted)
@@ -112,6 +112,6 @@ public class FacebookLogin : MonoBehaviour
             LocalUser.locUser = newUser;
             GameObject.FindGameObjectWithTag("GameManager").GetComponent<ActivatePanel>().SwitchPanel(GameObject.FindGameObjectWithTag("GameManager").GetComponent<Menu>().characterCreationPanel);
         }
-        GameObject.FindGameObjectWithTag("LoadingScreen").GetComponent<LoadingScreen>().TurnOffLoadingScreen();
+        LoadingScreen.Instance.TurnOffLoadingScreen();
     }
 }

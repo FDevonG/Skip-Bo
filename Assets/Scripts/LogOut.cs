@@ -9,9 +9,9 @@ public class LogOut : MonoBehaviour
             FirebaseAuthentication.DeleteAccount();
         }
         PhotonNetwork.Disconnect();
-        GameObject.FindGameObjectWithTag("Chat").GetComponent<Chat>().Disconnect();
+        Chat.Instance.Disconnect();
         FirebaseAuthentication.SignOut();
-        StartCoroutine(GameObject.FindGameObjectWithTag("AdManager").GetComponent<AdManager>().ShowBannerAdd());
-        GameObject.FindGameObjectWithTag("RemoveAdsPanel").GetComponent<RemoveAds>().HideButton();
+        StartCoroutine(AdManager.Instance.ShowBannerAdd());
+        RemoveAds.instance.HideButton();
     }
 }

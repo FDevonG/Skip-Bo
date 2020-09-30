@@ -70,7 +70,6 @@ public class Leaderboards : MonoBehaviour
         loadingPanel.SetActive(false);
         if (task.IsFaulted) {
             GetComponent<ErrorText>().SetError("Failed to load leaderboards");
-            GameObject.FindGameObjectWithTag("Announcer").GetComponent<Announcer>().AnnouncerAnError();
         } else {
             DivideArray(GetArray(task.Result));
         }

@@ -21,31 +21,30 @@ public class Login : MonoBehaviour {
 
     private IEnumerator LogIn() {
         var task = FirebaseAuthentication.LogIn(emailInput.GetComponent<InputField>().text, passwordInput.GetComponent<InputField>().text);
-        GameObject.FindGameObjectWithTag("LoadingScreen").GetComponent<LoadingScreen>().TurnOnLoadingScreen();
+        LoadingScreen.Instance.TurnOnLoadingScreen();
         yield return new WaitUntil(() => task.IsCompleted);
         if (task.IsFaulted) {
-            GameObject.FindGameObjectWithTag("LoadingScreen").GetComponent<LoadingScreen>().TurnOffLoadingScreen();
+            LoadingScreen.Instance.TurnOffLoadingScreen();
             GetComponent<ErrorText>().SetError(FirebaseError.GetErrorMessage(task.Exception));
         } else {
             var userTask = Database.GetCurrentUser();
             yield return new WaitUntil(() => userTask.IsCompleted);
-            //User user = new User();
             if (!userTask.IsFaulted) {
                 LocalUser.locUser = JsonUtility.FromJson<User>(userTask.Result);
-                GameObject.FindGameObjectWithTag("RemoveAdsPanel").GetComponent<RemoveAds>().AdsCheck();
+                RemoveAds.instance.AdsCheck();
                 if (string.IsNullOrEmpty(LocalUser.locUser.userName) || string.IsNullOrWhiteSpace(LocalUser.locUser.userName)) {
-                    GameObject.FindGameObjectWithTag("LoadingScreen").GetComponent<LoadingScreen>().TurnOffLoadingScreen();
+                    LoadingScreen.Instance.TurnOffLoadingScreen();
                     GameObject.FindGameObjectWithTag("GameManager").GetComponent<ActivatePanel>().SwitchPanel(GameObject.FindGameObjectWithTag("GameManager").GetComponent<Menu>().characterCreationPanel);
                 } else {
                     StartCoroutine(Friends.GetStartFriends());
                     PhotonPlayerSetup.BuildPhotonPlayer(PhotonNetwork.player, LocalUser.locUser);
-                    GameObject.FindGameObjectWithTag("NetworkManager").GetComponent<PhotonNetworking>().ConnectToPhoton();
-                    GameObject.FindGameObjectWithTag("LoadingScreen").GetComponent<LoadingScreen>().TurnOffLoadingScreen();
+                    PhotonNetworking.Instance.ConnectToPhoton();
+                    LoadingScreen.Instance.TurnOffLoadingScreen();
                     GameObject.FindGameObjectWithTag("GameManager").GetComponent<ActivatePanel>().SwitchPanel(GameObject.FindGameObjectWithTag("GameManager").GetComponent<Menu>().startMenu);
                 }
             } else {
                 GetComponent<ErrorText>().SetError(FirebaseError.GetErrorMessage(userTask.Exception));
-                GameObject.FindGameObjectWithTag("LoadingScreen").GetComponent<LoadingScreen>().TurnOffLoadingScreen();
+                LoadingScreen.Instance.TurnOffLoadingScreen();
             }            
         }
     }

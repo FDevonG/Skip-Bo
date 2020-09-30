@@ -9,6 +9,7 @@ public class AdManager : MonoBehaviour
     private bool testMode = true;
     private string regularPlacementString = "video";
     private string bannerPlacementString = "banner";
+    private string rewardPlacementString = "rewardedVideo";
 
     public static AdManager Instance { get; private set; }
 
@@ -28,6 +29,22 @@ public class AdManager : MonoBehaviour
             gameId = "3313552";
         }
         Advertisement.Initialize(gameId, testMode);
+    }
+
+    public IEnumerator ShowRewardAdd()
+    {
+        if (!Advertisement.isInitialized)
+        {
+            Advertisement.Initialize(gameId, testMode);
+            yield return new WaitUntil(() => Advertisement.isInitialized);
+        }
+        if (Advertisement.isInitialized)
+        {
+            yield return new WaitUntil(() => Advertisement.IsReady(rewardPlacementString));
+            Advertisement.Show(rewardPlacementString);
+            yield return new WaitUntil(() => Advertisement.isShowing);
+            yield return new WaitUntil(() => !Advertisement.isShowing);
+        }
     }
 
     public IEnumerator ShowRegularAd() {
@@ -85,5 +102,13 @@ public class AdManager : MonoBehaviour
     public void TurnOffBannerAd()
     {
         Advertisement.Banner.Hide();
+    }
+
+    public bool IsAdPlaying()
+    {
+        if (Advertisement.isShowing)
+            return true;
+        else
+            return false;
     }
 }

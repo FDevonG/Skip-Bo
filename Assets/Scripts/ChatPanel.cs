@@ -7,7 +7,6 @@ using UnityEngine.SceneManagement;
 public class ChatPanel : MonoBehaviour
 {
     public static ChatPanel Instance { get; private set; }
-    Sounds sounds;
     List<GameObject> messages = new List<GameObject>();
     int maxHistory = 35;
     [SerializeField] GameObject chatPanel;
@@ -15,7 +14,6 @@ public class ChatPanel : MonoBehaviour
     [SerializeField] Transform messageParent;
     [SerializeField] InputField messageInput;
     [SerializeField] Text numberText;
-    Chat chat;
     int messageCounter = 0;
 
     float timeStartedLerping;
@@ -27,7 +25,7 @@ public class ChatPanel : MonoBehaviour
 
     private void Awake() {
         if (Instance != null && Instance != this) {
-            Destroy(this.gameObject);
+            Destroy(gameObject);
         } else {
             Instance = this;
         }
@@ -38,8 +36,6 @@ public class ChatPanel : MonoBehaviour
     {
         DontDestroyOnLoad(gameObject);
         SceneManager.sceneLoaded += OnSceneLoaded;
-        chat = GameObject.FindGameObjectWithTag("Chat").GetComponent<Chat>();
-        sounds = GameObject.FindGameObjectWithTag("SoundManager").GetComponent<Sounds>();
     }
 
     void OnSceneLoaded(Scene scene, LoadSceneMode mode) {
@@ -79,7 +75,7 @@ public class ChatPanel : MonoBehaviour
 
     public void SendMessage() {
         if (!string.IsNullOrEmpty(messageInput.text) && !string.IsNullOrWhiteSpace(messageInput.text)) {
-            chat.SendPublicMessage(PhotonNetwork.room.Name, messageInput.text);
+            Chat.Instance.SendPublicMessage(PhotonNetwork.room.Name, messageInput.text);
             messageInput.text = "";
         } 
     }
@@ -97,9 +93,8 @@ public class ChatPanel : MonoBehaviour
             }
             messages.Add(text);
             text.GetComponent<ChatMessageSetUp>().SetUpMessage(GetUserName(user) + ": ", message);
-            //text.GetComponent<Text>().text = GetUserName(user) + " : " + message;
         }
-        sounds.NewMessage();
+        Sounds.Instance.NewMessage();
     }
 
     public void PlayerStatus(string message) {
@@ -114,7 +109,7 @@ public class ChatPanel : MonoBehaviour
         }
         messages.Add(text);
         text.GetComponent<Text>().text = message;
-        sounds.NewMessage();
+        Sounds.Instance.NewMessage();
     }
 
     private string GetUserName(string user) {

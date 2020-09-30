@@ -60,7 +60,7 @@ public class Chat : MonoBehaviour, IChatClientListener
         for (int i = 0; i < messages.Length; i++) { //go through each received msg
             string sender = senders[i];
             string msg = (string)messages[i];
-            GameObject.FindGameObjectWithTag("ChatPanel").GetComponent<ChatPanel>().ReceiveMessage(sender, msg);
+            ChatPanel.Instance.ReceiveMessage(sender, msg);
         }
     }
 
@@ -92,15 +92,15 @@ public class Chat : MonoBehaviour, IChatClientListener
     }
 
     public void OnUnsubscribed(string[] channels) {
-        throw new System.NotImplementedException();
+        
     }
 
     public void OnUserSubscribed(string channel, string user) {
-        throw new System.NotImplementedException();
+        
     }
 
     public void OnUserUnsubscribed(string channel, string user) {
-        throw new System.NotImplementedException();
+        
     }
 
     public void SendPublicMessage(string channelName, string message) {

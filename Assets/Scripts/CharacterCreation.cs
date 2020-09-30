@@ -233,12 +233,12 @@ public class CharacterCreation : MonoBehaviour
     }
 
     private IEnumerator NameCheck(string userName) {
-        GameObject.FindGameObjectWithTag("LoadingScreen").GetComponent<LoadingScreen>().TurnOnLoadingScreen();
+        LoadingScreen.Instance.TurnOnLoadingScreen();
         var task = Database.GetUsers();
         yield return new WaitUntil(() => task.IsCompleted);
         if (task.IsFaulted) {
             GetComponent<ErrorText>().SetError("Failed to save character");
-            GameObject.FindGameObjectWithTag("LoadingScreen").GetComponent<LoadingScreen>().TurnOffLoadingScreen();
+            LoadingScreen.Instance.TurnOffLoadingScreen();
         } else {
             bool nameBool = false;
             foreach (DataSnapshot snap in task.Result.Children) {
@@ -254,7 +254,7 @@ public class CharacterCreation : MonoBehaviour
                 StartCoroutine(SaveCharacter(userName));
             } else {
                 GetComponent<ErrorText>().SetError("Username is taken");
-                GameObject.FindGameObjectWithTag("LoadingScreen").GetComponent<LoadingScreen>().TurnOffLoadingScreen();
+                LoadingScreen.Instance.TurnOffLoadingScreen();
             }
         }
     }
@@ -278,10 +278,10 @@ public class CharacterCreation : MonoBehaviour
             LocalUser.locUser.kit = kit[ckitIndex].name;
             LocalUser.locUser.body = body[cbodyIndex].name;
             PhotonPlayerSetup.BuildPhotonPlayer(PhotonNetwork.player, LocalUser.locUser);
-            GameObject.FindGameObjectWithTag("NetworkManager").GetComponent<PhotonNetworking>().ConnectToPhoton();
+            PhotonNetworking.Instance.ConnectToPhoton();
             GameObject.FindGameObjectWithTag("GameManager").GetComponent<ActivatePanel>().SwitchPanel(GameObject.FindGameObjectWithTag("GameManager").GetComponent<Menu>().startMenu);
         }
-        GameObject.FindGameObjectWithTag("LoadingScreen").GetComponent<LoadingScreen>().TurnOffLoadingScreen();
+        LoadingScreen.Instance.TurnOffLoadingScreen();
     }
 
     private void Update() {

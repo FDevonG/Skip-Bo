@@ -36,6 +36,10 @@ public class User {
     public List<string> unlockedFace = new List<string>();
     public List<string> unlockedClothes = new List<string>();
 
+    public string nextRewardUnlock;
+    public bool dailyRewardGotten;
+    public int rewardCounter;
+
     public User(string userEmail, string id, List<Achievment> ach) {
         email = userEmail;
         userID = id;

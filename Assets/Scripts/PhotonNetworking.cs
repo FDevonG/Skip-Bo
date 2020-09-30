@@ -37,7 +37,7 @@ public class PhotonNetworking : MonoBehaviour {
         PhotonNetwork.JoinLobby(TypedLobby.Default);
         PhotonNetwork.automaticallySyncScene = true;
         PhotonNetwork.autoCleanUpPlayerObjects = true;
-        GameObject.FindGameObjectWithTag("Chat").GetComponent<Chat>().ConnectToChat();
+        Chat.Instance.ConnectToChat();
         if (LocalUser.locUser.friends.Count > 0) {
             PhotonNetwork.FindFriends(LocalUser.locUser.friends.ToArray());
         }
@@ -60,7 +60,7 @@ public class PhotonNetworking : MonoBehaviour {
     private void OnCreatedRoom() {
         if (!PhotonNetwork.offlineMode) {
             SceneController.LoadLobbyScene();
-            GameObject.FindGameObjectWithTag("Chat").GetComponent<Chat>().SubcsribeToChannel(PhotonNetwork.room.Name);
+            Chat.Instance.SubcsribeToChannel(PhotonNetwork.room.Name);
         }
     }
 
@@ -68,7 +68,7 @@ public class PhotonNetworking : MonoBehaviour {
     private void OnJoinedRoom() {
         SceneController.LoadLobbyScene();
         if (!PhotonNetwork.isMasterClient) {
-            GameObject.FindGameObjectWithTag("Chat").GetComponent<Chat>().SubcsribeToChannel(PhotonNetwork.room.Name);
+            Chat.Instance.SubcsribeToChannel(PhotonNetwork.room.Name);
         }
     }
 
@@ -82,8 +82,8 @@ public class PhotonNetworking : MonoBehaviour {
 
     private void OnPhotonPlayerDisconnected(PhotonPlayer photonPlayer) {
         if (!Friends.IsPlayerBlocked(photonPlayer.UserId)) {
-            if (GameObject.FindGameObjectWithTag("ChatPanel") != null) {
-                GameObject.FindGameObjectWithTag("ChatPanel").GetComponent<ChatPanel>().PlayerStatus(photonPlayer.CustomProperties["name"] + " : Has left.");
+            if (ChatPanel.Instance != null) {
+                ChatPanel.Instance.PlayerStatus(photonPlayer.CustomProperties["name"] + " : Has left.");
             }
         }
         if (GameObject.FindGameObjectWithTag("Lobby") != null) {

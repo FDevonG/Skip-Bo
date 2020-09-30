@@ -5,17 +5,11 @@ using UnityEngine.EventSystems;
 public class PlayedCardsDropHandler : MonoBehaviour, IDropHandler {
 
     PhotonView photonView;
-    Sounds sounds;
     GameControl gameControl;
-    Announcer announcer;
-    LevelSystem levelSystem;
 
     private void Start() {
         photonView = GetComponent<PhotonView>();
-        sounds = GameObject.FindGameObjectWithTag("SoundManager").GetComponent<Sounds>();
         gameControl = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameControl>();
-        announcer = GameObject.FindGameObjectWithTag("Announcer").GetComponent<Announcer>();
-        levelSystem = GameObject.FindGameObjectWithTag("LevelManager").GetComponent<LevelSystem>();
     }
 
     public void OnDrop(PointerEventData eventData) {
@@ -23,7 +17,7 @@ public class PlayedCardsDropHandler : MonoBehaviour, IDropHandler {
         //we check to see if we are able to place this card on the stack
         if (CardDragHandler.cardNumber == GetComponent<PlayedCardStack>().currentCardValue + 1 || CardDragHandler.cardNumber == gameControl.wildNumber) {
 
-            sounds.PlayCardFlip(CardDragHandler.itemBeingDragged.GetComponent<AudioSource>());//play the sound of the card being played
+            Sounds.Instance.PlayCardFlip(CardDragHandler.itemBeingDragged.GetComponent<AudioSource>());//play the sound of the card being played
 
             CardDragHandler.itemBeingDragged.transform.SetParent(transform);//set the new transform parent
             CardDragHandler.itemBeingDragged.GetComponent<RectTransform>().localPosition = new Vector3(0, 0, 0);//zero out the dragged card in its new transform
@@ -36,13 +30,13 @@ public class PlayedCardsDropHandler : MonoBehaviour, IDropHandler {
 
             if (CardDragHandler.playerDeck) {
                 gameControl.CardRemovedOffDeck(panelControl);
-                announcer.PayCompliment();
-                StartCoroutine(levelSystem.AddExperience(15));
+                Announcer.Instance.PayCompliment();
+                StartCoroutine(LevelSystem.Instance.AddExperience(15));
             }
 
             if (CardDragHandler.playerHand) {
                 gameControl.CheckRedeal(panelControl);
-                StartCoroutine(levelSystem.AddExperience(5));
+                StartCoroutine(LevelSystem.Instance.AddExperience(5));
             }
             if (CardDragHandler.itemBeingDragged.GetComponent<Card>().cardNumber == gameControl.wildNumber) {
                 if (PhotonNetwork.isMasterClient) {
@@ -76,7 +70,7 @@ public class PlayedCardsDropHandler : MonoBehaviour, IDropHandler {
             }
 
         } else {
-            announcer.Cant();
+            Announcer.Instance.Cant();
         }
 
     }

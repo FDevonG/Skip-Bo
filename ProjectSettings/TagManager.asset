@@ -4,26 +4,15 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - NetworkManager
   - GameManager
-  - SoundManager
-  - AdManager
-  - StatsController
-  - Chat
   - Lobby
   - NotificationPanel
   - OtherPlayerPanel
   - VictoryPanel
   - GameInvitePanel
   - VoteToKick
-  - ChatPanel
   - ChatButton
-  - Announcer
-  - LevelManager
-  - AchievementManager
   - ErrorText
-  - RemoveAdsPanel
-  - LoadingScreen
   layers:
   - Default
   - TransparentFX

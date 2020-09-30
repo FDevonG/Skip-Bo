@@ -25,14 +25,14 @@ public class SignUpPanel : MonoBehaviour
     }
 
     private IEnumerator CreatingNewAccount() {
-        GameObject.FindGameObjectWithTag("LoadingScreen").GetComponent<LoadingScreen>().TurnOnLoadingScreen();
+        LoadingScreen.Instance.TurnOnLoadingScreen();
         var task = FirebaseAuthentication.CreateNewAccount(signUpEmailInput.GetComponent<InputField>().text, signUpPasswordInput.GetComponent<InputField>().text);
         yield return new WaitUntil(() => task.IsCompleted);
         if (task.IsFaulted) {
             GetComponent<ErrorText>().SetError(FirebaseError.GetErrorMessage(task.Exception));
-            GameObject.FindGameObjectWithTag("LoadingScreen").GetComponent<LoadingScreen>().TurnOffLoadingScreen();
+            LoadingScreen.Instance.TurnOffLoadingScreen();
         } else {
-            User newUser = new User(signUpEmailInput.GetComponent<InputField>().text, FirebaseAuthentication.AuthenitcationKey(), GameObject.FindGameObjectWithTag("AchievementManager").GetComponent<Achievments>().BuildAchievmentsList());
+            User newUser = new User(signUpEmailInput.GetComponent<InputField>().text, FirebaseAuthentication.AuthenitcationKey(), Achievments.Instance.BuildAchievmentsList());
             var newUserTask = Database.WriteNewUser(newUser);
             yield return new WaitUntil(() => newUserTask.IsCompleted);
             if (newUserTask.IsFaulted) {
@@ -41,7 +41,7 @@ public class SignUpPanel : MonoBehaviour
                 LocalUser.locUser = newUser;
                 GameObject.FindGameObjectWithTag("GameManager").GetComponent<ActivatePanel>().SwitchPanel(GameObject.FindGameObjectWithTag("GameManager").GetComponent<Menu>().characterCreationPanel);
             }
-            GameObject.FindGameObjectWithTag("LoadingScreen").GetComponent<LoadingScreen>().TurnOffLoadingScreen();
+            LoadingScreen.Instance.TurnOffLoadingScreen();
         }
     }
 

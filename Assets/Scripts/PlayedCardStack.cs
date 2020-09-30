@@ -5,7 +5,6 @@ using System.Linq;
 
 public class PlayedCardStack : Photon.MonoBehaviour {
 
-    private Sounds sounds;
     public int currentCardValue = 0;//a int to store the current card value
     public int maxStackSize = 12;
 
@@ -14,7 +13,6 @@ public class PlayedCardStack : Photon.MonoBehaviour {
 
     private void Start() {
         gameSetup = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameSetup>();
-        sounds = GameObject.FindGameObjectWithTag("SoundManager").GetComponent<Sounds>();
         gameControl = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameControl>();
     }
 
@@ -43,7 +41,7 @@ public class PlayedCardStack : Photon.MonoBehaviour {
             int countNumber = cardObjects.Count - 1;
             for (int i = countNumber; i >= 0; i--) {
                 cardObjects[i].GetComponent<CardLerp>().StartLerping(gameSetup.canvas.transform, gameControl.cardSpawnLocation);//tell the card to lerp off screen
-                sounds.PlayCardFlip(cardObjects[i].GetComponent<AudioSource>());
+                Sounds.Instance.PlayCardFlip(cardObjects[i].GetComponent<AudioSource>());
                 StartCoroutine(DestroyCard(cardObjects[i].gameObject));//destroy the card
                 cardObjects.Remove(cardObjects[i]);
                 yield return new WaitForSeconds(0.15f);

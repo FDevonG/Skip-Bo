@@ -6,11 +6,8 @@ public class GameControl : MonoBehaviour
 {
     PhotonView photonView;
 
-    AdManager adManager;
-
     [SerializeField] GameSetup gameSetup;
     NPCTurn npcTurn;
-    Announcer announcer;
 
     public List<int> mainDeck;
     public int wildNumber = 100;
@@ -32,9 +29,7 @@ public class GameControl : MonoBehaviour
 
     private void Start() {
         npcTurn = GetComponent<NPCTurn>();
-        announcer = GameObject.FindGameObjectWithTag("Announcer").GetComponent<Announcer>();
         photonView = GetComponent<PhotonView>();
-        adManager = GameObject.FindGameObjectWithTag("AdManager").GetComponent<AdManager>();
     }
 
     public void PlayedDeckCardCount()
@@ -42,7 +37,7 @@ public class GameControl : MonoBehaviour
         deckCardsPlayed++;
         if (deckCardsPlayed == 10 && !playerWon)
         {
-            StartCoroutine(adManager.ShowRegularAd());
+            StartCoroutine(AdManager.Instance.ShowRegularAd());
             deckCardsPlayed = 0;
         }
     }
@@ -66,7 +61,7 @@ public class GameControl : MonoBehaviour
         while (playerPanels[turnIndex] == null) {
             yield return new WaitForSeconds(0.5f);
         }
-        announcer.AnnouncePlayerTurn(turnIndex);
+        Announcer.Instance.AnnouncePlayerTurn(turnIndex);
         if (playerPanels[turnIndex] == localPlayerPanel) {
             localPlayerPanel.GetComponent<CanvasGroup>().blocksRaycasts = true;
         } 
@@ -161,7 +156,7 @@ public class GameControl : MonoBehaviour
     [PunRPC]
     private void ChangePlayerPanel (int newTurn) {
 
-        announcer.AnnouncePlayerTurn(newTurn);
+        Announcer.Instance.AnnouncePlayerTurn(newTurn);
         if (playerPanels[newTurn] == localPlayerPanel) {
             localPlayerPanel.GetComponent<CanvasGroup>().blocksRaycasts = true;
         }
@@ -208,7 +203,7 @@ public class GameControl : MonoBehaviour
     public void PlayerWonGame() {
         localPlayerPanel.GetComponent<CanvasGroup>().blocksRaycasts = false;
         playerWon = true;
-        StartCoroutine(GameObject.FindGameObjectWithTag("AdManager").GetComponent<AdManager>().Victory());
+        StartCoroutine(AdManager.Instance.Victory());
         if (PhotonNetwork.isMasterClient) {
             GameObject.FindGameObjectWithTag("VictoryPanel").GetComponent<Victory>().playerStandings = GameObject.FindGameObjectWithTag("VictoryPanel").GetComponent<Victory>().GetPlayerStandings();
         }

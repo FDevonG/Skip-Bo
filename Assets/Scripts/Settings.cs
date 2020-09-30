@@ -9,13 +9,12 @@ public class Settings : MonoBehaviour
     private void OnEnable() {
         musicToggle.isOn = Sounds.IsMusicPlaying();
         soundEffectsToggle.isOn = Sounds.IsSoundEffectsActive();
-        Sounds sounds = GameObject.FindGameObjectWithTag("SoundManager").GetComponent<Sounds>();
         musicToggle.onValueChanged.AddListener(delegate {
-            sounds.PlayButtonClick();
-            sounds.SwitchMusic();
+            Sounds.Instance.PlayButtonClick();
+            Sounds.Instance.SwitchMusic();
         });
         soundEffectsToggle.onValueChanged.AddListener(delegate {
-            sounds.PlayButtonClick();
+            Sounds.Instance.PlayButtonClick();
         });
     }
 

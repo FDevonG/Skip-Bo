@@ -1,7 +1,102 @@
 ﻿[
-  {
-    "ItemName": "Hair_15",
-    "Type": "cloth",
-    "Price": 200
-  }
+    {
+        "ItemName": "Kit_18",
+        "Type": "cloth",
+        "Price": 200
+    },
+    {
+        "ItemName": "Kit_19",
+        "Type": "cloth",
+        "Price": 200
+    },
+    {
+        "ItemName": "Kit_20",
+        "Type": "cloth",
+        "Price": 200
+    },
+    {
+        "ItemName": "Kit_21",
+        "Type": "cloth",
+        "Price": 200
+    },
+    {
+        "ItemName": "Kit_22",
+        "Type": "cloth",
+        "Price": 200
+    },
+    {
+        "ItemName": "Kit_23",
+        "Type": "cloth",
+        "Price": 200
+    },
+    {
+        "ItemName": "Kit_24",
+        "Type": "cloth",
+        "Price": 200
+    },
+    {
+        "ItemName": "Kit_25",
+        "Type": "cloth",
+        "Price": 200
+    },
+    {
+        "ItemName": "Kit_26",
+        "Type": "cloth",
+        "Price": 200
+    },
+    {
+        "ItemName": "Kit_27",
+        "Type": "cloth",
+        "Price": 200
+    },
+    {
+        "ItemName": "Kit_28",
+        "Type": "cloth",
+        "Price": 200
+    },
+    {
+        "ItemName": "Kit_29",
+        "Type": "cloth",
+        "Price": 200
+    },
+    {
+        "ItemName": "Kit_30",
+        "Type": "cloth",
+        "Price": 200
+    },
+    {
+        "ItemName": "Kit_31",
+        "Type": "cloth",
+        "Price": 300
+    },
+    {
+        "ItemName": "Kit_32",
+        "Type": "cloth",
+        "Price": 300
+    },
+    {
+        "ItemName": "Kit_33",
+        "Type": "cloth",
+        "Price": 300
+    },
+    {
+        "ItemName": "Kit_34",
+        "Type": "cloth",
+        "Price": 300
+    },
+    {
+        "ItemName": "Kit_35",
+        "Type": "cloth",
+        "Price": 300
+    },
+    {
+        "ItemName": "Kit_36",
+        "Type": "cloth",
+        "Price": 300
+    },
+    {
+        "ItemName": "Kit_37",
+        "Type": "cloth",
+        "Price": 300
+    }
 ]

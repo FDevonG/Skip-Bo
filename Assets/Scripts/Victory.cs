@@ -16,13 +16,8 @@ public class Victory : MonoBehaviour
     [SerializeField] GameObject victoryPanel;
     [SerializeField] GameObject quitGamePanel;
 
-    LevelSystem levelSystem;
-    Achievments achievments;
-
     private void Start() {
         gameControl = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameControl>();
-        levelSystem = GameObject.FindGameObjectWithTag("LevelManager").GetComponent<LevelSystem>();
-        achievments = GameObject.FindGameObjectWithTag("AchievementManager").GetComponent<Achievments>();
     }
 
     public void CloseQuitPanel()
@@ -74,6 +69,8 @@ public class Victory : MonoBehaviour
 
     public IEnumerator ShowStandings() {
 
+        RewardVideo.Instance.GamesPlayedRewardCounter();
+
         GetComponent<Image>().color = Color.white;
         GetComponent<CanvasGroup>().blocksRaycasts = true;
 
@@ -85,37 +82,34 @@ public class Victory : MonoBehaviour
 
         yield return new WaitUntil(() => playerStandings.Length == gameControl.playerPanels.Length);
 
-        //while (playerStandings.Length == 0) {
-        //    yield return new WaitForSeconds(0.5f);
-        //}
-
-        Announcer announcer = GameObject.FindGameObjectWithTag("Announcer").GetComponent<Announcer>();
         bool playerWon = false;
         if (gameControl.localPlayerPanel.GetComponent<PanelControl>().deck.transform.childCount == 0) {
-            GameObject.FindGameObjectWithTag("StatsController").GetComponent<PlayerStatsController>().AddGameWon();
-            announcer.YouWon();
+            PlayerStatsController.Instance.AddGameWon();
+            Announcer.Instance.YouWon();
             if (PhotonNetwork.offlineMode) {
-                StartCoroutine(levelSystem.AddExperience(25));
-                achievments.UnlockAchievement("Champion");
+                StartCoroutine(LevelSystem.Instance.AddExperience(25));
+                Achievments.Instance.UnlockAchievement("Champion");
             } else {
-                StartCoroutine(levelSystem.AddExperience(50));
-                achievments.UnlockAchievement("Champion");
-                achievments.UnlockAchievement("Online champion");
+                StartCoroutine(LevelSystem.Instance.AddExperience(50));
+                Achievments.Instance.UnlockAchievement("Champion");
+                Achievments.Instance.UnlockAchievement("Online champion");
             }
             playerWon = true;
             LocalUser.locUser.gamesWonInARow++;
         } else {
-            announcer.YouLost();
+            Announcer.Instance.YouLost();
             if (PhotonNetwork.offlineMode) {
-                StartCoroutine(levelSystem.AddExperience(10));
+                StartCoroutine(LevelSystem.Instance.AddExperience(10));
             } else {
-                StartCoroutine(levelSystem.AddExperience(15));
+                StartCoroutine(LevelSystem.Instance.AddExperience(15));
             }
             LocalUser.locUser.gamesWonInARow = 0;
         }
         Database.UpdateUser("gamesWonInARow", LocalUser.locUser.gamesWonInARow);
-        achievments.GamesWon();
+        Achievments.Instance.GamesWon();
+
         GemControl.Instance.GameGemPayOut((int)PhotonNetwork.room.CustomProperties[PhotonRooms.DeckSize()], PhotonNetwork.offlineMode, playerWon);
+
         for (int i = 0; i < playerStandings.Length; i++) {
             GameObject standingPanel = Instantiate(Resources.Load<GameObject>("PlayerStandingPanel") as GameObject);
             standingPanel.transform.SetParent(panelsParent.transform);

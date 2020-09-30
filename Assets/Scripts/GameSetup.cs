@@ -26,7 +26,7 @@ public class GameSetup : MonoBehaviour {
 
     public void SetGameUp() {
         PlayerPrefsHandler.SetGamesPlayed();
-        GameObject.FindGameObjectWithTag("StatsController").GetComponent<PlayerStatsController>().AddGamePlayed();
+        PlayerStatsController.Instance.AddGamePlayed();
         //if we are in an offline game we want to build the array to build out the game with and to store later for checking if the play is still connected
         if (!PhotonNetwork.offlineMode) {
             gameControl.connectedPlayers = GetPhotonPlayerArray();

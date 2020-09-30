@@ -13,7 +13,7 @@ public class NotificationPanel : MonoBehaviour
         StartCoroutine(StartCountdown());
         DontDestroyOnLoad(gameObject);
         SceneManager.sceneLoaded += OnSceneLoaded;
-        GameObject.FindGameObjectWithTag("SoundManager").GetComponent<Sounds>().PlayerNotification();
+        Sounds.Instance.PlayerNotification();
     }
 
     void OnSceneLoaded(Scene scene, LoadSceneMode mode) {

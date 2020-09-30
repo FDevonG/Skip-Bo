@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class LoadingScreen : MonoBehaviour
 {
-    public LoadingScreen Instance { get; private set; }
+    public static LoadingScreen Instance { get; private set; }
 
     [SerializeField] GameObject mainPanel;
     [SerializeField] Text loadingText;
@@ -16,8 +16,6 @@ public class LoadingScreen : MonoBehaviour
 
     private float timeTakenDuringLerp = 1.0f;
     private float timeStartedLerping;
-
-    RemoveAds removeAds;
 
     void Awake()
     {
@@ -34,7 +32,6 @@ public class LoadingScreen : MonoBehaviour
 
     private void Start()
     {
-        removeAds = GameObject.FindGameObjectWithTag("RemoveAdsPanel").GetComponent<RemoveAds>();
         SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
@@ -80,7 +77,7 @@ public class LoadingScreen : MonoBehaviour
 
     public void TurnOnLoadingScreen()
     {
-        removeAds.HideButton();
+        RemoveAds.instance.HideButton();
         mainPanel.SetActive(true);
         GetComponent<CanvasGroup>().blocksRaycasts = true;
         loading = true;
@@ -90,7 +87,7 @@ public class LoadingScreen : MonoBehaviour
 
     public void TurnOffLoadingScreen()
     {
-        removeAds.AdsCheck();
+        RemoveAds.instance.AdsCheck();
         GetComponent<CanvasGroup>().blocksRaycasts = false;
         loadingText.color = new Color(loadingText.color.r, loadingText.color.g, loadingText.color.b, 1);
         loading = false;

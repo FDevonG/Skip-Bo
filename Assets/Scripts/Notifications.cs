@@ -30,9 +30,9 @@ public class Notifications : MonoBehaviour
 
     public IEnumerator SpawnNotification(string message)
     {
-        while (GameObject.FindGameObjectWithTag("NotificationPanel") != null && CardDragHandler.itemBeingDragged != null)
+        if (GameObject.FindGameObjectWithTag("NotificationPanel") != null && CardDragHandler.itemBeingDragged != null && AdManager.Instance.IsAdPlaying())
         {
-            yield return new WaitUntil(() => GameObject.FindGameObjectWithTag("NotificationPanel") == null && CardDragHandler.itemBeingDragged == null);
+            yield return new WaitUntil(() => GameObject.FindGameObjectWithTag("NotificationPanel") == null && CardDragHandler.itemBeingDragged == null && !AdManager.Instance.IsAdPlaying());
         }
         GameObject notificationPanel = Instantiate(Resources.Load<GameObject>("NotificationPanel"));
         notificationPanel.transform.localScale = new Vector3(1, 1, 1);

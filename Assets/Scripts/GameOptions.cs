@@ -7,7 +7,7 @@ public class GameOptions : MonoBehaviour
     public void OnlineGame() {
         //GetComponent<ActivatePanel>().SwitchPanel(connectingPanel);
         if (!PhotonNetwork.connected) {
-            GameObject.FindGameObjectWithTag("NetworkManager").GetComponent<PhotonNetworking>().ConnectToPhoton();
+            PhotonNetworking.Instance.ConnectToPhoton();
         }
         SceneController.LoadGameSetup();
     }
@@ -18,6 +18,6 @@ public class GameOptions : MonoBehaviour
     }
 
     public void CreateOfflineGame(int deckAmmount) {
-        GameObject.FindGameObjectWithTag("NetworkManager").GetComponent<PhotonRooms>().CreateOfflineRoom(deckAmmount);
+        PhotonRooms.Instance.CreateOfflineRoom(deckAmmount);
     }
 }

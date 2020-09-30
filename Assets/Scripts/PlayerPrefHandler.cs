@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 public class PlayerPrefsHandler {
 
@@ -18,6 +19,7 @@ public class PlayerPrefsHandler {
         return PlayerPrefs.GetInt("soundEffects");
     }
 
+    #region Rating
     public static void SetGameRated(int value) {
         PlayerPrefs.SetInt("rated", value);
     }
@@ -37,4 +39,16 @@ public class PlayerPrefsHandler {
     public static int GetGamesPlayed() {
         return PlayerPrefs.GetInt("gamesPlayed");
     }
+    #endregion
+
+    //public static void SetLogOutTime()
+    //{
+    //    PlayerPrefs.SetString("LogOutTime", System.DateTime.Now.ToBinary().ToString());
+    //}
+
+    //public static DateTime GetLastLogOutTime()
+    //{
+    //    return DateTime.FromBinary(Convert.ToInt64(PlayerPrefs.GetString("LogOutTime")));
+    //}
+
 }

@@ -16,7 +16,7 @@ public class InvitedToGamePanel : MonoBehaviour
         DontDestroyOnLoad(gameObject);
         StartCoroutine(StartCountdown());
         SceneManager.sceneLoaded += OnSceneLoaded;
-        GameObject.FindGameObjectWithTag("SoundManager").GetComponent<Sounds>().PlayGameInvite();
+        Sounds.Instance.PlayGameInvite();
     }
 
     void OnSceneLoaded(Scene scene, LoadSceneMode mode) {

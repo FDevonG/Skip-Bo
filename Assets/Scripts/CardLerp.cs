@@ -55,7 +55,7 @@ public class CardLerp : MonoBehaviour {
             if (percentageComplete >= timeTakenDuringLerp) {
                 isLerping = false;
                 if (transform.parent != startParent) {
-                    GameObject.FindGameObjectWithTag("SoundManager").GetComponent<Sounds>().PlayCardFlip(transform.GetComponent<AudioSource>());
+                    Sounds.Instance.PlayCardFlip(transform.GetComponent<AudioSource>());
                 }
             }
         }

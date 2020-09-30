@@ -27,11 +27,12 @@ public class Menu : MonoBehaviour
     public GameObject achievementsPanel;
     public GameObject removeAdsPanel;
     public GameObject storePanel;
+    public GameObject dailyRewardVideoPanel;
+
 
     public GameObject errorPanel;
 
     private ActivatePanel activatePanel;
-    AdManager adManager;
 
     private void Awake() {
         Screen.sleepTimeout = SleepTimeout.NeverSleep;//keep the screen from fading
@@ -41,7 +42,6 @@ public class Menu : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        adManager = GameObject.FindGameObjectWithTag("AdManager").GetComponent<AdManager>();
         activatePanel = GetComponent<ActivatePanel>();
         StartCoroutine(DoesPlayerExist());
     }
@@ -136,6 +136,11 @@ public class Menu : MonoBehaviour
             activatePanel.SwitchPanel(startMenu);
             return;
         }
+        if (activatePanel.activePanel == dailyRewardVideoPanel)
+        {
+            activatePanel.SwitchPanel(startMenu);
+            return;
+        }
         if (activatePanel.activePanel == playerPanel)
         {
             activatePanel.SwitchPanel(storePanel);
@@ -150,23 +155,23 @@ public class Menu : MonoBehaviour
 
     public IEnumerator DoesPlayerExist() {
         if (!FirebaseAuthentication.IsPlayerLoggedIn() && !FacebookScript.Instance.IsFacebookLoggedIn()) {
-            StartCoroutine(adManager.ShowBannerAdd());
+            StartCoroutine(AdManager.Instance.ShowBannerAdd());
             activatePanel.SwitchPanel(startGamePanel);
         } else {
-            GameObject.FindGameObjectWithTag("LoadingScreen").GetComponent<LoadingScreen>().TurnOnLoadingScreen();
+            LoadingScreen.Instance.TurnOnLoadingScreen();
             if (LocalUser.locUser == null) {
                 var task = Database.GetCurrentUser();
                 yield return new WaitUntil(() => task.IsCompleted);
                 if (task.IsFaulted) {
-                    StartCoroutine(adManager.ShowBannerAdd());
+                    StartCoroutine(AdManager.Instance.ShowBannerAdd());
                     activatePanel.SwitchPanel(errorPanel);
-                    GameObject.FindGameObjectWithTag("LoadingScreen").GetComponent<LoadingScreen>().TurnOffLoadingScreen();
+                    LoadingScreen.Instance.TurnOffLoadingScreen();
                 } else {
                     LocalUser.locUser = JsonUtility.FromJson<User>(task.Result);
 
                     if (LocalUser.locUser.achievments.Count == 0) {
-                        LocalUser.locUser.achievments = GameObject.FindGameObjectWithTag("AchievementManager").GetComponent<Achievments>().BuildAchievmentsList();
-                        StartCoroutine(GameObject.FindGameObjectWithTag("AchievementManager").GetComponent<Achievments>().SaveAchievments());
+                        LocalUser.locUser.achievments = Achievments.Instance.BuildAchievmentsList();
+                        StartCoroutine(Achievments.Instance.SaveAchievments());
                     }
                     if (LevelSystem.GetExperienceToNextLevel() == 0) {
                         LocalUser.locUser.experienceToNextLevel = 100;
@@ -188,6 +193,7 @@ public class Menu : MonoBehaviour
                     }
                 }
             }
+
             if (LocalUser.locUser != null) {
                 if (LocalUser.locUser.friends.Count > 0) {
                     StartCoroutine(Friends.GetStartFriends());
@@ -196,8 +202,12 @@ public class Menu : MonoBehaviour
                     activatePanel.SwitchPanel(characterCreationPanel);
                 } else {
                     PhotonPlayerSetup.BuildPhotonPlayer(PhotonNetwork.player, LocalUser.locUser);
-                    GameObject.FindGameObjectWithTag("NetworkManager").GetComponent<PhotonNetworking>().ConnectToPhoton();
-                    if (!Rating.CheckRated()) {
+                    PhotonNetworking.Instance.ConnectToPhoton();
+                    if (RewardVideo.Instance.DailyRewardCanPlay())
+                    {
+                        activatePanel.SwitchPanel(dailyRewardVideoPanel);
+                    }
+                    else if (!Rating.CheckRated()) {
                         if (Rating.CheckGamesPlayed()) {
                             activatePanel.SwitchPanel(ratingPanel);
                         } else {
@@ -210,11 +220,11 @@ public class Menu : MonoBehaviour
             }
         }
 
-        GameObject.FindGameObjectWithTag("LoadingScreen").GetComponent<LoadingScreen>().TurnOffLoadingScreen();
+        LoadingScreen.Instance.TurnOffLoadingScreen();
 
-        if (!GameObject.FindGameObjectWithTag("Announcer").GetComponent<Announcer>().welcomePlayed) {
-            GameObject.FindGameObjectWithTag("Announcer").GetComponent<Announcer>().Welcome();
-            GameObject.FindGameObjectWithTag("Announcer").GetComponent<Announcer>().welcomePlayed = true;
+        if (!Announcer.Instance.welcomePlayed) {
+            Announcer.Instance.Welcome();
+            Announcer.Instance.welcomePlayed = true;
         }
     }
 

@@ -31,9 +31,9 @@ public class RoomSetup : MonoBehaviour {
             if (fourPlayerToggle.isOn) {
                 players = 4;
             }
-            GameObject.FindGameObjectWithTag("NetworkManager").GetComponent<PhotonRooms>().CreateOnlineGame(roomName, ((int)cardSlider.value * 5), players, privateToggle.isOn);
+            PhotonRooms.Instance.CreateOnlineGame(roomName, ((int)cardSlider.value * 5), players, privateToggle.isOn);
         } else {
-            GameObject.FindGameObjectWithTag("Announcer").GetComponent<Announcer>().AnnouncerAnError();
+            Announcer.Instance.AnnouncerAnError();
             placeholderText.text = "Enter Name";
             placeholderText.color = Color.red;
         }

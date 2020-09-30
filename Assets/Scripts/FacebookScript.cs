@@ -50,9 +50,7 @@ public class FacebookScript : MonoBehaviour
 
     public void InviteFacebookFriendToGame()
     {
-        GameObject.FindGameObjectWithTag("LoadingScreen").GetComponent<LoadingScreen>().TurnOnLoadingScreen();
         FB.AppRequest("Come play some SkipBo!", title:"SkipBo");
-        GameObject.FindGameObjectWithTag("LoadingScreen").GetComponent<LoadingScreen>().TurnOffLoadingScreen();
     }
 
     public Dictionary<string, object> GetFriendsPlayingThisGame()

@@ -35,7 +35,7 @@ public class ErrorText : MonoBehaviour
             FindErrorText(gameObject);
         errorText.text = message;
         errorText.gameObject.SetActive(true);
-        GameObject.FindGameObjectWithTag("Announcer").GetComponent<Announcer>().AnnouncerAnError();
+        Announcer.Instance.AnnouncerAnError();
     }
 
     public void ClearError() {

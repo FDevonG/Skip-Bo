@@ -1,7 +1,107 @@
 ﻿[
-  {
-    "ItemName": "Hair_15",
-    "Type": "face",
-    "Price": 200
-  }
+    {
+        "ItemName": "Face_4",
+        "Type": "face",
+        "Price": 150
+    },
+    {
+        "ItemName": "Face_5",
+        "Type": "face",
+        "Price": 150
+    },
+    {
+        "ItemName": "Face_6",
+        "Type": "face",
+        "Price": 150
+    },
+    {
+        "ItemName": "Face_7",
+        "Type": "face",
+        "Price": 150
+    },
+    {
+        "ItemName": "Face_8",
+        "Type": "face",
+        "Price": 150
+    },
+    {
+        "ItemName": "Face_9",
+        "Type": "face",
+        "Price": 150
+    },
+    {
+        "ItemName": "Face_10",
+        "Type": "face",
+        "Price": 150
+    },
+    {
+        "ItemName": "Face_11",
+        "Type": "face",
+        "Price": 150
+    },
+    {
+        "ItemName": "Face_12",
+        "Type": "face",
+        "Price": 150
+    },
+    {
+        "ItemName": "Face_13",
+        "Type": "face",
+        "Price": 150
+    },
+    {
+        "ItemName": "Face_14",
+        "Type": "face",
+        "Price": 150
+    },
+    {
+        "ItemName": "Face_15",
+        "Type": "face",
+        "Price": 150
+    },
+    {
+        "ItemName": "Face_16",
+        "Type": "face",
+        "Price": 150
+    },
+    {
+        "ItemName": "Face_17",
+        "Type": "face",
+        "Price": 150
+    },
+    {
+        "ItemName": "Face_18",
+        "Type": "face",
+        "Price": 150
+    },
+    {
+        "ItemName": "Face_19",
+        "Type": "face",
+        "Price": 150
+    },
+    {
+        "ItemName": "Face_20",
+        "Type": "face",
+        "Price": 150
+    },
+    {
+        "ItemName": "Face_21",
+        "Type": "face",
+        "Price": 150
+    },
+    {
+        "ItemName": "Face_22",
+        "Type": "face",
+        "Price": 150
+    },
+    {
+        "ItemName": "Face_23",
+        "Type": "face",
+        "Price": 150
+    },
+    {
+        "ItemName": "Face_24",
+        "Type": "face",
+        "Price": 150
+    }
 ]
