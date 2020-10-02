@@ -51,6 +51,11 @@ Update2.3
 Update2.4
 -Remove ads option added
 
-Update 2.4
+Update 2.5
 -Facebook login added
 -Share screen shot button added to victory screen
+
+Update 2.6
+-In game store added
+-Daily reward videos
+-Bonus reward videos for playing games

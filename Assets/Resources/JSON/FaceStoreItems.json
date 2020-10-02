@@ -103,5 +103,50 @@
         "ItemName": "Face_24",
         "Type": "face",
         "Price": 150
+    },
+    {
+        "ItemName": "Face_25",
+        "Type": "face",
+        "Price": 150
+    },
+    {
+        "ItemName": "Face_26",
+        "Type": "face",
+        "Price": 150
+    },
+    {
+        "ItemName": "Face_27",
+        "Type": "face",
+        "Price": 150
+    },
+    {
+        "ItemName": "Face_28",
+        "Type": "face",
+        "Price": 150
+    },
+    {
+        "ItemName": "Face_29",
+        "Type": "face",
+        "Price": 150
+    },
+    {
+        "ItemName": "Face_30",
+        "Type": "face",
+        "Price": 150
+    },
+    {
+        "ItemName": "Face_31",
+        "Type": "face",
+        "Price": 150
+    },
+    {
+        "ItemName": "Face_32",
+        "Type": "face",
+        "Price": 150
+    },
+    {
+        "ItemName": "Face_33",
+        "Type": "face",
+        "Price": 150
     }
 ]

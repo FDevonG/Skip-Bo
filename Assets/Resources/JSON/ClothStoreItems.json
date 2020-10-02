@@ -1,102 +1,167 @@
 ﻿[
     {
         "ItemName": "Kit_18",
-        "Type": "cloth",
+        "Type": "kit",
         "Price": 200
     },
     {
         "ItemName": "Kit_19",
-        "Type": "cloth",
+        "Type": "kit",
         "Price": 200
     },
     {
         "ItemName": "Kit_20",
-        "Type": "cloth",
+        "Type": "kit",
         "Price": 200
     },
     {
         "ItemName": "Kit_21",
-        "Type": "cloth",
+        "Type": "kit",
         "Price": 200
     },
     {
         "ItemName": "Kit_22",
-        "Type": "cloth",
+        "Type": "kit",
         "Price": 200
     },
     {
         "ItemName": "Kit_23",
-        "Type": "cloth",
+        "Type": "kit",
         "Price": 200
     },
     {
         "ItemName": "Kit_24",
-        "Type": "cloth",
+        "Type": "kit",
         "Price": 200
     },
     {
         "ItemName": "Kit_25",
-        "Type": "cloth",
+        "Type": "kit",
         "Price": 200
     },
     {
         "ItemName": "Kit_26",
-        "Type": "cloth",
+        "Type": "kit",
         "Price": 200
     },
     {
         "ItemName": "Kit_27",
-        "Type": "cloth",
+        "Type": "kit",
         "Price": 200
     },
     {
         "ItemName": "Kit_28",
-        "Type": "cloth",
+        "Type": "kit",
         "Price": 200
     },
     {
         "ItemName": "Kit_29",
-        "Type": "cloth",
+        "Type": "kit",
         "Price": 200
     },
     {
         "ItemName": "Kit_30",
-        "Type": "cloth",
+        "Type": "kit",
         "Price": 200
     },
     {
         "ItemName": "Kit_31",
-        "Type": "cloth",
+        "Type": "kit",
         "Price": 300
     },
     {
         "ItemName": "Kit_32",
-        "Type": "cloth",
+        "Type": "kit",
         "Price": 300
     },
     {
         "ItemName": "Kit_33",
-        "Type": "cloth",
+        "Type": "kit",
         "Price": 300
     },
     {
         "ItemName": "Kit_34",
-        "Type": "cloth",
+        "Type": "kit",
         "Price": 300
     },
     {
         "ItemName": "Kit_35",
-        "Type": "cloth",
+        "Type": "kit",
         "Price": 300
     },
     {
         "ItemName": "Kit_36",
-        "Type": "cloth",
+        "Type": "kit",
         "Price": 300
     },
     {
         "ItemName": "Kit_37",
-        "Type": "cloth",
+        "Type": "kit",
         "Price": 300
+    },
+    {
+        "ItemName": "Kit_38",
+        "Type": "kit",
+        "Price": 200
+    },
+    {
+        "ItemName": "Kit_39",
+        "Type": "kit",
+        "Price": 200
+    },
+    {
+        "ItemName": "Kit_40",
+        "Type": "kit",
+        "Price": 200
+    },
+    {
+        "ItemName": "Kit_41",
+        "Type": "kit",
+        "Price": 200
+    },
+    {
+        "ItemName": "Kit_42",
+        "Type": "kit",
+        "Price": 200
+    },
+    {
+        "ItemName": "Kit_43",
+        "Type": "kit",
+        "Price": 200
+    },
+    {
+        "ItemName": "Kit_44",
+        "Type": "kit",
+        "Price": 300
+    },
+    {
+        "ItemName": "Kit_45",
+        "Type": "kit",
+        "Price": 300
+    },
+    {
+        "ItemName": "Kit_46",
+        "Type": "kit",
+        "Price": 200
+    },
+    {
+        "ItemName": "Kit_47",
+        "Type": "kit",
+        "Price": 200
+    },
+    {
+        "ItemName": "Kit_48",
+        "Type": "kit",
+        "Price": 200
+    },
+    {
+        "ItemName": "Kit_49",
+        "Type": "kit",
+        "Price": 200
+    },
+    {
+        "ItemName": "Kit_50",
+        "Type": "kit",
+        "Price": 200
     }
 ]
