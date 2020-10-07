@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using UnityEngine;
 using UnityEngine.Purchasing;
 
@@ -96,7 +96,7 @@ public class InAppPurchasing : MonoBehaviour, IStoreListener
 
                 if (string.Equals(productId, removeAds))
                     GameObject.FindGameObjectWithTag("RemoveAdsPanel").GetComponent<ErrorText>().SetError("Item is not available for purchase");
-                GameObject storePanel = GameObject.FindGameObjectWithTag("GameManagr").GetComponent<Menu>().storePanel;
+                GameObject storePanel = GameObject.FindGameObjectWithTag("GameManager").GetComponent<Menu>().storePanel;
                 if (string.Equals(productId, twoHundredGems) || string.Equals(productId, oneThousandGems))
                     storePanel.GetComponent<ErrorText>().SetError("Item is not availible for purchase");
                 
@@ -110,7 +110,7 @@ public class InAppPurchasing : MonoBehaviour, IStoreListener
             // retrying initiailization.
             if(string.Equals(productId, removeAds))
                 GameObject.FindGameObjectWithTag("RemoveAdsPanel").GetComponent<ErrorText>().SetError("Not connected to the store");
-            GameObject storePanel = GameObject.FindGameObjectWithTag("GameManagr").GetComponent<Menu>().storePanel;
+            GameObject storePanel = GameObject.FindGameObjectWithTag("GameManager").GetComponent<Menu>().storePanel;
             if (string.Equals(productId, twoHundredGems) || string.Equals(productId, oneThousandGems))
                 storePanel.GetComponent<ErrorText>().SetError("Not Connected to the store");
 
@@ -152,10 +152,10 @@ public class InAppPurchasing : MonoBehaviour, IStoreListener
 
     public void OnPurchaseFailed(Product i, PurchaseFailureReason p)
     {
-        if (GameObject.FindGameObjectWithTag("RemoveAdsPanel").GetActive())
+        if (GameObject.FindGameObjectWithTag("RemoveAdsPanel").GetComponent<RemoveAds>().adsPanel.GetActive())
             GameObject.FindGameObjectWithTag("RemoveAdsPanel").GetComponent<ErrorText>().SetError(p.ToString());
-        else if(GameObject.FindGameObjectWithTag("GameManagr").GetComponent<Menu>().storePanel.GetActive())
-            GameObject.FindGameObjectWithTag("GameManagr").GetComponent<Menu>().storePanel.GetComponent<ErrorText>().SetError(p.ToString());
+        else if(GameObject.FindGameObjectWithTag("GameManager").GetComponent<Menu>().storePanel.GetActive())
+            GameObject.FindGameObjectWithTag("GameManager").GetComponent<Menu>().storePanel.GetComponent<ErrorText>().SetError(p.ToString());
     }
 
 

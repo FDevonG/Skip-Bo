@@ -13,6 +13,7 @@ TagManager:
   - VoteToKick
   - ChatButton
   - ErrorText
+  - RemoveAdsPanel
   layers:
   - Default
   - TransparentFX

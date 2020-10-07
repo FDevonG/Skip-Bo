@@ -86,18 +86,26 @@ public class StorePanel : MonoBehaviour
     {
         SetHeaderText("Gems");
 
-        GameObject gridLayout = Instantiate(Resources.Load<GameObject>("StoreGridLayoutPanel"), panelParent.transform);
-        storeItemPanels.Add(gridLayout);
+        if (FirebaseAuthentication.IsPlayerAnonymous())
+        {
+            Text messageText = Instantiate(Resources.Load<Text>("StoreGuestText"), panelParent.transform);
+            storeItemPanels.Add(messageText.gameObject);
+        }
+        else
+        {
+            GameObject gridLayout = Instantiate(Resources.Load<GameObject>("StoreGridLayoutPanel"), panelParent.transform);
+            storeItemPanels.Add(gridLayout);
 
-        GameObject twoHundred = Instantiate(Resources.Load<GameObject>("StoreGemPanel"), gridLayout.transform);
-        twoHundred.GetComponent<StoreGemPanel>().ammountText.text = "X 200";
-        twoHundred.GetComponent<StoreGemPanel>().costText.text = "$1 CAD";
-        twoHundred.GetComponent<StoreGemPanel>().button.onClick.AddListener(BuyTwoHundredGems);
+            GameObject twoHundred = Instantiate(Resources.Load<GameObject>("StoreGemPanel"), gridLayout.transform);
+            twoHundred.GetComponent<StoreGemPanel>().ammountText.text = "X 200";
+            twoHundred.GetComponent<StoreGemPanel>().costText.text = "$1 CAD";
+            twoHundred.GetComponent<StoreGemPanel>().button.onClick.AddListener(BuyTwoHundredGems);
 
-        GameObject oneThousand = Instantiate(Resources.Load<GameObject>("StoreGemPanel"), gridLayout.transform);
-        oneThousand.GetComponent<StoreGemPanel>().ammountText.text = "X 1000";
-        oneThousand.GetComponent<StoreGemPanel>().costText.text = "$5 CAD";
-        oneThousand.GetComponent<StoreGemPanel>().button.onClick.AddListener(BuyOneThousandGems);
+            GameObject oneThousand = Instantiate(Resources.Load<GameObject>("StoreGemPanel"), gridLayout.transform);
+            oneThousand.GetComponent<StoreGemPanel>().ammountText.text = "X 1000";
+            oneThousand.GetComponent<StoreGemPanel>().costText.text = "$5 CAD";
+            oneThousand.GetComponent<StoreGemPanel>().button.onClick.AddListener(BuyOneThousandGems);
+        }
     }
 
     void BuildHairOptions()
@@ -147,7 +155,6 @@ public class StorePanel : MonoBehaviour
 
         foreach (StoreItem item in items)
         {
-            Debug.Log(item.itemName);
             GameObject storeItemPanel = Instantiate(Resources.Load<GameObject>("StoreItemPanel"), gridLayout.transform);
             storeItemPanel.GetComponent<StoreItemPanel>().SetUpPanel(item, this);
             storeItemPanels.Add(storeItemPanel);

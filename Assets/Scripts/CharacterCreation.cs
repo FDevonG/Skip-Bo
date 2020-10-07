@@ -243,8 +243,10 @@ public class CharacterCreation : MonoBehaviour
             bool nameBool = false;
             foreach (DataSnapshot snap in task.Result.Children) {
                 User tempUser = JsonUtility.FromJson<User>(snap.GetRawJsonValue());
-                if (tempUser.userName == userName) {
-                    if (tempUser.userID != FirebaseAuthentication.AuthenitcationKey()) {
+                if (tempUser.userName == userName)
+                {
+                    if (tempUser.userID != FirebaseAuthentication.AuthenitcationKey())
+                    {
                         nameBool = true;
                         break;
                     }

@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEngine.UI;
 
 public class RoomBrowserPanel : MonoBehaviour
@@ -12,7 +12,7 @@ public class RoomBrowserPanel : MonoBehaviour
     public void SetText(RoomInfo game) {
         nameText.text = game.Name;
         cardsText.text = game.CustomProperties[PhotonRooms.DeckSize()].ToString();
-        playersText.text = game.MaxPlayers.ToString();
+        playersText.text = game.PlayerCount.ToString() + "/" + game.MaxPlayers.ToString();
         gameInfo = game;
     }
 

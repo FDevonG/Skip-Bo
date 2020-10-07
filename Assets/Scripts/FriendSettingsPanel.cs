@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 public class FriendSettingsPanel : MonoBehaviour
@@ -16,7 +14,6 @@ public class FriendSettingsPanel : MonoBehaviour
     [SerializeField] Button blockUserButton;
     [SerializeField] Button joinRoomButton;
     [SerializeField] Button closeButton;
-    [SerializeField] Text infoText;
 
     [SerializeField] GameObject deleteFriendPanel;
     [SerializeField] Text areYouSureText;
@@ -41,8 +38,7 @@ public class FriendSettingsPanel : MonoBehaviour
                                 if (game.IsOpen) {
                                     PhotonNetwork.JoinRoom(game.Name);
                                 } else {
-                                    infoText.gameObject.SetActive(true);
-                                    infoText.text = "Room Full";
+                                    GetComponent<ErrorText>().SetError("Room Full");
                                 }
                             }
                         }
@@ -110,6 +106,7 @@ public class FriendSettingsPanel : MonoBehaviour
 
     private void OnDisable() {
         HideDeleteFriendPanel();
+        GetComponent<ErrorText>().ClearError();
     }
 
 }

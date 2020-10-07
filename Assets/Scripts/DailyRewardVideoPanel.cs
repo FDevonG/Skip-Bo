@@ -40,7 +40,6 @@ public class DailyRewardVideoPanel : MonoBehaviour
         }
         else
         {
-            Debug.Log(nextUnockDate.AddHours(19));
             Database.UpdateUser("nextRewardUnlock", nextUnockDate.AddHours(19).ToBinary().ToString());
         }
         GameObject.FindGameObjectWithTag("GameManager").GetComponent<ActivatePanel>().SwitchPanel(GameObject.FindGameObjectWithTag("GameManager").GetComponent<Menu>().startMenu);

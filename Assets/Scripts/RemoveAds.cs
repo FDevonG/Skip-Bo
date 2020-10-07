@@ -1,13 +1,11 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class RemoveAds : MonoBehaviour
 {
     [SerializeField] GameObject adsButton;
-    [SerializeField] GameObject adsPanel;
+    public GameObject adsPanel;
     [SerializeField] GameObject yesButton;
     [SerializeField] GameObject noButton;
     [SerializeField] Text text;
@@ -30,7 +28,6 @@ public class RemoveAds : MonoBehaviour
 
     private void Start()
     {
-        //SceneManager.sceneLoaded += OnSceneLoaded;
         adsButton.GetComponent<Button>().onClick.AddListener(() =>
         {
             GameObject.FindGameObjectWithTag("GameManager").GetComponent<ActivatePanel>().SwitchPanel(adsPanel);

@@ -8,7 +8,6 @@ public class FindFriends : MonoBehaviour
 {
     [SerializeField] GameObject emailInput;
     [SerializeField] Button searchButton;
-    [SerializeField] Text infoText;
 
     [SerializeField] GameObject freindPanel;
     [SerializeField] Text nameText;
@@ -24,7 +23,7 @@ public class FindFriends : MonoBehaviour
     void OnDisable() {
         searchButton.interactable = false;
         emailInput.GetComponent<InputField>().text = "";
-        infoText.gameObject.SetActive(false);
+        GetComponent<ErrorText>().ClearError();
         freindPanel.SetActive(false);
         id = "";
         searchingPanel.SetActive(false);
@@ -40,7 +39,7 @@ public class FindFriends : MonoBehaviour
         yield return new WaitUntil(() => task.IsCompleted);
         searchingPanel.SetActive(false);
         if (task.IsFaulted) {
-            SetErrorMessage("Search failed");
+            GetComponent<ErrorText>().SetError("Search failed");
         } else {
             bool friendFound = false;
             foreach (DataSnapshot s in task.Result.Children) {
@@ -64,7 +63,7 @@ public class FindFriends : MonoBehaviour
                 }
             }
             if (!friendFound) {
-                SetErrorMessage("No users found");
+                GetComponent<ErrorText>().SetError("No users found");
             }
         }
     }
@@ -88,14 +87,14 @@ public class FindFriends : MonoBehaviour
         if (!Friends.FriendAlreadyAdded(id)) {
             CoroutineWithData cd = new CoroutineWithData(this, Friends.AddFriend(id));
             yield return cd.coroutine;
-            SetErrorMessage((string)cd.result);
+            GetComponent<ErrorText>().SetError((string)cd.result);
         } else {
-            SetErrorMessage("Friend already added");
+            GetComponent<ErrorText>().SetError("Friend already added");
         }
     }
 
     public void CheckUserSearch() {
-        infoText.gameObject.SetActive(false);
+        GetComponent<ErrorText>().ClearError();
         freindPanel.SetActive(false);
         if (VerifyEmail.ValidateEmail(emailInput.GetComponent<InputField>().text)) {
             searchButton.interactable = true;
@@ -103,11 +102,6 @@ public class FindFriends : MonoBehaviour
             searchButton.interactable = false;
             freindPanel.SetActive(false);
         }
-    }
-
-    private void SetErrorMessage(string message) {
-        infoText.gameObject.SetActive(true);
-        infoText.text = message;
     }
 
 }
