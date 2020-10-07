@@ -37,8 +37,8 @@ public static class Friends
                 }
                 string[] addedFriend = new string[1];
                 addedFriend[0] = UserID;
-                GameObject.FindGameObjectWithTag("Chat").GetComponent<Chat>().AddFriend(addedFriend);
-                GameObject.FindGameObjectWithTag("AchievementManager").GetComponent<Achievments>().FreindAdded();
+                Chat.Instance.AddFriend(addedFriend);
+                Achievments.Instance.FreindAdded();
                 yield return "Friend added";
             }
         } else {
@@ -59,7 +59,7 @@ public static class Friends
             if (LocalUser.locUser.friends[i] == friend.userID) {
                 string[] removedFriend = new string[1];
                 removedFriend[0] = LocalUser.locUser.friends[i];
-                GameObject.FindGameObjectWithTag("Chat").GetComponent<Chat>().DeleteFriends(removedFriend);
+                Chat.Instance.DeleteFriends(removedFriend);
                 LocalUser.locUser.friends.Remove(LocalUser.locUser.friends[i]);
                 break;
             }

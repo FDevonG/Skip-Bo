@@ -29,8 +29,8 @@ public class InviteFriendsToGame : MonoBehaviour {
                 playerTab.transform.localScale = new Vector3(1,1,1);
                 playerTab.GetComponent<FriendInvitePanel>().emailText.text = friend.userName;
                 playerTab.GetComponent<FriendInvitePanel>().inviteButton.onClick.AddListener(() => {
-                    GameObject.FindGameObjectWithTag("AchievementManager").GetComponent<Achievments>().UnlockAchievement("Better with friends");
-                    GameObject.FindGameObjectWithTag("Chat").GetComponent<Chat>().SendGameInvite(friend.userID, PhotonNetwork.room.Name + "@" + LocalUser.locUser.userName);
+                    Achievments.Instance.UnlockAchievement("Better with friends");
+                    Chat.Instance.SendGameInvite(friend.userID, PhotonNetwork.room.Name + "@" + LocalUser.locUser.userName);
                     SetInfoText(friend.userName + " has been invited");
                     playerTab.GetComponent<FriendInvitePanel>().inviteButton.interactable = false;
                 });

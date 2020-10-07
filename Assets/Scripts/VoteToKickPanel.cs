@@ -87,8 +87,7 @@ public class VoteToKickPanel : MonoBehaviour
     public void KickPlayer() {
         PhotonNetwork.LeaveRoom();
         SceneController.LoadStartMenu();
-        GameObject notificationPanel = Instantiate(Resources.Load<GameObject>("NotificationPanel"));
-        notificationPanel.GetComponent<NotificationPanel>().SetText("You have been kicked");
+        StartCoroutine(Notifications.Instance.SpawnNotification("You have been kicked"));
     }
 
     public void ClosePanel() {

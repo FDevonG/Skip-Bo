@@ -17,7 +17,6 @@ public class CardLerp : MonoBehaviour {
         startParent = transform.parent;
         transform.SetParent(newParent);
        
-        //We set the start position to the current position, and the finish to 10 spaces in the 'forward' direction
         startPosition = transform.localPosition;
         startScale = transform.localScale;
 
@@ -36,22 +35,13 @@ public class CardLerp : MonoBehaviour {
     void Update() {
         if (isLerping) {
 
-            //We want percentage = 0.0 when Time.time = _timeStartedLerping
-            //and percentage = 1.0 when Time.time = _timeStartedLerping + timeTakenDuringLerp
-            //In other words, we want to know what percentage of "timeTakenDuringLerp" the value
-            //"Time.time - _timeStartedLerping" is.
             float timeSinceStarted = Time.time - timeStartedLerping;
             float percentageComplete = timeSinceStarted / timeTakenDuringLerp;
-
-            //Perform the actual lerping.  Notice that the first two parameters will always be the same
-            //throughout a single lerp-processs (ie. they won't change until we hit the space-bar again
-            //to start another lerp)
             transform.localPosition = Vector3.Lerp(startPosition, endPosition, percentageComplete);
             if (newScale != new Vector3(1, 1, 1)) {
                 transform.localScale = Vector3.Lerp(startScale, newScale, percentageComplete);
             }
             
-            //When we've completed the lerp, we set _isLerping to false
             if (percentageComplete >= timeTakenDuringLerp) {
                 isLerping = false;
                 if (transform.parent != startParent) {

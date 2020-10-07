@@ -41,14 +41,4 @@ public class PlayerPrefsHandler {
     }
     #endregion
 
-    //public static void SetLogOutTime()
-    //{
-    //    PlayerPrefs.SetString("LogOutTime", System.DateTime.Now.ToBinary().ToString());
-    //}
-
-    //public static DateTime GetLastLogOutTime()
-    //{
-    //    return DateTime.FromBinary(Convert.ToInt64(PlayerPrefs.GetString("LogOutTime")));
-    //}
-
 }

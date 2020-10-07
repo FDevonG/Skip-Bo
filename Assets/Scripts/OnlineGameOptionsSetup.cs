@@ -20,7 +20,7 @@ public class OnlineGameOptionsSetup : MonoBehaviour
 
     public void JoinRandomRoom() {
         if (PhotonNetwork.GetRoomList().Length != 0) {
-            GameObject.FindGameObjectWithTag("GameManager").GetComponent<PhotonRooms>().JoinRandomRoom();
+            PhotonRooms.Instance.JoinRandomRoom();
         } else {
             GameObject.FindGameObjectWithTag("GameManager").GetComponent<ActivatePanel>().SwitchPanel(noGamesPanel);
         }
