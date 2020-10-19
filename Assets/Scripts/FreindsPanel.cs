@@ -19,6 +19,7 @@ public class FreindsPanel : MonoBehaviour
         if (LocalUser.locUser.friends.Count > 0)
         {
             PhotonNetwork.FindFriends(LocalUser.locUser.friends.ToArray());
+            yield return new WaitUntil(() => PhotonNetwork.Friends != null);
 
             if (Friends.friends.Count != LocalUser.locUser.friends.Count)
             {
