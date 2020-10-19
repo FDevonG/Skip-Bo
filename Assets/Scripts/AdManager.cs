@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.Advertisements;
 
@@ -96,7 +96,7 @@ public class AdManager : MonoBehaviour
         if (LocalUser.locUser.adsBlocked)
             return;
 
-        Advertisement.Banner.Show();
+        Advertisement.Banner.Show(bannerPlacementString);
     }
 
     public void TurnOffBannerAd()

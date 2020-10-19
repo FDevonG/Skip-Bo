@@ -1128,9 +1128,6 @@ MonoBehaviour:
   m_CharacterLimit: 0
   m_OnEndEdit:
     m_PersistentCalls:
-      m_Calls: []
-  m_OnValueChanged:
-    m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 2070116870}
         m_MethodName: DoPasswordsMatch
@@ -1143,6 +1140,9 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  m_OnValueChanged:
+    m_PersistentCalls:
+      m_Calls:
       - m_Target: {fileID: 2070116870}
         m_MethodName: CheckSignUpButton
         m_Mode: 1
@@ -23605,7 +23605,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1432638593}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 41544cd480e024cfab77cc18b95ebf6d, type: 3}
+  m_Script: {fileID: 11500000, guid: 6dd5b67cb4c2949c5a52fc9fd9f6e4ae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!4 &1432638595
@@ -31880,7 +31880,7 @@ PrefabInstance:
     - target: {fileID: 5247988230175085175, guid: 2d80c77b21de041babe6ac38894d9be5,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5247988230175085175, guid: 2d80c77b21de041babe6ac38894d9be5,
         type: 3}
@@ -31900,7 +31900,7 @@ PrefabInstance:
     - target: {fileID: 5247988230175085175, guid: 2d80c77b21de041babe6ac38894d9be5,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: ShowDeleteFrindPanel
+      value: BlockedButtonPressed
       objectReference: {fileID: 0}
     - target: {fileID: 5247988230175085175, guid: 2d80c77b21de041babe6ac38894d9be5,
         type: 3}
@@ -36264,9 +36264,6 @@ MonoBehaviour:
   m_CharacterLimit: 0
   m_OnEndEdit:
     m_PersistentCalls:
-      m_Calls: []
-  m_OnValueChanged:
-    m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 2070116870}
         m_MethodName: DoPasswordsMatch
@@ -36279,6 +36276,9 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  m_OnValueChanged:
+    m_PersistentCalls:
+      m_Calls:
       - m_Target: {fileID: 2070116870}
         m_MethodName: CheckSignUpButton
         m_Mode: 1

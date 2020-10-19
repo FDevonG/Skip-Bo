@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -26,7 +26,7 @@ public class PlayedCardsDropHandler : MonoBehaviour, IDropHandler {
 
             this.GetComponent<PlayedCardStack>().AddCardToStack();//add the card to the stack
 
-            PanelControl panelControl = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameControl>().localPlayerPanel.GetComponent<PanelControl>();
+            PanelControl panelControl = gameControl.localPlayerPanel.GetComponent<PanelControl>();
 
             if (CardDragHandler.playerDeck) {
                 gameControl.CardRemovedOffDeck(panelControl);

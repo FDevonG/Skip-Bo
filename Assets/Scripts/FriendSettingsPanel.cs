@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEngine.UI;
 
 public class FriendSettingsPanel : MonoBehaviour
@@ -52,23 +52,28 @@ public class FriendSettingsPanel : MonoBehaviour
     }
 
     private void SetBlockedButton() {
-        if (Friends.IsPlayerBlocked(friend.userID)) {
+
+        if (Friends.IsPlayerBlocked(friend.userID))
+        {
             blockUserButton.GetComponentInChildren<Text>().text = "Unblock";
-            blockUserButton.onClick.AddListener(() => {
-                Friends.UnblockPlayer(friend.userID);
-                blockUserButton.onClick.RemoveAllListeners();
-                blockUserButton.GetComponentInChildren<Text>().text = "Block";
-                blockUserButton.onClick.AddListener(() => {
-                    ShowDeleteFrindPanel();
-                    SetUpBlockPanel();
-                });
-            });
-        } else {
+        }
+        else
+        {
             blockUserButton.GetComponentInChildren<Text>().text = "Block";
-            blockUserButton.onClick.AddListener(() => {
-                ShowDeleteFrindPanel();
-                SetUpBlockPanel();
-            });
+        }
+    }
+
+    public void BlockedButtonPressed()
+    {
+        if (Friends.IsPlayerBlocked(friend.userID))
+        {
+            Friends.UnblockPlayer(friend.userID);
+            blockUserButton.GetComponentInChildren<Text>().text = "Block";
+        }
+        else
+        {
+            ShowDeleteFrindPanel();
+            SetUpBlockPanel();
         }
     }
 

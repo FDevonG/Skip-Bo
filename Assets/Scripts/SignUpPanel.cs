@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,10 +8,8 @@ public class SignUpPanel : MonoBehaviour
     public GameObject signUpEmailInput;
     public GameObject signUpPasswordInput;
     public GameObject signUpPasswordConfirmInput;
-    private bool passwordsMatch = false;
 
     private void OnDisable() {
-        passwordsMatch = false;
         signUpNewButton.interactable = false;
         signUpEmailInput.GetComponent<InputField>().text = "";
         signUpPasswordInput.GetComponent<InputField>().text = "";
@@ -46,7 +44,7 @@ public class SignUpPanel : MonoBehaviour
     }
 
     public void CheckSignUpButton() {
-        if (ArePasswordsFilledOut() && passwordsMatch && VerifyEmail.ValidateEmail(signUpEmailInput.GetComponent<InputField>().text)) {
+        if (ArePasswordsFilledOut() && signUpPasswordInput.GetComponent<InputField>().text == signUpPasswordConfirmInput.GetComponent<InputField>().text && VerifyEmail.ValidateEmail(signUpEmailInput.GetComponent<InputField>().text)) {
             signUpNewButton.interactable = true;
         } else {
             signUpNewButton.interactable = false;
@@ -67,11 +65,9 @@ public class SignUpPanel : MonoBehaviour
         if (signUpPasswordInput.GetComponent<InputField>().text == signUpPasswordConfirmInput.GetComponent<InputField>().text) {
             signUpPasswordConfirmInput.GetComponentInChildren<Text>().color = Colors.GetBaseColor();
             GetComponent<ErrorText>().ClearError();
-            passwordsMatch = true;
         } else {
             signUpPasswordConfirmInput.GetComponentInChildren<Text>().color = Color.red;
             GetComponent<ErrorText>().SetError("Passwords do not match");
-            passwordsMatch = false;
         }
     }
 }

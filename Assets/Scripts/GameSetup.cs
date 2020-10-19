@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
@@ -272,9 +272,13 @@ public class GameSetup : MonoBehaviour {
         if (gameControl.playerPanels[panelIndex] == gameControl.localPlayerPanel) {
             card.GetComponent<Card>().SetUpCard(card.GetComponent<Card>().cardNumber);
         }
-        if (gameControl.playerPanels[panelIndex] == gameControl.localPlayerPanel || PhotonNetwork.room.MaxPlayers == 2) {
+        if (gameControl.playerPanels[panelIndex] == gameControl.localPlayerPanel) {
             card.localScale = new Vector3(2, 2, 2);
             card.gameObject.AddComponent<CardDragHandler>();
         }
+	if (PhotonNetwork.room.MaxPlayers == 2)
+	{
+	    card.localScale = new Vector3(2, 2, 2);
+	}
     }
 }
