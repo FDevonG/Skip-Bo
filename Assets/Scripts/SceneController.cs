@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class SceneController: MonoBehaviour {
@@ -15,22 +15,24 @@ public class SceneController: MonoBehaviour {
 
     public static void LoadLobbyScene() {
         LoadScreen();
-        if (PhotonNetwork.isMasterClient) 
-            PhotonNetwork.LoadLevelAsync(2);
+        PhotonNetwork.LoadLevelAsync(2);
     }
 
     public static void LoadGameScene() {
         LoadScreen();
         if (PhotonNetwork.offlineMode)
             PhotonNetwork.LoadLevel(3);
-        else if (PhotonNetwork.isMasterClient)
+        else 
             PhotonNetwork.LoadLevelAsync(3);
     }
 
     public static void ReloadScene() {
         LoadScreen();
         Scene scene = SceneManager.GetActiveScene();
-        PhotonNetwork.LoadLevel(scene.buildIndex);
+        if (PhotonNetwork.offlineMode)
+            PhotonNetwork.LoadLevel(scene.buildIndex);
+        else
+            PhotonNetwork.LoadLevelAsync(scene.buildIndex);
     }
 
     public static void LoadScreen()

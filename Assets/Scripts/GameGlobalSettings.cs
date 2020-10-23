@@ -1,4 +1,4 @@
-﻿public static  class GameGlobalSettings
+public static  class GameGlobalSettings
 {
     public static string Version() {
         return "2.6";
