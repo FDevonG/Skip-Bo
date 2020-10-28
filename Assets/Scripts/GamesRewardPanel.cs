@@ -28,7 +28,9 @@ public class GamesRewardPanel : MonoBehaviour
 
     IEnumerator WatchAd()
     {
-        yield return StartCoroutine(AdManager.Instance.ShowRewardAdd());
+        StartCoroutine(AdManager.Instance.ShowRewardAdd());
+        yield return new WaitForSeconds(1.0f);
+        yield return new WaitUntil(() => !AdManager.Instance.rewardAddPlaying);
         GemControl.Instance.AddGems(gemPayout);
         RewardVideoCleanUp();
     }

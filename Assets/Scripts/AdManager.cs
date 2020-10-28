@@ -13,6 +13,8 @@ public class AdManager : MonoBehaviour
 
     public static AdManager Instance { get; private set; }
 
+    public bool rewardAddPlaying = false;
+
     private void Awake() {
 
         if (Instance != null && Instance != this) {
@@ -40,10 +42,12 @@ public class AdManager : MonoBehaviour
         }
         if (Advertisement.isInitialized)
         {
+            rewardAddPlaying = true;
             yield return new WaitUntil(() => Advertisement.IsReady(rewardPlacementString));
             Advertisement.Show(rewardPlacementString);
             yield return new WaitUntil(() => Advertisement.isShowing);
             yield return new WaitUntil(() => !Advertisement.isShowing);
+            rewardAddPlaying = false;
         }
     }
 
