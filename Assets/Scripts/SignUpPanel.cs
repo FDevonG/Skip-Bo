@@ -30,7 +30,7 @@ public class SignUpPanel : MonoBehaviour
             GetComponent<ErrorText>().SetError(FirebaseError.GetErrorMessage(task.Exception));
             LoadingScreen.Instance.TurnOffLoadingScreen();
         } else {
-            User newUser = new User(signUpEmailInput.GetComponent<InputField>().text, FirebaseAuthentication.AuthenitcationKey(), Achievments.Instance.BuildAchievmentsList());
+            User newUser = new User(FirebaseAuthentication.AuthenitcationKey(), Achievments.Instance.BuildAchievmentsList());
             var newUserTask = Database.WriteNewUser(newUser);
             yield return new WaitUntil(() => newUserTask.IsCompleted);
             if (newUserTask.IsFaulted) {

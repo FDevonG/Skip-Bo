@@ -59,3 +59,7 @@ Update 2.6
 -In game store added
 -Daily reward videos
 -Bonus reward videos for playing games
+
+Update 2.7
+-backend code added
+-few bugs fixed

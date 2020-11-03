@@ -21,29 +21,40 @@ public class FriendSettingsPanel : MonoBehaviour
 
     User friend;
 
-    public void SetUpFriendPanel(User user) {
+    public void SetUpFriendPanel(User user)
+    {
         friend = user;
         nameText.text = user.userName;
         hair.sprite = Resources.Load<Sprite>("Faces/Hairs/" + user.hair) as Sprite;
         face.sprite = Resources.Load<Sprite>("Faces/Faces/" + user.face) as Sprite;
         body.sprite = Resources.Load<Sprite>("Faces/Bodies/" + user.body) as Sprite;
         kit.sprite = Resources.Load<Sprite>("Faces/Kits/" + user.kit) as Sprite;
-        foreach (FriendInfo photonFriend in PhotonNetwork.Friends) {
-            if (photonFriend.UserId == friend.userID) {
-                if (photonFriend.IsInRoom) {
+        foreach (FriendInfo photonFriend in PhotonNetwork.Friends)
+        {
+            if (photonFriend.UserId == friend.userID)
+            {
+                if (photonFriend.IsInRoom)
+                {
                     joinRoomButton.interactable = true;
                     joinRoomButton.onClick.AddListener(() => {
-                        foreach (RoomInfo game in PhotonNetwork.GetRoomList()) {
-                            if (game.Name == photonFriend.Room) {
-                                if (game.IsOpen) {
+                        foreach (RoomInfo game in PhotonNetwork.GetRoomList())
+                        {
+                            if (game.Name == photonFriend.Room)
+                            {
+                                if (game.IsOpen)
+                                {
                                     PhotonNetwork.JoinRoom(game.Name);
-                                } else {
+                                }
+                                else
+                                {
                                     GetComponent<ErrorText>().SetError("Room Full");
                                 }
                             }
                         }
                     });
-                } else {
+                }
+                else
+                {
                     joinRoomButton.interactable = false;
                 }
             }
@@ -51,7 +62,8 @@ public class FriendSettingsPanel : MonoBehaviour
         SetBlockedButton();
     }
 
-    private void SetBlockedButton() {
+    private void SetBlockedButton()
+    {
 
         if (Friends.IsPlayerBlocked(friend.userID))
         {
@@ -77,7 +89,8 @@ public class FriendSettingsPanel : MonoBehaviour
         }
     }
 
-    public void ShowDeleteFrindPanel() {
+    public void ShowDeleteFrindPanel()
+    {
         deleteFriendPanel.SetActive(true);
         nameText.gameObject.SetActive(false);
         character.gameObject.SetActive(false);
@@ -87,17 +100,20 @@ public class FriendSettingsPanel : MonoBehaviour
         blockUserButton.gameObject.SetActive(false);
     }
 
-    public void SetUpDeletePanle() {
+    public void SetUpDeletePanle()
+    {
         areYouSureText.text = "Are you sure you want to delete " + friend.userName + "?";
         confirmActionButton.onClick.AddListener(() => Friends.DeleteFriend(friend));
     }
 
-    public void SetUpBlockPanel() {
+    public void SetUpBlockPanel()
+    {
         areYouSureText.text = "Are you sure you want to block " + friend.userName + "?";
         confirmActionButton.onClick.AddListener(() => Friends.BlockFriend(friend.userID));
     }
 
-    public void HideDeleteFriendPanel() {
+    public void HideDeleteFriendPanel()
+    {
         deleteFriendPanel.SetActive(false);
         nameText.gameObject.SetActive(true);
         character.gameObject.SetActive(true);
@@ -109,7 +125,8 @@ public class FriendSettingsPanel : MonoBehaviour
         SetBlockedButton();
     }
 
-    private void OnDisable() {
+    private void OnDisable()
+    {
         HideDeleteFriendPanel();
         GetComponent<ErrorText>().ClearError();
     }

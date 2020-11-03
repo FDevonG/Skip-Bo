@@ -36,7 +36,6 @@ public class Login : MonoBehaviour {
                     LoadingScreen.Instance.TurnOffLoadingScreen();
                     GameObject.FindGameObjectWithTag("GameManager").GetComponent<ActivatePanel>().SwitchPanel(GameObject.FindGameObjectWithTag("GameManager").GetComponent<Menu>().characterCreationPanel);
                 } else {
-                    StartCoroutine(Friends.GetStartFriends());
                     PhotonPlayerSetup.BuildPhotonPlayer(PhotonNetwork.player, LocalUser.locUser);
                     PhotonNetworking.Instance.ConnectToPhoton();
                     LoadingScreen.Instance.TurnOffLoadingScreen();

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 
 [Serializable]
 public class User {
-    public string email;
     public string userName;
     public string userID;
 
@@ -40,8 +39,7 @@ public class User {
     public bool dailyRewardGotten;
     public int rewardCounter;
 
-    public User(string userEmail, string id, List<Achievment> ach) {
-        email = userEmail;
+    public User(string id, List<Achievment> ach) {
         userID = id;
         achievments = ach;
         level = 1;

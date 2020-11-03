@@ -14,7 +14,7 @@ public class GuestLogin : MonoBehaviour
         if (task.IsFaulted) {
             GetComponent<ErrorText>().SetError(FirebaseError.GetErrorMessage(task.Exception));
         } else {
-            LocalUser.locUser = new User("", FirebaseAuthentication.AuthenitcationKey(), Achievments.Instance.BuildAchievmentsList());
+            LocalUser.locUser = new User(FirebaseAuthentication.AuthenitcationKey(), Achievments.Instance.BuildAchievmentsList());
             var newUserTask = Database.WriteNewUser(LocalUser.locUser);
             yield return new WaitUntil(() => newUserTask.IsCompleted);
             if (newUserTask.IsFaulted) {

@@ -9,45 +9,44 @@ public class FreindsPanel : MonoBehaviour
     [SerializeField] GameObject headerText;
     List<GameObject> friendPanels = new List<GameObject>();
 
-    private void OnEnable() {
+    private void OnEnable()
+    {
         LoadingScreen.Instance.TurnOnLoadingScreen();
         StartCoroutine(BuildFriends());
     }
 
-    private IEnumerator BuildFriends() {
+    private void OnDisable()
+    {
+        GetComponent<ErrorText>().ClearError();
+    }
+
+    private IEnumerator BuildFriends()
+    {
         DeleteFriends();
         if (LocalUser.locUser.friends.Count > 0)
         {
-            PhotonNetwork.FindFriends(LocalUser.locUser.friends.ToArray());
-            yield return new WaitUntil(() => PhotonNetwork.Friends != null);
+            //PhotonNetwork.FindFriends(LocalUser.locUser.friends.ToArray());
+            CoroutineWithData cd = new CoroutineWithData(this, GetFriends());
+            yield return cd.result;
+            string returnedString = cd.result as string;
 
-            if (Friends.friends.Count != LocalUser.locUser.friends.Count)
+            string[] strArr;
+            strArr = returnedString.Split('#');
+
+            foreach (string str in strArr)
             {
-                yield return new WaitUntil(() => Friends.friends.Count == LocalUser.locUser.friends.Count);
-            }
-            Debug.Log(PhotonNetwork.Friends.Count);
-            if (PhotonNetwork.Friends != null)
-            {
-                for (int i = 0; i < PhotonNetwork.Friends.Count; i++)
+                if(!string.IsNullOrEmpty(str) && !string.IsNullOrWhiteSpace(str))
                 {
-                    User friend = new User();
-                    for (int x = 0; x < Friends.friends.Count; x++)
+                    User friend = JsonUtility.FromJson<User>(str);
+                    foreach (FriendInfo pp in PhotonNetwork.Friends)
                     {
-                        if (Friends.friends[x].userID == PhotonNetwork.Friends[i].UserId)
+                        if (pp.UserId == friend.userID)
                         {
-                            friend = Friends.friends[x];
+                            if (pp.IsOnline)
+                                SpawnFriendPanel(friend, true);
+                            else
+                                SpawnFriendPanel(friend, false);
                             break;
-                        }
-                    }
-                    if (!Friends.AmIBlocked(friend))
-                    {
-                        if (PhotonNetwork.Friends[i].IsOnline)
-                        {
-                            SpawnFriendPanel(friend, true);
-                        }
-                        else
-                        {
-                            SpawnFriendPanel(friend, false);
                         }
                     }
                 }
@@ -56,8 +55,25 @@ public class FreindsPanel : MonoBehaviour
         LoadingScreen.Instance.TurnOffLoadingScreen();
     }
 
-    void SpawnFriendPanel(User user, bool status) {
-        if (!string.IsNullOrEmpty(user.userName) && !string.IsNullOrWhiteSpace(user.userName)) {
+    IEnumerator GetFriends()
+    {
+        var task = BackendFunctions.GetFriends();
+        yield return new WaitUntil(() => task.IsCompleted);
+        if (task.IsFaulted)
+        {
+            GetComponent<ErrorText>().SetError("Failed to load friends");
+            yield return null;
+        }
+        else
+        {
+            yield return task.Result;
+        }
+    }
+
+    void SpawnFriendPanel(User user, bool status)
+    {
+        if (!string.IsNullOrEmpty(user.userName) && !string.IsNullOrWhiteSpace(user.userName))
+        {
             GameObject friendPanel = Instantiate(Resources.Load<GameObject>("FriendPanel"), friendsPanelParent.transform);
             friendPanel.transform.localScale = new Vector3(1, 1, 1);
             friendPanel.GetComponent<FriendListInfoPanel>().SetUpFriendPanel(user, status);
@@ -65,8 +81,10 @@ public class FreindsPanel : MonoBehaviour
         }
     }
 
-    private void DeleteFriends() {
-        foreach (GameObject panel in friendPanels) {
+    private void DeleteFriends()
+    {
+        foreach (GameObject panel in friendPanels)
+        {
             Destroy(panel);
         }
         friendPanels.Clear();

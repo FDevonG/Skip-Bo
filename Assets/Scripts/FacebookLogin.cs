@@ -43,29 +43,31 @@ public class FacebookLogin : MonoBehaviour
             yield return null;
         }
 
-        Firebase.Auth.FirebaseUser newUser = task.Result;
-        FB.API("/me?fields=email", HttpMethod.GET, GetFacebookInfo);
+        StartCoroutine(DoesPlayerExist());
+
+        //Firebase.Auth.FirebaseUser newUser = task.Result;
+        //FB.API("/me?fields=email", HttpMethod.GET, GetFacebookInfo);
         
     }
 
-    public void GetFacebookInfo(IResult result)
-    {
-        if (result.Error == null)
-        {
+    //public void GetFacebookInfo(IResult result)
+    //{
+    //    if (result.Error == null)
+    //    {
 
-            //Debug.Log(result.ResultDictionary["id"].ToString());
-            //Debug.Log(result.ResultDictionary["name"].ToString());
-            //Debug.Log(result.ResultDictionary["email"].ToString());
-            StartCoroutine(DoesPlayerExist(result));
-        }
-        else
-        {
-            GetComponent<ErrorText>().SetError(result.Error);
-            LoadingScreen.Instance.TurnOffLoadingScreen();
-        }
-    }
+    //        //Debug.Log(result.ResultDictionary["id"].ToString());
+    //        //Debug.Log(result.ResultDictionary["name"].ToString());
+    //        //Debug.Log(result.ResultDictionary["email"].ToString());
+    //        StartCoroutine();
+    //    }
+    //    else
+    //    {
+    //        GetComponent<ErrorText>().SetError(result.Error);
+    //        LoadingScreen.Instance.TurnOffLoadingScreen();
+    //    }
+    //}
 
-    IEnumerator DoesPlayerExist(IResult result)
+    IEnumerator DoesPlayerExist()
     {
         var task = Database.GetCurrentUser();
         yield return new WaitUntil(() => task.IsCompleted);
@@ -77,7 +79,7 @@ public class FacebookLogin : MonoBehaviour
         }
         if (task.Result == null)
         {
-            StartCoroutine(SaveNewPlayer(result));
+            StartCoroutine(SaveNewPlayer());
         } else
         {
             LocalUser.locUser = JsonUtility.FromJson<User>(task.Result);
@@ -89,7 +91,6 @@ public class FacebookLogin : MonoBehaviour
             }
             else
             {
-                StartCoroutine(Friends.GetStartFriends());
                 PhotonPlayerSetup.BuildPhotonPlayer(PhotonNetwork.player, LocalUser.locUser);
                 PhotonNetworking.Instance.ConnectToPhoton();
                 GameObject.FindGameObjectWithTag("GameManager").GetComponent<ActivatePanel>().SwitchPanel(GameObject.FindGameObjectWithTag("GameManager").GetComponent<Menu>().startMenu);
@@ -98,9 +99,9 @@ public class FacebookLogin : MonoBehaviour
         }
     }
 
-    IEnumerator SaveNewPlayer(IResult result)
+    IEnumerator SaveNewPlayer()
     {
-        User newUser = new User(result.ResultDictionary["email"].ToString(), FirebaseAuthentication.AuthenitcationKey(), Achievments.Instance.BuildAchievmentsList());
+        User newUser = new User(FirebaseAuthentication.AuthenitcationKey(), Achievments.Instance.BuildAchievmentsList());
         var newUserTask = Database.WriteNewUser(newUser);
         yield return new WaitUntil(() => newUserTask.IsCompleted);
         if (newUserTask.IsFaulted)

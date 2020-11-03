@@ -19,29 +19,37 @@ public class Announcer : MonoBehaviour
 
     private void Awake() {
         if (Instance != null && Instance != this) {
-            Destroy(this.gameObject);
+            Destroy(gameObject);
         } else {
             Instance = this;
         }
         DontDestroyOnLoad(gameObject);
     }
 
+    public bool IsAnnouncerActive()
+    {
+        if (PlayerPrefsHandler.GetAnnouncer() == 0)
+            return false;
+        else 
+            return true;
+    }
+
     public void Welcome() {
-        if (Sounds.IsSoundEffectsActive()) {
+        if (IsAnnouncerActive()) {
             announcerVoice.clip = hellos[Random.Range(0, hellos.Length)];
             announcerVoice.Play();
         }
     }
 
     public void AnnouncePlayerTurn(int turnIndex) {
-        if (Sounds.IsSoundEffectsActive()) {
+        if (IsAnnouncerActive()) {
             announcerVoice.clip = playerTurns[turnIndex];
             announcerVoice.Play();
         }
     }
 
     public void PayCompliment() {
-        if (Sounds.IsSoundEffectsActive()) {
+        if (IsAnnouncerActive()) {
             if (!announcerVoice.isPlaying) {
                 announcerVoice.clip = compliments[Random.Range(0, compliments.Length)];
                 announcerVoice.Play();
@@ -50,35 +58,35 @@ public class Announcer : MonoBehaviour
     }
 
     public void Cant() {
-        if (Sounds.IsSoundEffectsActive()) {
+        if (IsAnnouncerActive()) {
             announcerVoice.clip = cant[Random.Range(0, cant.Length)];
             announcerVoice.Play();
         }
     }
 
     public void AnnouncerAnError() {
-        if (Sounds.IsSoundEffectsActive()) {
+        if (IsAnnouncerActive()) {
             announcerVoice.clip = errors[Random.Range(0, errors.Length)];
             announcerVoice.Play();
         }
     }
 
     public void YouWon() {
-        if (Sounds.IsSoundEffectsActive()) {
+        if (IsAnnouncerActive()) {
             announcerVoice.clip = youWon[Random.Range(0, youWon.Length)];
             announcerVoice.Play();
         }
     }
 
     public void YouLost() {
-        if (Sounds.IsSoundEffectsActive()) {
+        if (IsAnnouncerActive()) {
             announcerVoice.clip = betterLuck;
             announcerVoice.Play();
         }
     }
 
     public void GoodBye() {
-        if (Sounds.IsSoundEffectsActive()) {
+        if (IsAnnouncerActive()) {
             announcerVoice.clip = bye;
             announcerVoice.Play();
         }

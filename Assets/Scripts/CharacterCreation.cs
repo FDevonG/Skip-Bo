@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using Firebase.Database;
+using Firebase.Functions;
+using System.Threading.Tasks;
 
 public class CharacterCreation : MonoBehaviour
 {
@@ -126,7 +127,7 @@ public class CharacterCreation : MonoBehaviour
     }
 
     private void BuildSavedCharacter(User user) {
-        nameInput.GetComponent<InputField>().text = user.userName;
+        nameInput.gameObject.SetActive(false);
         
         ////set the body parts
         cbody.sprite = Resources.Load<Sprite>("Faces/Bodies/" + user.body) as Sprite;
@@ -223,62 +224,117 @@ public class CharacterCreation : MonoBehaviour
     }
 
     public void SavePlayer() {
-        string playerName = nameInput.GetComponent<InputField>().text;
-        if (!string.IsNullOrEmpty(playerName) && !string.IsNullOrWhiteSpace(playerName)) {
-            //StartCoroutine(SaveCharacter(playerName));
-            StartCoroutine(NameCheck(playerName));
-        } else {
-            GetComponent<ErrorText>().SetError("Please enter a username");
+        if (nameInput.gameObject.GetActive())
+        {
+            string playerName = nameInput.GetComponent<InputField>().text;
+            if (!string.IsNullOrEmpty(playerName) && !string.IsNullOrWhiteSpace(playerName))
+            {
+                LoadingScreen.Instance.TurnOnLoadingScreen();
+                StartCoroutine(StartSaveCoroutine());
+            }
+            else
+            {
+                GetComponent<ErrorText>().SetError("Please enter a username");
+                //LoadingScreen.Instance.TurnOffLoadingScreen();
+            }
         }
+        else
+        {
+            LoadingScreen.Instance.TurnOnLoadingScreen();
+            StartCoroutine(StartSaveCoroutine());
+        }
+
     }
 
-    private IEnumerator NameCheck(string userName) {
-        LoadingScreen.Instance.TurnOnLoadingScreen();
-        var task = Database.GetUsers();
-        yield return new WaitUntil(() => task.IsCompleted);
-        if (task.IsFaulted) {
-            GetComponent<ErrorText>().SetError("Failed to save character");
-            LoadingScreen.Instance.TurnOffLoadingScreen();
-        } else {
-            bool nameBool = false;
-            foreach (DataSnapshot snap in task.Result.Children) {
-                User tempUser = JsonUtility.FromJson<User>(snap.GetRawJsonValue());
-                if (tempUser.userName == userName)
+    IEnumerator StartSaveCoroutine()
+    {
+
+        var nameCheckTask = BackendFunctions.NameCheck(nameInput.GetComponent<InputField>().text);
+        Debug.Log("Thumbs Down");
+        yield return new WaitUntil(() => nameCheckTask.IsCompleted);
+        Debug.Log("Thumbs UP");
+        if (nameCheckTask.IsFaulted)
+        {
+            foreach (var inner in nameCheckTask.Exception.InnerExceptions)
+            {
+                if (inner is FunctionsException)
                 {
-                    if (tempUser.userID != FirebaseAuthentication.AuthenitcationKey())
-                    {
-                        nameBool = true;
-                        break;
-                    }
+                    var e = (FunctionsException)inner;
+                    var code = e.ErrorCode;
+                    var message = e.Message;
+                    GetComponent<ErrorText>().SetError(message);
+                    Debug.Log(message);
                 }
             }
-            if (!nameBool) {
-                StartCoroutine(SaveCharacter(userName));
-            } else {
+            LoadingScreen.Instance.TurnOffLoadingScreen();
+        }
+        else
+        {
+
+            if (nameCheckTask.Result != null)
+            {
+                Debug.Log(nameCheckTask.Result);
                 GetComponent<ErrorText>().SetError("Username is taken");
                 LoadingScreen.Instance.TurnOffLoadingScreen();
             }
+            else if (nameCheckTask.Result == null)
+            {
+                StartCoroutine(SaveCharacter());
+            }
         }
+
     }
 
+    private IEnumerator SaveCharacter() {
+        Debug.Log("OF");
+        bool faulted = false;
+        if (nameInput.GetActive())
+        {
+            var userNameTask = Database.UpdateUser("userName", nameInput.GetComponent<InputField>().text);
+            yield return new WaitUntil(() => userNameTask.IsCompleted);
+            if (userNameTask.IsFaulted)
+                faulted = true;
+        }
+        if (LocalUser.locUser.hair != hair[chairIndex].name && !faulted)
+        {
+            var hairTask = Database.UpdateUser("hair", hair[chairIndex].name);
+            yield return new WaitUntil(() => hairTask.IsCompleted);
+            if (hairTask.IsFaulted)
+                faulted = true;
+        }
+        if (LocalUser.locUser.face != face[cfaceIndex].name && !faulted) {
+            var faceTask = Database.UpdateUser("face", face[cfaceIndex].name);
+            yield return new WaitUntil(() => faceTask.IsCompleted);
+            if (faceTask.IsFaulted)
+                faulted = true;
+        }
+        if (LocalUser.locUser.kit != kit[ckitIndex].name && !faulted) {
+            var kitTask = Database.UpdateUser("kit", kit[ckitIndex].name);
+            yield return new WaitUntil(() => kitTask.IsCompleted);
+            if (kitTask.IsFaulted)
+                faulted = true;
+        }
+        if (LocalUser.locUser.body != body[cbodyIndex].name && !faulted) {
+            var bodyTask = Database.UpdateUser("body", body[cbodyIndex].name);
+            yield return new WaitUntil(() => bodyTask.IsCompleted);
+            if (bodyTask.IsFaulted)
+                faulted = true;
+        }
+        
 
-
-    private IEnumerator SaveCharacter(string userName) {
-        var userNameTask = Database.UpdateUser("userName", userName);
-        var hairTask = Database.UpdateUser("hair", hair[chairIndex].name);
-        var faceTask = Database.UpdateUser("face", face[cfaceIndex].name);
-        var kitTask = Database.UpdateUser("kit", kit[ckitIndex].name);
-        var bodyTask = Database.UpdateUser("body", body[cbodyIndex].name);
-        yield return new WaitUntil(() => userNameTask.IsCompleted && hairTask.IsCompleted && faceTask.IsCompleted && kitTask.IsCompleted && bodyTask.IsCompleted);
-
-        if (userNameTask.IsFaulted || hairTask.IsFaulted || faceTask.IsFaulted || kitTask.IsFaulted || bodyTask.IsFaulted) {
+        if (faulted) {
             GetComponent<ErrorText>().SetError("Failed to save character");
         } else {
-            LocalUser.locUser.userName = userName;
-            LocalUser.locUser.hair = hair[chairIndex].name;
-            LocalUser.locUser.face = face[cfaceIndex].name;
-            LocalUser.locUser.kit = kit[ckitIndex].name;
-            LocalUser.locUser.body = body[cbodyIndex].name;
+            if(nameInput.GetActive())
+                LocalUser.locUser.userName = nameInput.GetComponent<InputField>().text;
+            if (LocalUser.locUser.hair != hair[chairIndex].name)
+                LocalUser.locUser.hair = hair[chairIndex].name;
+            if (LocalUser.locUser.face != face[cfaceIndex].name)
+                LocalUser.locUser.face = face[cfaceIndex].name;
+            if (LocalUser.locUser.kit != kit[ckitIndex].name)
+                LocalUser.locUser.kit = kit[ckitIndex].name;
+            if (LocalUser.locUser.body != body[cbodyIndex].name)
+                LocalUser.locUser.body = body[cbodyIndex].name;
             PhotonPlayerSetup.BuildPhotonPlayer(PhotonNetwork.player, LocalUser.locUser);
             PhotonNetworking.Instance.ConnectToPhoton();
             GameObject.FindGameObjectWithTag("GameManager").GetComponent<ActivatePanel>().SwitchPanel(GameObject.FindGameObjectWithTag("GameManager").GetComponent<Menu>().startMenu);

@@ -1,62 +1,47 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using Firebase.Database;
 
 public static class Friends
 {
-    public static List<User> friends = new List<User>();
-
-    public static IEnumerator GetStartFriends() {
-        var usersTask = Database.GetUsers();
-        yield return new WaitUntil(() => usersTask.IsCompleted);
-        foreach (DataSnapshot snap in usersTask.Result.Children) {//we are looping through the reseult passed back from the server to get the users
-            User snapUser = JsonUtility.FromJson<User>(snap.GetRawJsonValue());//we convert each piece of data into a user to compare to the friends list
-            foreach (string id in LocalUser.locUser.friends) {//we loop through the list of friends
-                if (snapUser.userID == id) {//if the users id matchs the id on the friends list then 
-                    friends.Add(snapUser);//we add it to the list of friends
+    public static IEnumerator AddFriend(string UserID)
+    {
+        if (!string.IsNullOrEmpty(UserID) && !string.IsNullOrWhiteSpace(UserID))
+        {
+            LocalUser.locUser.friends.Add(UserID);
+            var addFriendTask = Database.UpdateUser("friends", LocalUser.locUser.friends);
+            yield return new WaitUntil(() => addFriendTask.IsCompleted);
+            if (addFriendTask.IsFaulted)
+            {
+                yield return "Failed to add friend";
+            }
+            else
+            {
+                var getUserTask = BackendFunctions.GetUser(UserID);
+                yield return new WaitUntil(() => getUserTask.IsCompleted);
+                if (!getUserTask.IsFaulted)
+                {
+                    string user = getUserTask.Result;
+                    User tempUser = JsonUtility.FromJson<User>(user);
+                    string[] addedFriend = new string[1];
+                    addedFriend[0] = UserID;
+                    Chat.Instance.AddFriend(addedFriend);
+                    Achievments.Instance.FreindAdded();
+                    yield return "Friend added";
                 }
             }
         }
-    }
-
-    public static IEnumerator AddFriend(string UserID) {
-        if (!string.IsNullOrEmpty(UserID) && !string.IsNullOrWhiteSpace(UserID)) {
-            LocalUser.locUser.friends.Add(UserID);
-            var usersTask = Database.GetUsers();
-            var addFriendTask = Database.UpdateUser("friends", LocalUser.locUser.friends);
-            yield return new WaitUntil(() => addFriendTask.IsCompleted && usersTask.IsCompleted);
-            if (addFriendTask.IsFaulted || usersTask.IsFaulted) {
-                yield return "Failed to add friend";
-            } else {
-                foreach (DataSnapshot snap in usersTask.Result.Children) {
-                    User tempUser = JsonUtility.FromJson<User>(snap.GetRawJsonValue());
-                    if (tempUser.userID == UserID) {
-                        friends.Add(tempUser);
-                    }
-                }
-                string[] addedFriend = new string[1];
-                addedFriend[0] = UserID;
-                Chat.Instance.AddFriend(addedFriend);
-                Achievments.Instance.FreindAdded();
-                yield return "Friend added";
-            }
-        } else {
+        else
+        {
             yield return "Failed to add friend";
         }
     }
 
-    public static void DeleteFriend(User friend) {
-
-        foreach (User friendUser in friends) {
-            if (friendUser == friend) {
-                friends.Remove(friendUser);
-                break;
-            }
-        }
-
-        for (int i = 0; i < LocalUser.locUser.friends.Count; i++) {
-            if (LocalUser.locUser.friends[i] == friend.userID) {
+    public static void DeleteFriend(User friend)
+    {
+        for (int i = 0; i < LocalUser.locUser.friends.Count; i++)
+        {
+            if (LocalUser.locUser.friends[i] == friend.userID)
+            {
                 string[] removedFriend = new string[1];
                 removedFriend[0] = LocalUser.locUser.friends[i];
                 Chat.Instance.DeleteFriends(removedFriend);
@@ -67,17 +52,22 @@ public static class Friends
         Database.UpdateUser("friends", LocalUser.locUser.friends);
     }
 
-    public static void BlockFriend(string userID) {
-        if (!IsPlayerBlocked(userID)) {
+    public static void BlockFriend(string userID)
+    {
+        if (!IsPlayerBlocked(userID))
+        {
             LocalUser.locUser.blocked.Add(userID);
             Database.UpdateUser("blocked", LocalUser.locUser.blocked);
         }
     }
 
-    public static bool IsPlayerBlocked(string userID) {
+    public static bool IsPlayerBlocked(string userID)
+    {
         bool alreadyBlocked = false;
-        foreach (string block in LocalUser.locUser.blocked) {
-            if (block == userID) {
+        foreach (string block in LocalUser.locUser.blocked)
+        {
+            if (block == userID)
+            {
                 alreadyBlocked = true;
                 break;
             }
@@ -85,16 +75,21 @@ public static class Friends
         return alreadyBlocked;
     }
 
-    public static void UnblockPlayer(string userId) {
+    public static void UnblockPlayer(string userId)
+    {
         LocalUser.locUser.blocked.Remove(userId);
         Database.UpdateUser("blocked", LocalUser.locUser.blocked);
     }
 
-    public static bool FriendAlreadyAdded(string userID) {
+    public static bool FriendAlreadyAdded(string userID)
+    {
         bool friendAlreadyAdded = false;
-        for (int i = 0; i < LocalUser.locUser.friends.Count; i++) {
-            if (!string.IsNullOrEmpty(userID) && !string.IsNullOrWhiteSpace(userID)) {
-                if (LocalUser.locUser.friends[i].ToUpper() == userID.ToUpper()) {
+        for (int i = 0; i < LocalUser.locUser.friends.Count; i++)
+        {
+            if (!string.IsNullOrEmpty(userID) && !string.IsNullOrWhiteSpace(userID))
+            {
+                if (LocalUser.locUser.friends[i].ToUpper() == userID.ToUpper())
+                {
                     friendAlreadyAdded = true;
                 }
             }
@@ -102,10 +97,13 @@ public static class Friends
         return friendAlreadyAdded;
     }
 
-    public static bool AmIBlocked(User friend) {
+    public static bool AmIBlocked(User friend)
+    {
         bool blocked = false;
-        foreach (string block in friend.blocked) {
-            if (block == LocalUser.locUser.userID) {
+        foreach (string block in friend.blocked)
+        {
+            if (block == LocalUser.locUser.userID)
+            {
                 blocked = true;
                 break;
             }

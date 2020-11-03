@@ -26,7 +26,7 @@ public class Sounds : MonoBehaviour
         }
     }
 
-    public static bool IsMusicPlaying() {
+    public bool IsMusicPlaying() {
         bool music = true;
         int musicSetting = PlayerPrefsHandler.GetMusicSetting();
         if (musicSetting == 0) {
@@ -38,7 +38,7 @@ public class Sounds : MonoBehaviour
         return music;
     }
 
-    public static bool IsSoundEffectsActive() {
+    public bool IsSoundEffectsActive() {
         bool soundEffects = true;
         int soundSettings = PlayerPrefsHandler.GetSoundEffectsSetting();
         if (soundSettings == 0) {

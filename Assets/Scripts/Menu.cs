@@ -113,7 +113,7 @@ public class Menu : MonoBehaviour
             return;
         }
         if (activatePanel.activePanel == findFriendsPanel) {
-            activatePanel.SwitchPanel(startGamePanel);
+            activatePanel.SwitchPanel(startMenu);
             return;
         }
         if (activatePanel.activePanel == friendsSettingsPanel) {
@@ -195,9 +195,6 @@ public class Menu : MonoBehaviour
             }
 
             if (LocalUser.locUser != null) {
-                if (LocalUser.locUser.friends.Count > 0) {
-                    StartCoroutine(Friends.GetStartFriends());
-                }
                 if (string.IsNullOrEmpty(LocalUser.locUser.userName) || string.IsNullOrWhiteSpace(LocalUser.locUser.userName)) {
                     activatePanel.SwitchPanel(characterCreationPanel);
                 } else {
@@ -230,6 +227,8 @@ public class Menu : MonoBehaviour
 
     private void Update() {
         if (Input.GetKeyDown(KeyCode.Escape)) {
+            if (LoadingScreen.Instance.loading)
+                return;
             GoBackAPanel();
         }
     }

@@ -10,7 +10,7 @@ public class LoadingScreen : MonoBehaviour
     [SerializeField] GameObject mainPanel;
     [SerializeField] Text loadingText;
 
-    bool loading = false;
+    public bool loading = false;
 
     bool textLerp = false;
 
@@ -77,6 +77,7 @@ public class LoadingScreen : MonoBehaviour
 
     public void TurnOnLoadingScreen()
     {
+
         RemoveAds.instance.HideButton();
         mainPanel.SetActive(true);
         GetComponent<CanvasGroup>().blocksRaycasts = true;

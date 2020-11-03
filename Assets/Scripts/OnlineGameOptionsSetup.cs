@@ -64,6 +64,8 @@ public class OnlineGameOptionsSetup : MonoBehaviour
 
     private void Update() {
         if (Input.GetKeyDown(KeyCode.Escape)) {
+            if (LoadingScreen.Instance.loading)
+                return;
             GoBackAPanel();
         }
     }

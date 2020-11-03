@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class InGamePlayerInfoTab : MonoBehaviour {
+public class InGamePlayerInfoTab : MonoBehaviour
+{
 
     [SerializeField] Text nameText;
     [SerializeField] Text infoText;
@@ -22,7 +23,8 @@ public class InGamePlayerInfoTab : MonoBehaviour {
         backgroundColor = GetComponent<Image>().color;
     }
 
-    public void SetUpPanel(PhotonPlayer sentPhotonPlayer) {
+    public void SetUpPanel(PhotonPlayer sentPhotonPlayer)
+    {
         photonPlayer = sentPhotonPlayer;
         gameObject.GetComponent<Image>().color = new Color(backgroundColor.r, backgroundColor.g, backgroundColor.b, 1);
         nameText.gameObject.SetActive(true);
@@ -32,84 +34,109 @@ public class InGamePlayerInfoTab : MonoBehaviour {
         closeButton.gameObject.SetActive(true);
         nameText.text = (string)photonPlayer.CustomProperties["name"];
 
-        if (PhotonNetwork.room.MaxPlayers == 4) {
+        if (PhotonNetwork.room.MaxPlayers == 4)
+        {
             voteToKickButton.gameObject.SetActive(true);
-        } else {
+        }
+        else
+        {
             voteToKickButton.gameObject.SetActive(false);
         }
 
-        if (Friends.FriendAlreadyAdded(photonPlayer.UserId)) {
+        if (Friends.FriendAlreadyAdded(photonPlayer.UserId))
+        {
             addFriendButton.GetComponentInChildren<Text>().text = "Delete Friend";
-            addFriendButton.onClick.AddListener(() => DeleteFriend());
+            addFriendButton.onClick.AddListener(() => StartCoroutine(DeleteFriend()));
         }
-        if (!Friends.FriendAlreadyAdded(photonPlayer.UserId)) {
+        if (!Friends.FriendAlreadyAdded(photonPlayer.UserId))
+        {
             addFriendButton.GetComponentInChildren<Text>().text = "Add Friend";
             addFriendButton.onClick.AddListener(() => StartCoroutine(AddingFriend()));
         }
 
-        if (Friends.IsPlayerBlocked(photonPlayer.UserId)) {
+        if (Friends.IsPlayerBlocked(photonPlayer.UserId))
+        {
             blockButton.GetComponentInChildren<Text>().text = "Unblock";
             blockButton.onClick.AddListener(UnBlock);
-        } else {
+        }
+        else
+        {
             blockButton.GetComponentInChildren<Text>().text = "Block";
             blockButton.onClick.AddListener(Block);
         }
 
         //here we will check to see if we are logged in anonoum and set the buttons acordingly
-        if (FirebaseAuthentication.IsPlayerAnonymous()) {
+        if (FirebaseAuthentication.IsPlayerAnonymous())
+        {
             blockButton.interactable = false;
             addFriendButton.interactable = false;
-        } else {
+        }
+        else
+        {
             blockButton.interactable = true;
             addFriendButton.interactable = true;
         }
     }
 
-    public void KickPlayer() {
-        if (!GameObject.FindGameObjectWithTag("VoteToKick").GetComponent<VoteToKickPanel>().kickInProgress) {
+    public void KickPlayer()
+    {
+        if (!GameObject.FindGameObjectWithTag("VoteToKick").GetComponent<VoteToKickPanel>().kickInProgress)
+        {
             photonView.RPC("VoteToKick", PhotonTargets.Others, photonPlayer);
             SetInfoText("Vote to kick " + photonPlayer.CustomProperties["name"] + " sent");
-        } else {
+        }
+        else
+        {
             SetInfoText("Kick in progress");
         }
     }
 
     [PunRPC]
-    public void VoteToKick(PhotonPlayer photonPlayerToKick) {
+    public void VoteToKick(PhotonPlayer photonPlayerToKick)
+    {
         StartCoroutine(GameObject.FindGameObjectWithTag("VoteToKick").GetComponent<VoteToKickPanel>().SetUpKickPanel(photonPlayerToKick));
     }
 
-    public IEnumerator AddingFriend() {
-        if (!Friends.FriendAlreadyAdded(photonPlayer.UserId)) {
+    public IEnumerator AddingFriend()
+    {
+        if (!Friends.FriendAlreadyAdded(photonPlayer.UserId))
+        {
             CoroutineWithData cd = new CoroutineWithData(this, Friends.AddFriend(photonPlayer.UserId));
             yield return cd.coroutine;
             SetInfoText((string)cd.result);
-            if ((string)cd.result == "Friend added") {
+            if ((string)cd.result == "Friend added")
+            {
                 addFriendButton.GetComponentInChildren<Text>().text = "Delete Friend";
                 addFriendButton.onClick.RemoveListener(() => StartCoroutine(AddingFriend()));
-                addFriendButton.onClick.AddListener(DeleteFriend);
+                addFriendButton.onClick.AddListener(() => StartCoroutine(DeleteFriend()));
             }
         } //else {
         //    SetInfoText("Friend already added");
         //}
     }
 
-    private void DeleteFriend() {
-        User friendToDelete = new User();
-        foreach (User friend in Friends.friends) {
-            if (friend.userID == photonPlayer.UserId) {
-                friendToDelete = friend;
-                break;
-            }
+    private IEnumerator DeleteFriend()
+    {
+
+        var getUserTask = BackendFunctions.GetUser(photonPlayer.UserId);
+        yield return new WaitUntil(() => getUserTask.IsCompleted);
+        if (!getUserTask.IsFaulted)
+        {
+            User friendToDelete = JsonUtility.FromJson<User>(getUserTask.Result);
+            Friends.DeleteFriend(friendToDelete);
+            SetInfoText("Friend Deleted");
+            addFriendButton.GetComponentInChildren<Text>().text = "Add Friend";
+            addFriendButton.onClick.RemoveListener(() => StartCoroutine(DeleteFriend()));
+            addFriendButton.onClick.AddListener(() => StartCoroutine(AddingFriend()));
         }
-        Friends.DeleteFriend(friendToDelete);
-        SetInfoText("Friend Deleted");
-        addFriendButton.GetComponentInChildren<Text>().text = "Add Friend";
-        addFriendButton.onClick.RemoveListener(DeleteFriend);
-        addFriendButton.onClick.AddListener(() => StartCoroutine(AddingFriend()));
+        else
+        {
+            GetComponent<ErrorText>().SetError("A problem has occured");
+        }
     }
 
-    public void Block() {
+    public void Block()
+    {
         Friends.BlockFriend(photonPlayer.UserId);
         SetInfoText((string)photonPlayer.CustomProperties["name"] + " has been blocked");
         blockButton.onClick.RemoveListener(Block);
@@ -117,7 +144,8 @@ public class InGamePlayerInfoTab : MonoBehaviour {
         blockButton.GetComponentInChildren<Text>().text = "Unblock";
     }
 
-    public void UnBlock() {
+    public void UnBlock()
+    {
         Friends.UnblockPlayer(photonPlayer.UserId);
         SetInfoText(photonPlayer.CustomProperties["name"] + " has been unblocked");
         blockButton.onClick.RemoveListener(UnBlock);
@@ -125,7 +153,8 @@ public class InGamePlayerInfoTab : MonoBehaviour {
         blockButton.GetComponentInChildren<Text>().text = "Block";
     }
 
-    public void ClosePanel() {
+    public void ClosePanel()
+    {
         photonPlayer = null;
         voteToKickButton.gameObject.SetActive(false);
         nameText.gameObject.SetActive(false);
@@ -136,12 +165,14 @@ public class InGamePlayerInfoTab : MonoBehaviour {
         gameObject.GetComponent<Image>().color = new Color(backgroundColor.r, backgroundColor.g, backgroundColor.b, 0);
     }
 
-    private void SetInfoText(string message) {
+    private void SetInfoText(string message)
+    {
         infoText.gameObject.SetActive(true);
         infoText.text = message;
     }
 
-    private void OnDisable() {
+    private void OnDisable()
+    {
         infoText.gameObject.SetActive(false);
     }
 }

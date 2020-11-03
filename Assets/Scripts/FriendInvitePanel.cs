@@ -3,6 +3,6 @@ using UnityEngine.UI;
 
 public class FriendInvitePanel : MonoBehaviour
 {
-    public Text emailText;
+    public Text nameText;
     public Button inviteButton;
 }

@@ -173,7 +173,7 @@ PlayerSettings:
     Android: com.FogBankGames.SkipBo
     iPhone: com.FogBankGames.SkipBo
   buildNumber: {}
-  AndroidBundleVersionCode: 60
+  AndroidBundleVersionCode: 61
   AndroidMinSdkVersion: 19
   AndroidTargetSdkVersion: 0
   AndroidPreferredInstallLocation: 1
@@ -235,6 +235,7 @@ PlayerSettings:
   metalEditorSupport: 1
   metalAPIValidation: 1
   iOSRenderExtraFrameOnPause: 0
+  iosCopyPluginsCodeInsteadOfSymlink: 0
   appleDeveloperTeamID: R968428F5Y
   iOSManualSigningProvisioningProfileID: 
   tvOSManualSigningProvisioningProfileID: 

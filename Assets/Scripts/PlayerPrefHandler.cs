@@ -19,6 +19,16 @@ public class PlayerPrefsHandler {
         return PlayerPrefs.GetInt("soundEffects");
     }
 
+    public static void SetAnnouncer(int value)
+    {
+        PlayerPrefs.SetInt("announcer", value);
+    }
+
+    public static int GetAnnouncer()
+    {
+        return PlayerPrefs.GetInt("announcer");
+    }
+
     #region Rating
     public static void SetGameRated(int value) {
         PlayerPrefs.SetInt("rated", value);

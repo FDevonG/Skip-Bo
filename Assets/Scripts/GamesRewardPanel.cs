@@ -28,15 +28,14 @@ public class GamesRewardPanel : MonoBehaviour
 
     IEnumerator WatchAd()
     {
-        StartCoroutine(AdManager.Instance.ShowRewardAdd());
-        yield return new WaitForSeconds(1.0f);
-        yield return new WaitUntil(() => !AdManager.Instance.rewardAddPlaying);
-        GemControl.Instance.AddGems(gemPayout);
+        CoroutineWithData cd = new CoroutineWithData(this, AdManager.Instance.ShowRewardAdd());
+        yield return cd.result;
         RewardVideoCleanUp();
     }
 
     public void RewardVideoCleanUp()
     {
+        GemControl.Instance.AddGems(gemPayout);
         LocalUser.locUser.rewardCounter = 0;
         Database.UpdateUser("rewardCounter", 0);
         Destroy(gameObject);

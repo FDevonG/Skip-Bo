@@ -35,20 +35,14 @@ public class AdManager : MonoBehaviour
 
     public IEnumerator ShowRewardAdd()
     {
-        if (!Advertisement.isInitialized)
-        {
-            Advertisement.Initialize(gameId, testMode);
-            yield return new WaitUntil(() => Advertisement.isInitialized);
-        }
-        if (Advertisement.isInitialized)
-        {
-            rewardAddPlaying = true;
-            yield return new WaitUntil(() => Advertisement.IsReady(rewardPlacementString));
-            Advertisement.Show(rewardPlacementString);
-            yield return new WaitUntil(() => Advertisement.isShowing);
-            yield return new WaitUntil(() => !Advertisement.isShowing);
-            rewardAddPlaying = false;
-        }
+        LoadingScreen.Instance.TurnOnLoadingScreen();
+        rewardAddPlaying = true;
+        yield return new WaitUntil(() => Advertisement.IsReady(rewardPlacementString));
+        LoadingScreen.Instance.TurnOffLoadingScreen();
+        Advertisement.Show(rewardPlacementString);
+        yield return new WaitUntil(() => Advertisement.isShowing);
+        yield return new WaitUntil(() => !Advertisement.isShowing);
+        rewardAddPlaying = false;
     }
 
     public IEnumerator ShowRegularAd() {

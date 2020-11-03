@@ -1,14 +1,24 @@
-﻿using UnityEngine.UI;
-using UnityEngine;
+﻿using UnityEngine;
 using System;
 using System.Collections;
 
 public class DailyRewardVideoPanel : MonoBehaviour
 {
-    [SerializeField] Button yesButton;
-    [SerializeField] Button noButton;
-
     int gemPayout = 10;
+
+    public static DailyRewardVideoPanel Instance { get; private set; }
+
+    private void Awake()
+    {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+        }
+        else
+        {
+            Instance = this;
+        }
+    }
 
     public void WatchRewardAd()
     {
@@ -17,16 +27,14 @@ public class DailyRewardVideoPanel : MonoBehaviour
 
     IEnumerator WatchAd()
     {
-        StartCoroutine(AdManager.Instance.ShowRewardAdd());
-        yield return new WaitForSeconds(1.0f);
-        yield return new WaitUntil(() => !AdManager.Instance.rewardAddPlaying);
-        GemControl.Instance.AddGems(gemPayout);
+        CoroutineWithData cd = new CoroutineWithData(this, AdManager.Instance.ShowRewardAdd());
+        yield return cd.result;
         RewardVideoCleanUp();
     }
 
     public void RewardVideoCleanUp()
     {
-
+        GemControl.Instance.AddGems(gemPayout);
         LocalUser.locUser.dailyRewardGotten = true;
         Database.UpdateUser("dailyRewardGotten", true);
 
