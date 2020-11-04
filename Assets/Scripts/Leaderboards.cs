@@ -58,6 +58,18 @@ public class Leaderboards : MonoBehaviour
     }
 
     public void BuildLeaderboards() {
+
+        //var pageNumberTask = BackendFunctions.LeaderBoardPageNumber();
+        //yield return new WaitUntil(() => pageNumberTask.IsCompleted);
+        //if (pageNumberTask.IsFaulted)
+        //{
+        //    Debug.Log("Shit Fucked Up");
+        //}
+        //else
+        //{
+        //    Debug.Log(pageNumberTask.Result);
+        //}
+
         leaderboards.Clear();
         DestroyPanels();
         GetComponent<ErrorText>().ClearError();

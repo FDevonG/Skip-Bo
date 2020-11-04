@@ -39,4 +39,13 @@ public static class BackendFunctions
             return (string)task.Result.Data;
         });
     }
+
+    public static Task<string> LeaderBoardPageNumber()
+    {
+        var functions = FirebaseFunctions.DefaultInstance;
+        var function = functions.GetHttpsCallable("leaderBoardPageNumbers");
+        return function.CallAsync().ContinueWith((task) => {
+            return (string)task.Result.Data;
+        });
+    }
 }

@@ -29,12 +29,12 @@ public class DailyRewardVideoPanel : MonoBehaviour
     {
         CoroutineWithData cd = new CoroutineWithData(this, AdManager.Instance.ShowRewardAdd());
         yield return cd.result;
+        GemControl.Instance.AddGems(gemPayout);
         RewardVideoCleanUp();
     }
 
     public void RewardVideoCleanUp()
     {
-        GemControl.Instance.AddGems(gemPayout);
         LocalUser.locUser.dailyRewardGotten = true;
         Database.UpdateUser("dailyRewardGotten", true);
 

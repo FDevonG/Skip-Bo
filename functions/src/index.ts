@@ -137,3 +137,29 @@ export const getUsers = functions.https.onCall(async (data) => {
 		})
     });
 })
+
+export const leaderBoardPageNumbers = functions.https.onCall(async () => {
+	const dbRef = admin.database().ref("users");
+	var users = new Array();
+	return new Promise((resolve, reject) => {
+		dbRef.orderByValue().once("value").then((snap) => {
+			var exists = (snap.val() !== null);
+			if (exists)
+			{
+				snap.forEach((childSnapshot) => {
+					if(childSnapshot.child('userName').val() !== ""){
+						users.push(childSnapshot);
+					}
+				})
+				resolve((users.length / 50).toString());
+			}
+			else
+			{
+				resolve(null);
+			}
+			}).catch(error => {
+			console.log(error);
+			reject(error);
+		})
+    });
+})

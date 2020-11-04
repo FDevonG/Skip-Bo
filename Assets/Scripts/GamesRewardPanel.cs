@@ -30,12 +30,12 @@ public class GamesRewardPanel : MonoBehaviour
     {
         CoroutineWithData cd = new CoroutineWithData(this, AdManager.Instance.ShowRewardAdd());
         yield return cd.result;
+        GemControl.Instance.AddGems(gemPayout);
         RewardVideoCleanUp();
     }
 
     public void RewardVideoCleanUp()
     {
-        GemControl.Instance.AddGems(gemPayout);
         LocalUser.locUser.rewardCounter = 0;
         Database.UpdateUser("rewardCounter", 0);
         Destroy(gameObject);
