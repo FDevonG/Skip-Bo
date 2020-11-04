@@ -92,7 +92,36 @@ export const getFreinds = functions.https.onCall(async (data) => {
 						var childData = childSnapshot.child('userID').val();
 						if(childData === element) {
 							friends += JSON.stringify(childSnapshot.val()) + "#";
-							// friends.push(json);
+						}
+					})
+				});
+				resolve(friends);
+			}
+			else
+			{
+				resolve(null);
+			}
+			}).catch(error => {
+			console.log(error);
+			reject(error);
+		})
+    });
+})
+
+export const getUsers = functions.https.onCall(async (data) => {
+	const friendsIDS = data;
+	const dbRef = admin.database().ref("users");
+	var friends = "";
+	return new Promise((resolve, reject) => {
+		dbRef.orderByValue().once("value").then((snap) => {
+			var exists = (snap.val() !== null);
+			if (exists)
+			{
+				friendsIDS.forEach(element => {
+					snap.forEach((childSnapshot) => {
+						var childData = childSnapshot.child('userID').val();
+						if(childData === element) {
+							friends += JSON.stringify(childSnapshot.val()) + "#";
 						}
 					})
 				});

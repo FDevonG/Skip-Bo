@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -25,7 +25,7 @@ public class FreindsPanel : MonoBehaviour
         DeleteFriends();
         if (LocalUser.locUser.friends.Count > 0)
         {
-            //PhotonNetwork.FindFriends(LocalUser.locUser.friends.ToArray());
+            PhotonNetwork.FindFriends(LocalUser.locUser.friends.ToArray());
             CoroutineWithData cd = new CoroutineWithData(this, GetFriends());
             yield return cd.result;
             string returnedString = cd.result as string;
@@ -57,7 +57,7 @@ public class FreindsPanel : MonoBehaviour
 
     IEnumerator GetFriends()
     {
-        var task = BackendFunctions.GetFriends();
+        var task = BackendFunctions.GetUsers(LocalUser.locUser.friends);
         yield return new WaitUntil(() => task.IsCompleted);
         if (task.IsFaulted)
         {

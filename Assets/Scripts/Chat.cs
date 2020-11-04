@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Photon.Chat;
@@ -56,7 +56,7 @@ public class Chat : MonoBehaviour, IChatClientListener
     public void OnConnected()
     {
         chatConnected = true;
-        //chatClient.ChatRegion = "US";
+        chatClient.ChatRegion = "US";
         chatClient.SetOnlineStatus(ChatUserStatus.Online);
         UpdateFriends();
     }

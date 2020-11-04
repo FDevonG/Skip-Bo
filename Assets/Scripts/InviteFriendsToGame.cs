@@ -66,7 +66,7 @@ public class InviteFriendsToGame : MonoBehaviour
 
     IEnumerator GetFriends()
     {
-        var task = BackendFunctions.GetFriends();
+        var task = BackendFunctions.GetUsers(LocalUser.locUser.friends);
         yield return new WaitUntil(() => task.IsCompleted);
         if (task.IsFaulted)
         {

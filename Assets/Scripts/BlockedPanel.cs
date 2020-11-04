@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Firebase.Database;
 
 public class BlockedPanel : MonoBehaviour
 {
@@ -10,6 +9,7 @@ public class BlockedPanel : MonoBehaviour
 
     private void OnEnable()
     {
+        LoadingScreen.Instance.TurnOnLoadingScreen();
         StartCoroutine(BuildBlockedList());
     }
 
@@ -20,27 +20,26 @@ public class BlockedPanel : MonoBehaviour
 
     private IEnumerator BuildBlockedList()
     {
-        if (LocalUser.locUser.blocked.Count <= 0)
+        if (LocalUser.locUser.blocked.Count > 0)
         {
-            yield return null;
-        }
-        var userTask = Database.GetUsers();
-        yield return new WaitUntil(() => userTask.IsCompleted);
-        if (!userTask.IsFaulted)
-        {
-            foreach (string blocked in LocalUser.locUser.blocked)
+            var task = BackendFunctions.GetUsers(LocalUser.locUser.blocked);
+            yield return new WaitUntil(() => task.IsCompleted);
+            if (!task.IsFaulted)
             {
-                foreach (DataSnapshot snapshot in userTask.Result.Children)
+                string[] strArr;
+                strArr = task.Result.Split('#');
+
+                foreach (string str in strArr)
                 {
-                    User tempUser = JsonUtility.FromJson<User>(snapshot.GetRawJsonValue());
-                    if (tempUser.userID == blocked)
+                    if (!string.IsNullOrEmpty(str) && !string.IsNullOrWhiteSpace(str))
                     {
-                        SpawnBlockedPanel(tempUser);
-                        break;
+                        //User friend = JsonUtility.FromJson<User>(str);
+                        SpawnBlockedPanel(JsonUtility.FromJson<User>(str));
                     }
                 }
             }
         }
+        LoadingScreen.Instance.TurnOffLoadingScreen();
     }
 
     private void SpawnBlockedPanel(User blockedUser)

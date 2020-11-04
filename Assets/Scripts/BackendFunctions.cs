@@ -31,11 +31,11 @@ public static class BackendFunctions
         });
     }
 
-    public static Task<string> GetFriends()
+    public static Task<string> GetUsers(List<string> ids)
     {
         var functions = FirebaseFunctions.DefaultInstance;
-        var function = functions.GetHttpsCallable("getFreinds");
-        return function.CallAsync(LocalUser.locUser.friends.ToArray()).ContinueWith((task) => {
+        var function = functions.GetHttpsCallable("getUsers");
+        return function.CallAsync(ids.ToArray()).ContinueWith((task) => {
             return (string)task.Result.Data;
         });
     }
