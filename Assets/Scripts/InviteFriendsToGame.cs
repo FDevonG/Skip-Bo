@@ -29,17 +29,13 @@ public class InviteFriendsToGame : MonoBehaviour
         {
             CoroutineWithData cd = new CoroutineWithData(this, GetFriends());
             yield return cd.result;
-            string returnedString = cd.result as string;
+            UserArray friends = JsonUtility.FromJson<UserArray>(cd.result as string);
 
-            string[] strArr;
-            strArr = returnedString.Split('#');
-            loadingPanel.SetActive(false);
-            foreach (string str in strArr)
+            foreach (User friend in friends.users)
             {
-                if (!string.IsNullOrEmpty(str) && !string.IsNullOrWhiteSpace(str))
-                {
-                    User friend = JsonUtility.FromJson<User>(str);
-                    Debug.Log(friend.userName);
+                //if (!string.IsNullOrEmpty(str) && !string.IsNullOrWhiteSpace(str))
+                //{
+                    //User friend = JsonUtility.FromJson<User>(str);
                     foreach (FriendInfo pp in PhotonNetwork.Friends)
                     {
                         if (pp.UserId == friend.userID)
@@ -59,14 +55,14 @@ public class InviteFriendsToGame : MonoBehaviour
                             }
                         }
                     }
-                }
+                //}
             }
         }
     }
 
     IEnumerator GetFriends()
     {
-        var task = BackendFunctions.GetUsers(LocalUser.locUser.friends);
+        var task = BackendFunctions.GetUsersArray(LocalUser.locUser.friends);
         yield return new WaitUntil(() => task.IsCompleted);
         if (task.IsFaulted)
         {

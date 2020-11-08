@@ -23,7 +23,7 @@ public class SignUpPanel : MonoBehaviour
     }
 
     private IEnumerator CreatingNewAccount() {
-        LoadingScreen.Instance.TurnOnLoadingScreen();
+        LoadingScreen.Instance.TurnOnLoadingScreen("Loading");
         var task = FirebaseAuthentication.CreateNewAccount(signUpEmailInput.GetComponent<InputField>().text, signUpPasswordInput.GetComponent<InputField>().text);
         yield return new WaitUntil(() => task.IsCompleted);
         if (task.IsFaulted) {

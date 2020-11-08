@@ -8,7 +8,7 @@ public class GuestLogin : MonoBehaviour
     }
 
     private IEnumerator LoginInAnon() {
-        LoadingScreen.Instance.TurnOnLoadingScreen();
+        LoadingScreen.Instance.TurnOnLoadingScreen("Loading");
         var task = FirebaseAuthentication.LogInAnonymous();
         yield return new WaitUntil(() => task.IsCompleted);
         if (task.IsFaulted) {

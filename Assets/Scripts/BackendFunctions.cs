@@ -31,20 +31,42 @@ public static class BackendFunctions
         });
     }
 
-    public static Task<string> GetUsers(List<string> ids)
+    public static Task<string> GetUsersArray(List<string> ids)
     {
         var functions = FirebaseFunctions.DefaultInstance;
-        var function = functions.GetHttpsCallable("getUsers");
-        return function.CallAsync(ids.ToArray()).ContinueWith((task) => {
+        var function = functions.GetHttpsCallable("getUsersArray");
+        return function.CallAsync(ids.ToArray()).ContinueWith((task) =>
+        {
             return (string)task.Result.Data;
         });
     }
 
-    public static Task<string> LeaderBoardPageNumber()
+    public static Task<string> LoadLeaderBoards(int selection)
+    {
+        string[] dataToSend = new string[2];
+        dataToSend[0] = selection.ToString();
+        dataToSend[1] = FirebaseAuthentication.AuthenitcationKey();
+        var functions = FirebaseFunctions.DefaultInstance;
+        var function = functions.GetHttpsCallable("leaderboardsOpened");
+        return function.CallAsync(dataToSend).ContinueWith((task) => {
+            return (string)task.Result.Data;
+        });
+    }
+
+    public static Task<string> LoadLeaderBoardPage(int[] data)
     {
         var functions = FirebaseFunctions.DefaultInstance;
-        var function = functions.GetHttpsCallable("leaderBoardPageNumbers");
-        return function.CallAsync().ContinueWith((task) => {
+        var function = functions.GetHttpsCallable("leaderboardPage");
+        return function.CallAsync(data).ContinueWith((task) => {
+            return (string)task.Result.Data;
+        });
+    }
+    
+    public static Task<string> GetLastPage(int selectionValue)
+    {
+        var functions = FirebaseFunctions.DefaultInstance;
+        var function = functions.GetHttpsCallable("getLastPage");
+        return function.CallAsync(selectionValue).ContinueWith((task) => {
             return (string)task.Result.Data;
         });
     }

@@ -229,18 +229,17 @@ public class CharacterCreation : MonoBehaviour
             string playerName = nameInput.GetComponent<InputField>().text;
             if (!string.IsNullOrEmpty(playerName) && !string.IsNullOrWhiteSpace(playerName))
             {
-                LoadingScreen.Instance.TurnOnLoadingScreen();
+                LoadingScreen.Instance.TurnOnLoadingScreen("Saving");
                 StartCoroutine(StartSaveCoroutine());
             }
             else
             {
                 GetComponent<ErrorText>().SetError("Please enter a username");
-                //LoadingScreen.Instance.TurnOffLoadingScreen();
             }
         }
         else
         {
-            LoadingScreen.Instance.TurnOnLoadingScreen();
+            LoadingScreen.Instance.TurnOnLoadingScreen("Saving");
             StartCoroutine(StartSaveCoroutine());
         }
 

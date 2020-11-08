@@ -8,7 +8,7 @@ public class FacebookLogin : MonoBehaviour
 
     public void FacebookLoginPressed()
     {
-        LoadingScreen.Instance.TurnOnLoadingScreen();
+        LoadingScreen.Instance.TurnOnLoadingScreen("Loading");
         var perms = new List<string>() { "public_profile", "email", "user_friends" };
         FB.LogInWithReadPermissions(perms, OnFacebookLoginResult);
     }

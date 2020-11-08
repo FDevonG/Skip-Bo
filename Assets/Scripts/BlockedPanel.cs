@@ -9,7 +9,7 @@ public class BlockedPanel : MonoBehaviour
 
     private void OnEnable()
     {
-        LoadingScreen.Instance.TurnOnLoadingScreen();
+        LoadingScreen.Instance.TurnOnLoadingScreen("Loading");
         StartCoroutine(BuildBlockedList());
     }
 
@@ -22,22 +22,19 @@ public class BlockedPanel : MonoBehaviour
     {
         if (LocalUser.locUser.blocked.Count > 0)
         {
-            var task = BackendFunctions.GetUsers(LocalUser.locUser.blocked);
+            var task = BackendFunctions.GetUsersArray(LocalUser.locUser.blocked);
             yield return new WaitUntil(() => task.IsCompleted);
             if (!task.IsFaulted)
             {
-                string[] strArr;
-                strArr = task.Result.Split('#');
+                UserArray friends = JsonUtility.FromJson<UserArray>(task.Result);
 
-                foreach (string str in strArr)
+                foreach (User str in friends.users)
                 {
-                    if (!string.IsNullOrEmpty(str) && !string.IsNullOrWhiteSpace(str))
-                    {
-                        //User friend = JsonUtility.FromJson<User>(str);
-                        SpawnBlockedPanel(JsonUtility.FromJson<User>(str));
-                    }
+                    SpawnBlockedPanel(str);
                 }
             }
+            else
+                GetComponent<ErrorText>().SetError("Failed");
         }
         LoadingScreen.Instance.TurnOffLoadingScreen();
     }

@@ -75,10 +75,11 @@ public class LoadingScreen : MonoBehaviour
     }
 
 
-    public void TurnOnLoadingScreen()
+    public void TurnOnLoadingScreen(string message)
     {
 
         RemoveAds.instance.HideButton();
+        loadingText.text = message + "...";
         mainPanel.SetActive(true);
         GetComponent<CanvasGroup>().blocksRaycasts = true;
         loading = true;

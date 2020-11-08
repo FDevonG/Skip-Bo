@@ -21,7 +21,7 @@ public class Login : MonoBehaviour {
 
     private IEnumerator LogIn() {
         var task = FirebaseAuthentication.LogIn(emailInput.GetComponent<InputField>().text, passwordInput.GetComponent<InputField>().text);
-        LoadingScreen.Instance.TurnOnLoadingScreen();
+        LoadingScreen.Instance.TurnOnLoadingScreen("Loading");
         yield return new WaitUntil(() => task.IsCompleted);
         if (task.IsFaulted) {
             LoadingScreen.Instance.TurnOffLoadingScreen();

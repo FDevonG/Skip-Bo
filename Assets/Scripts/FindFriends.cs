@@ -5,11 +5,8 @@ using UnityEngine.UI;
 public class FindFriends : MonoBehaviour
 {
     [SerializeField] GameObject nameInput;
-    [SerializeField] Button searchButton;
     [SerializeField] Button addFriendButton;
     [SerializeField] GameObject addedText;
-
-    [SerializeField] Text loadText;
  
     [SerializeField] GameObject freindPanel;
     [SerializeField] Text nameText;
@@ -17,8 +14,6 @@ public class FindFriends : MonoBehaviour
     [SerializeField] Image face;
     [SerializeField] Image kit;
     [SerializeField] Image body;
-
-    [SerializeField] GameObject searchingPanel;
 
     string id;//thjis is used to store the id of the found user
 
@@ -28,15 +23,13 @@ public class FindFriends : MonoBehaviour
         GetComponent<ErrorText>().ClearError();
         freindPanel.SetActive(false);
         id = "";
-        searchingPanel.SetActive(false);
         addedText.SetActive(false);
     }
 
     public void StartUserSearch()
     {
         freindPanel.SetActive(false);
-        loadText.text = "Searching...";
-        searchingPanel.SetActive(true);
+        LoadingScreen.Instance.TurnOnLoadingScreen("Searching");
         StartCoroutine(FindUser(nameInput.GetComponent<InputField>().text));
     }
 
@@ -60,7 +53,7 @@ public class FindFriends : MonoBehaviour
             else
                 GetComponent<ErrorText>().SetError("No users found");
         }
-        searchingPanel.SetActive(false);
+        LoadingScreen.Instance.TurnOffLoadingScreen();
     }
 
     private void FoundFriend(User user)
@@ -91,17 +84,12 @@ public class FindFriends : MonoBehaviour
 
     private IEnumerator SaveFriend()
     {
-        searchButton.interactable = false;
-        nameInput.GetComponent<InputField>().interactable = false;
         freindPanel.SetActive(false);
-        loadText.text = "Adding...";
-        searchingPanel.SetActive(true);
+        LoadingScreen.Instance.TurnOnLoadingScreen("Adding");
         CoroutineWithData cd = new CoroutineWithData(this, Friends.AddFriend(id));
         yield return cd.coroutine;
-        searchingPanel.SetActive(false);
+        LoadingScreen.Instance.TurnOffLoadingScreen();
         addedText.SetActive(true);
-        nameInput.GetComponent<InputField>().interactable = true;
-        searchButton.interactable = true;
     }
 
     public void CheckUserSearch()

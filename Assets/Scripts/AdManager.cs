@@ -35,7 +35,7 @@ public class AdManager : MonoBehaviour
 
     public IEnumerator ShowRewardAdd()
     {
-        LoadingScreen.Instance.TurnOnLoadingScreen();
+        LoadingScreen.Instance.TurnOnLoadingScreen("Loading");
         rewardAddPlaying = true;
         yield return new WaitUntil(() => Advertisement.IsReady(rewardPlacementString));
         LoadingScreen.Instance.TurnOffLoadingScreen();
@@ -50,6 +50,7 @@ public class AdManager : MonoBehaviour
             yield return null;
         else
         {
+            LoadingScreen.Instance.TurnOnLoadingScreen("Loading");
             if (!Advertisement.isInitialized)
             {
                 Advertisement.Initialize(gameId, testMode);
@@ -58,6 +59,7 @@ public class AdManager : MonoBehaviour
             if (Advertisement.isInitialized)
             {
                 yield return new WaitUntil(() => Advertisement.IsReady(regularPlacementString));
+                LoadingScreen.Instance.TurnOffLoadingScreen();
                 Advertisement.Show(regularPlacementString);
                 yield return new WaitUntil(() => Advertisement.isShowing);
                 yield return new WaitUntil(() => !Advertisement.isShowing);

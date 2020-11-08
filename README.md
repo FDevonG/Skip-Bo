@@ -63,3 +63,6 @@ Update 2.6
 Update 2.7
 -backend code added
 -few bugs fixed
+
+Update 2.8
+-Leaderboards optimized

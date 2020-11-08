@@ -39,7 +39,6 @@ public class DailyRewardVideoPanel : MonoBehaviour
         Database.UpdateUser("dailyRewardGotten", true);
 
         DateTime currentDate = DateTime.Now;
-        Debug.Log(currentDate.Hour);
 
         DateTime nextUnockDate = DateTime.Today;
         nextUnockDate.AddHours(19);

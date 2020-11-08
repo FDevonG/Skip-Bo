@@ -38,7 +38,7 @@ public class SceneController: MonoBehaviour {
     public static void LoadScreen()
     {
         Time.timeScale = 1;
-        LoadingScreen.Instance.TurnOnLoadingScreen();
+        LoadingScreen.Instance.TurnOnLoadingScreen("Loading");
     }
 
 }

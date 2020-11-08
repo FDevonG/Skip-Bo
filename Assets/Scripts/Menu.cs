@@ -158,7 +158,7 @@ public class Menu : MonoBehaviour
             StartCoroutine(AdManager.Instance.ShowBannerAdd());
             activatePanel.SwitchPanel(startGamePanel);
         } else {
-            LoadingScreen.Instance.TurnOnLoadingScreen();
+            LoadingScreen.Instance.TurnOnLoadingScreen("Loading");
             if (LocalUser.locUser == null) {
                 var task = Database.GetCurrentUser();
                 yield return new WaitUntil(() => task.IsCompleted);

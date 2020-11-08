@@ -11,7 +11,7 @@ public class FreindsPanel : MonoBehaviour
 
     private void OnEnable()
     {
-        LoadingScreen.Instance.TurnOnLoadingScreen();
+        LoadingScreen.Instance.TurnOnLoadingScreen("Loading");
         StartCoroutine(BuildFriends());
     }
 
@@ -25,19 +25,23 @@ public class FreindsPanel : MonoBehaviour
         DeleteFriends();
         if (LocalUser.locUser.friends.Count > 0)
         {
-            PhotonNetwork.FindFriends(LocalUser.locUser.friends.ToArray());
-            CoroutineWithData cd = new CoroutineWithData(this, GetFriends());
-            yield return cd.result;
-            string returnedString = cd.result as string;
-
-            string[] strArr;
-            strArr = returnedString.Split('#');
-
-            foreach (string str in strArr)
+            if (!PhotonNetwork.connected)
             {
-                if(!string.IsNullOrEmpty(str) && !string.IsNullOrWhiteSpace(str))
+                yield return new WaitUntil(() => PhotonNetwork.connected);
+            }
+            var task = BackendFunctions.GetUsersArray(LocalUser.locUser.friends);
+            yield return new WaitUntil(() => task.IsCompleted);
+            if (task.IsFaulted)
+            {
+                GetComponent<ErrorText>().SetError("Failed");
+            }
+            else
+            {
+                Debug.Log(task.Result);
+                UserArray friends = JsonUtility.FromJson<UserArray>(task.Result);
+                
+                foreach (User friend in friends.users)
                 {
-                    User friend = JsonUtility.FromJson<User>(str);
                     foreach (FriendInfo pp in PhotonNetwork.Friends)
                     {
                         if (pp.UserId == friend.userID)
@@ -53,21 +57,6 @@ public class FreindsPanel : MonoBehaviour
             }
         }
         LoadingScreen.Instance.TurnOffLoadingScreen();
-    }
-
-    IEnumerator GetFriends()
-    {
-        var task = BackendFunctions.GetUsers(LocalUser.locUser.friends);
-        yield return new WaitUntil(() => task.IsCompleted);
-        if (task.IsFaulted)
-        {
-            GetComponent<ErrorText>().SetError("Failed to load friends");
-            yield return null;
-        }
-        else
-        {
-            yield return task.Result;
-        }
     }
 
     void SpawnFriendPanel(User user, bool status)
