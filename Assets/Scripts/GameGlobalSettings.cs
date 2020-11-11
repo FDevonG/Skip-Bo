@@ -11,4 +11,9 @@ public static  class GameGlobalSettings
     public static string PhotonChatAppId() {
         return "ab972fe3-0ee2-4100-8118-6b1f80450309";
     }
+
+    public static int RewardVideoGemAmmount()
+    {
+        return 10;
+    }
 }

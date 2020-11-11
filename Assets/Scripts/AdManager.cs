@@ -13,8 +13,6 @@ public class AdManager : MonoBehaviour
 
     public static AdManager Instance { get; private set; }
 
-    public bool rewardAddPlaying = false;
-
     private void Awake() {
 
         if (Instance != null && Instance != this) {
@@ -33,16 +31,28 @@ public class AdManager : MonoBehaviour
         Advertisement.Initialize(gameId, testMode);
     }
 
-    public IEnumerator ShowRewardAdd()
+    public IEnumerator ShowDailyRewardAdd()
     {
         LoadingScreen.Instance.TurnOnLoadingScreen("Loading");
-        rewardAddPlaying = true;
         yield return new WaitUntil(() => Advertisement.IsReady(rewardPlacementString));
         LoadingScreen.Instance.TurnOffLoadingScreen();
+        GemControl.Instance.AddGems(GameGlobalSettings.RewardVideoGemAmmount());
+        DailyRewardVideoPanel.Instance.RewardVideoCleanUp();
         Advertisement.Show(rewardPlacementString);
         yield return new WaitUntil(() => Advertisement.isShowing);
         yield return new WaitUntil(() => !Advertisement.isShowing);
-        rewardAddPlaying = false;
+    }
+
+    public IEnumerator ShowGamesRewardAdd()
+    {
+        LoadingScreen.Instance.TurnOnLoadingScreen("Loading");
+        yield return new WaitUntil(() => Advertisement.IsReady(rewardPlacementString));
+        LoadingScreen.Instance.TurnOffLoadingScreen();
+        GemControl.Instance.AddGems(GameGlobalSettings.RewardVideoGemAmmount());
+        GamesRewardPanel.Instance.RewardVideoCleanUp();
+        Advertisement.Show(rewardPlacementString);
+        yield return new WaitUntil(() => Advertisement.isShowing);
+        yield return new WaitUntil(() => !Advertisement.isShowing);
     }
 
     public IEnumerator ShowRegularAd() {
@@ -50,7 +60,6 @@ public class AdManager : MonoBehaviour
             yield return null;
         else
         {
-            LoadingScreen.Instance.TurnOnLoadingScreen("Loading");
             if (!Advertisement.isInitialized)
             {
                 Advertisement.Initialize(gameId, testMode);
@@ -59,7 +68,6 @@ public class AdManager : MonoBehaviour
             if (Advertisement.isInitialized)
             {
                 yield return new WaitUntil(() => Advertisement.IsReady(regularPlacementString));
-                LoadingScreen.Instance.TurnOffLoadingScreen();
                 Advertisement.Show(regularPlacementString);
                 yield return new WaitUntil(() => Advertisement.isShowing);
                 yield return new WaitUntil(() => !Advertisement.isShowing);

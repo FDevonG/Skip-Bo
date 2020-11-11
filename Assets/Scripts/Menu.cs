@@ -194,23 +194,33 @@ public class Menu : MonoBehaviour
                 }
             }
 
-            if (LocalUser.locUser != null) {
-                if (string.IsNullOrEmpty(LocalUser.locUser.userName) || string.IsNullOrWhiteSpace(LocalUser.locUser.userName)) {
+            if (LocalUser.locUser != null)
+            {
+                if (string.IsNullOrEmpty(LocalUser.locUser.userName) || string.IsNullOrWhiteSpace(LocalUser.locUser.userName))
+                {
                     activatePanel.SwitchPanel(characterCreationPanel);
-                } else {
+                }
+                else
+                {
                     PhotonPlayerSetup.BuildPhotonPlayer(PhotonNetwork.player, LocalUser.locUser);
                     PhotonNetworking.Instance.ConnectToPhoton();
                     if (RewardVideo.Instance.DailyRewardCanPlay())
                     {
                         activatePanel.SwitchPanel(dailyRewardVideoPanel);
                     }
-                    else if (!Rating.CheckRated()) {
-                        if (Rating.CheckGamesPlayed()) {
+                    else if (!Rating.CheckRated())
+                    {
+                        if (Rating.CheckGamesPlayed())
+                        {
                             activatePanel.SwitchPanel(ratingPanel);
-                        } else {
+                        }
+                        else
+                        {
                             activatePanel.SwitchPanel(startMenu);
                         }
-                    } else {
+                    }
+                    else
+                    {
                         activatePanel.SwitchPanel(startMenu);
                     }
                 }

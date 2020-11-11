@@ -22,15 +22,8 @@ public class DailyRewardVideoPanel : MonoBehaviour
 
     public void WatchRewardAd()
     {
-        StartCoroutine(WatchAd());
-    }
-
-    IEnumerator WatchAd()
-    {
-        CoroutineWithData cd = new CoroutineWithData(this, AdManager.Instance.ShowRewardAdd());
-        yield return cd.result;
-        GemControl.Instance.AddGems(gemPayout);
-        RewardVideoCleanUp();
+        //StartCoroutine(WatchAd());
+        StartCoroutine(AdManager.Instance.ShowDailyRewardAdd());
     }
 
     public void RewardVideoCleanUp()
