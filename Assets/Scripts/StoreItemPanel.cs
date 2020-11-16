@@ -87,7 +87,7 @@ public class StoreItemPanel : MonoBehaviour
         }
         else
         {
-            button.onClick.AddListener(() => storePanel.BuyItem(storedItem, this));
+            button.onClick.AddListener(() => StartCoroutine(storePanel.BuyItem(storedItem, this)));
         }
 
     }

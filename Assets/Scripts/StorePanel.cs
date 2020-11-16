@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.UI;
@@ -11,10 +12,9 @@ public class StorePanel : MonoBehaviour
 
     [SerializeField] Text playerGemsText;
 
-    //[SerializeField] Transform 
-
     private void OnEnable()
     {
+        LoadingScreen.Instance.TurnOnLoadingScreen("Loading");
         SetGemText();
         BuildStoreItems();
     }
@@ -27,6 +27,7 @@ public class StorePanel : MonoBehaviour
 
     public void BuildStoreItems()
     {
+        LoadingScreen.Instance.TurnOnLoadingScreen("Loading");
         DestroyPanelItems();
         switch (dropdown.value)
         {
@@ -58,6 +59,7 @@ public class StorePanel : MonoBehaviour
                 BuildClothesOptions();
                 break;
         }
+        LoadingScreen.Instance.TurnOffLoadingScreen();
     }
 
     void DestroyPanelItems()
@@ -118,7 +120,6 @@ public class StorePanel : MonoBehaviour
 
         foreach (StoreItem item in items)
         {
-            Debug.Log(item.itemName);
             GameObject storeItemPanel = Instantiate(Resources.Load<GameObject>("StoreItemPanel"), gridLayout.transform);
             storeItemPanel.GetComponent<StoreItemPanel>().SetUpPanel(item, this);
             storeItemPanels.Add(storeItemPanel);
@@ -136,7 +137,6 @@ public class StorePanel : MonoBehaviour
 
         foreach (StoreItem item in items)
         {
-            Debug.Log(item.itemName);
             GameObject storeItemPanel = Instantiate(Resources.Load<GameObject>("StoreItemPanel"), gridLayout.transform);
             storeItemPanel.GetComponent<StoreItemPanel>().SetUpPanel(item, this);
             storeItemPanels.Add(storeItemPanel);
@@ -160,36 +160,68 @@ public class StorePanel : MonoBehaviour
         }
     }
 
-    public void BuyItem(StoreItem itemToPurchase, StoreItemPanel sp)
+    public IEnumerator BuyItem(StoreItem itemToPurchase, StoreItemPanel sp)
     {
+
         if (LocalUser.locUser.gems >= itemToPurchase.price)
         {
+            LoadingScreen.Instance.TurnOnLoadingScreen("Purchasing");
             switch (itemToPurchase.type)
             {
                 case "hair":
                     LocalUser.locUser.unlockedHair.Add(itemToPurchase.itemName);
-                    Database.UpdateUser("unlockedHair", LocalUser.locUser.unlockedHair);
+                    var task = Database.UpdateUser("unlockedHair", LocalUser.locUser.unlockedHair);
+                    yield return new WaitUntil(() => task.IsCompleted);
+                    if (task.IsFaulted)
+                    {
+                        GetComponent<ErrorText>().SetError("Failed");
+                        LoadingScreen.Instance.TurnOffLoadingScreen();
+                    }
+                    else
+                        PurchaseSuccess(itemToPurchase, sp);
                     break;
 
                 case "face":
                     LocalUser.locUser.unlockedFace.Add(itemToPurchase.itemName);
-                    Database.UpdateUser("unlockedFace", LocalUser.locUser.unlockedFace);
+                    var task1 = Database.UpdateUser("unlockedFace", LocalUser.locUser.unlockedFace);
+                    yield return new WaitUntil(() => task1.IsCompleted);
+                    if (task1.IsFaulted)
+                    {
+                        GetComponent<ErrorText>().SetError("Failed");
+                        LoadingScreen.Instance.TurnOffLoadingScreen();
+                    }
+                    else
+                        PurchaseSuccess(itemToPurchase, sp);
                     break;
 
-                case "cloth":
+                case "kit":
+                    Debug.Log("WYF");
                     LocalUser.locUser.unlockedClothes.Add(itemToPurchase.itemName);
-                    Database.UpdateUser("unlockedClothes", LocalUser.locUser.unlockedClothes);
+                    var task2 = Database.UpdateUser("unlockedClothes", LocalUser.locUser.unlockedClothes);
+                    yield return new WaitUntil(() => task2.IsCompleted);
+                    if (task2.IsFaulted)
+                    {
+                        GetComponent<ErrorText>().SetError("Failed");
+                        LoadingScreen.Instance.TurnOffLoadingScreen();
+                    }
+                    else
+                        PurchaseSuccess(itemToPurchase, sp);
                     break;
             }
-            GemControl.Instance.SubtractGems(itemToPurchase.price);
-            SetGemText();
-            StartCoroutine(Notifications.Instance.SpawnNotification("New item availible in charcter editor"));
-            sp.TurnOffButton();
         }
         else
         {
             GetComponent<ErrorText>().SetError("Not enough gems");
         }
+    }
+
+    void PurchaseSuccess(StoreItem itemToPurchase, StoreItemPanel sp)
+    {
+        LoadingScreen.Instance.TurnOffLoadingScreen();
+        GemControl.Instance.SubtractGems(itemToPurchase.price);
+        SetGemText();
+        StartCoroutine(Notifications.Instance.SpawnNotification("New item availible in charcter editor"));
+        sp.TurnOffButton();
     }
 
     public void BuyTwoHundredGems()

@@ -88,7 +88,7 @@ public class CharacterCreation : MonoBehaviour
             }
             if (!itemAdded)
             {
-                hair.Add(Resources.Load<Sprite>(("Faces/Faces/" + itemName)) as Sprite);
+                face.Add(Resources.Load<Sprite>(("Faces/Faces/" + itemName)) as Sprite);
             }
         }
 
@@ -106,7 +106,7 @@ public class CharacterCreation : MonoBehaviour
             }
             if (!itemAdded)
             {
-                hair.Add(Resources.Load<Sprite>(("Faces/Kits/" + itemName)) as Sprite);
+                kit.Add(Resources.Load<Sprite>(("Faces/Kits/" + itemName)) as Sprite);
             }
         }
     }
