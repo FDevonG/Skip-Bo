@@ -10285,6 +10285,7 @@ MonoBehaviour:
   achievementButton: {fileID: 1369446779}
   playerStatsButton: {fileID: 797993506}
   playerGems: {fileID: 1639416403}
+  playerName: {fileID: 1574401359}
 --- !u!114 &556740659
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -22166,18 +22167,6 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 1376720081}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1376720083 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 5247988230175085175, guid: 2d80c77b21de041babe6ac38894d9be5,
-    type: 3}
-  m_PrefabInstance: {fileID: 1376720081}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1379484835
 GameObject:
   m_ObjectHideFlags: 0
@@ -25024,6 +25013,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 14
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1574401359 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2230235928256671403, guid: cd2aa59e270fc4ebe8d5633a1d4806a7,
+    type: 3}
+  m_PrefabInstance: {fileID: 1068946891}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1579960789
 GameObject:
   m_ObjectHideFlags: 0
@@ -33279,7 +33280,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5514e95bcfdde4d53b8c2370f6aaf0a8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rewardAddPlaying: 0
 --- !u!1 &1865454991
 GameObject:
   m_ObjectHideFlags: 0
@@ -33795,17 +33795,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   nameInput: {fileID: 977341255}
-  searchButton: {fileID: 1376720083}
   addFriendButton: {fileID: 498537446}
   addedText: {fileID: 1492619924}
-  loadText: {fileID: 0}
   freindPanel: {fileID: 1145019806}
   nameText: {fileID: 1515472932}
   hair: {fileID: 209843954}
   face: {fileID: 209843953}
   kit: {fileID: 209843952}
   body: {fileID: 209843951}
-  searchingPanel: {fileID: 0}
 --- !u!114 &1880585467
 MonoBehaviour:
   m_ObjectHideFlags: 0

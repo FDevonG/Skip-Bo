@@ -240,7 +240,7 @@ public class CharacterCreation : MonoBehaviour
         else
         {
             LoadingScreen.Instance.TurnOnLoadingScreen("Saving");
-            StartCoroutine(StartSaveCoroutine());
+            StartCoroutine(SaveCharacter());
         }
 
     }
@@ -249,22 +249,10 @@ public class CharacterCreation : MonoBehaviour
     {
 
         var nameCheckTask = BackendFunctions.NameCheck(nameInput.GetComponent<InputField>().text);
-        Debug.Log("Thumbs Down");
         yield return new WaitUntil(() => nameCheckTask.IsCompleted);
-        Debug.Log("Thumbs UP");
         if (nameCheckTask.IsFaulted)
         {
-            foreach (var inner in nameCheckTask.Exception.InnerExceptions)
-            {
-                if (inner is FunctionsException)
-                {
-                    var e = (FunctionsException)inner;
-                    var code = e.ErrorCode;
-                    var message = e.Message;
-                    GetComponent<ErrorText>().SetError(message);
-                    Debug.Log(message);
-                }
-            }
+            GetComponent<ErrorText>().SetError(FirebaseError.GetErrorMessage(nameCheckTask.Exception));
             LoadingScreen.Instance.TurnOffLoadingScreen();
         }
         else
@@ -272,7 +260,6 @@ public class CharacterCreation : MonoBehaviour
 
             if (nameCheckTask.Result != null)
             {
-                Debug.Log(nameCheckTask.Result);
                 GetComponent<ErrorText>().SetError("Username is taken");
                 LoadingScreen.Instance.TurnOffLoadingScreen();
             }
@@ -285,7 +272,6 @@ public class CharacterCreation : MonoBehaviour
     }
 
     private IEnumerator SaveCharacter() {
-        Debug.Log("OF");
         bool faulted = false;
         if (nameInput.GetActive())
         {

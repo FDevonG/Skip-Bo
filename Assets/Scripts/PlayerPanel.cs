@@ -13,8 +13,14 @@ public class PlayerPanel : MonoBehaviour
     [SerializeField] Button achievementButton;
     [SerializeField] Button playerStatsButton;
     [SerializeField] Text playerGems;
+    [SerializeField] Text playerName;
 
     private void OnEnable() {
+        if (!string.IsNullOrEmpty(LocalUser.locUser.userName))
+            playerName.text = LocalUser.locUser.userName;
+        else
+            playerName.text = "Player";
+
         body.sprite = Resources.Load<Sprite>("Faces/Bodies/" + LocalUser.locUser.body) as Sprite;
         face.sprite = Resources.Load<Sprite>("Faces/Faces/" + LocalUser.locUser.face) as Sprite;
         hair.sprite = Resources.Load<Sprite>("Faces/Hairs/" + LocalUser.locUser.hair) as Sprite;
