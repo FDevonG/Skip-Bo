@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class RatePanel : MonoBehaviour
 {
@@ -15,6 +13,7 @@ public class RatePanel : MonoBehaviour
         Application.OpenURL(storeLink);
         PlayerPrefsHandler.SetGameRated(1);
         GameObject.FindGameObjectWithTag("GameManager").GetComponent<ActivatePanel>().SwitchPanel(GameObject.FindGameObjectWithTag("GameManager").GetComponent<Menu>().startMenu);
+        GemControl.Instance.AddGems(10);
     }
 
     public void DontRate() {
